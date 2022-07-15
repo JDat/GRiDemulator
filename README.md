@@ -1,3 +1,23 @@
+GRid Compass and Compass II 1101, 1121, 1129 ans 1139 emulator. 
+Based on XTulator projext by mikechambers84.
+https://github.com/mikechambers84/XTulator
+
+This is early stage.
+For now ROM  is running up to stage where it tries to boot from GPIB or bubble memry.
+Lot of work to do.
+Don't  complan about functionality in this early stage.
+
+TODO:
+Write GPIB driver.
+Write Bubble memory driver.
+Finish keyboard driver.
+Improve video driver for other resolutions.
+Write serial driver.
+Write GPIB follpy emulator to get system booting.
+Still lot of questions about unknow hardware.
+
+Original readme from XTulator author:
+
 # XTulator - A portable, open source (GPLv2) 80186 PC emulator
 
 ### About
