@@ -2,7 +2,9 @@
 #define _KEYMAP_H_
 
 #include <stdint.h>
-#include <SDL.h>
+//#include <SDL.h>
+#include <SDL2/SDL.h>
+
 /*
 typedef struct _keyTranslateMatrixEntry{
     const char  name[25];

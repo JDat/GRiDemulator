@@ -1,8 +1,8 @@
 #ifndef _SDLCONSOLE_H_
 #define _SDLCONSOLE_H_
 
-#include <SDL.h>
-
+//#include <SDL.h>
+#include <SDL2/SDL.h>
 #define SDLCONSOLE_EVENT_NONE		0
 #define SDLCONSOLE_EVENT_KEY		1
 #define SDLCONSOLE_EVENT_QUIT		2
