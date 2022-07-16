@@ -1,3 +1,0 @@
-/home/jdat/Desktop/GRiD_stuff/GRiDemulator/build/CMakeFiles/rebuild_cache.dir
-/home/jdat/Desktop/GRiD_stuff/GRiDemulator/build/CMakeFiles/gridemu.dir
-/home/jdat/Desktop/GRiD_stuff/GRiDemulator/build/CMakeFiles/edit_cache.dir
