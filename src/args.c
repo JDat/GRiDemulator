@@ -82,7 +82,7 @@ void args_showHelp() {
 	printf("                         There is currently no clock ticks counted per instruction, so the emulator is just going\r\n");
 	printf("                         to estimate how many instructions would come out to approximately the desired speed.\r\n");
 	printf("                         There will be more accurate speed-throttling at some point in the future.\r\n\r\n");
-
+/*
 	printf("Disk options:\r\n");
 	printf("  -fd0 <file>            Insert <file> disk image as floppy 0.\r\n");
 	printf("  -fd1 <file>            Insert <file> disk image as floppy 1.\r\n");
@@ -128,7 +128,7 @@ void args_showHelp() {
 	printf("                         by <id>. Use \"-net list\" to display available interfaces. NE2000 will be\r\n");
 	printf("                         available to guest system at base port 0x300, IRQ 2.\r\n\r\n");
 #endif
-
+*/
 	printf("Miscellaneous options:\r\n");
 	printf("  -mem <size>            Initialize emulator with only <size> KB of base memory. (Default is 640)\r\n");
 	printf("                         The maximum size is 736 KB, but this can only work with CGA video and a\r\n");
@@ -140,14 +140,12 @@ void args_showHelp() {
 
 int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 	int i;
-
-#ifndef _WIN32
+/*
 	if (argc < 2) {
 		printf("Specify command line parameters. Use -h for help.\r\n");
 		return -1;
 	}
-#endif
-
+*/
 	for (i = 1; i < argc; i++) {
 		if (args_isMatch(argv[i], "-h")) {
 			args_showHelp();
@@ -217,6 +215,7 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 			i++;
 		}
                 */
+                /*
 		else if (args_isMatch(argv[i], "-video")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -video. Use -h for help.\r\n");
@@ -231,19 +230,22 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 			}
 			i++;
 		}
+                */
+                /*
 		else if (args_isMatch(argv[i], "-fpslock")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -fpslock. Use -h for help.\r\n");
 				return -1;
 			}
-			/*
+			
                         vga_lockFPS = atof(argv[++i]);
 			if ((vga_lockFPS < 1) || (vga_lockFPS > 144)) {
 				printf("%f is an invalid FPS option, valid range is 1 to 144\r\n", vga_lockFPS);
 				return -1;
 			}
-                        */
+                        
 		}
+                */
 		else if (args_isMatch(argv[i], "-mem")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -mem. Use -h for help.\r\n");
@@ -273,6 +275,7 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 		else if (args_isMatch(argv[i], "-mips")) {
 			showMIPS = 1;
 		}
+                /*
 		else if (args_isMatch(argv[i], "-baud")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -baud. Use -h for help.\r\n");
@@ -317,7 +320,7 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 				timing_addTimer(tcpmodem_rxpoll, &machine->tcpmodem[uartnum], baudrate / 9, TIMING_ENABLED);
 			} else
 #endif
-				/*
+				
                                 if (args_isMatch(argv[i + 1], "mouse")) {
 				i++;
 				uart_init(&machine->UART[uartnum], &machine->i8259, base, irq, NULL, NULL, (void*)mouse_togglereset, NULL);
@@ -325,9 +328,9 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 				timing_addTimer(mouse_rxpoll, NULL, baudrate / 9, TIMING_ENABLED);
                                 
 			}
-                        */
                         
-                        /*
+                        
+                        
 			else if (args_isMatch(argv[i + 1], "none")) {
 				i++;
 				uart_init(&machine->UART[uartnum], &machine->i8259, base, irq, NULL, NULL, NULL, NULL);
@@ -336,8 +339,9 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 				printf("%s is not a valid parameter for -uart%u. Use -h for help.\r\n", argv[i + 1], uartnum);
 				return -1;
 			}
-                        */
+                        
 		}
+                
 		else if (args_isMatch(argv[i], "-hw")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -hw. Use -h for help.\r\n");
@@ -382,6 +386,7 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 			machine->hwflags |= MACHINE_HW_NE2000;
 		}
 #endif
+                */
 		else {
 			printf("%s is not a valid parameter. Use -h for help.\r\n", argv[i]);
 			return -1;

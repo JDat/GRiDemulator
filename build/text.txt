@@ -1,0 +1,6 @@
+[MACHINE] Initializing machine: "GRiD Compass 1101" (grid)
+[MEM] mapRegister start. Addr: 0x00000, len: 0x00400
+[MEM] mapRegister start. Addr: 0x02980, len: 0x3D680
+[MEM] mapRegister start. Addr: 0xC0000, len: 0x0FFFF
+[MACHINE] Could not open file, or size is less than expected: ROMS/bootROM1101.bin
+[ERROR] Machine initialization failure

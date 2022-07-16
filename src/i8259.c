@@ -28,6 +28,9 @@
 #include "i8259.h"
 #include "ports.h"
 
+#define baseAddress 0x000
+#define addressLen  0x3
+
 uint8_t i8259_read(I8259_t* i8259, uint16_t portnum) {
 #ifdef DEBUG_PIC
 	debug_log(DEBUG_DETAIL, "[I8259] Read port 0x%X\n", portnum);
@@ -156,6 +159,6 @@ void i8259_init(I8259_t* i8259) {
 	memset(i8259, 0, sizeof(I8259_t));
 	//i8259->intoffset = 8;
 	//ports_cbRegister(0x20, 2, (void*)i8259_read, NULL, (void*)i8259_write, NULL, i8259);
-        ports_cbRegister(0x0, 3, (void*)i8259_read, NULL, (void*)i8259_write, NULL, i8259);
+        ports_cbRegister(baseAddress, addressLen, (void*)i8259_read, NULL, (void*)i8259_write, NULL, i8259);
         //ports_cbRegister(0x2, 2, (void*)i8259_read, NULL, (void*)i8259_write, NULL, i8259);
 }

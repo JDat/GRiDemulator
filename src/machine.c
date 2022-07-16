@@ -149,14 +149,14 @@ const MACHINEMEM_t machine_mem[][11] = {
                 { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0x02980, 0x3D680, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },
-		//{ MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "bios1101_0_25.bin" },
-                { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "bios1139.bin" },
+		//{ MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1139.bin" },
+                { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1101.bin" },
 		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
 	},
 };
 
 //uint8_t mac[6] = { 0xac, 0xde, 0x48, 0x88, 0xbb, 0xab };
-
+/*
 int machine_init_generic_xt(MACHINE_t* machine) {
 	if (machine == NULL) return -1;
 
@@ -167,7 +167,7 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 	//i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);
 	//pcspeaker_init(&machine->pcspeaker);
 
-        /*
+        
 	//check machine HW flags and init devices accordingly
 	if ((machine->hwflags & MACHINE_HW_BLASTER) && !(machine->hwflags & MACHINE_HW_SKIP_BLASTER)) {
 		blaster_init(&machine->blaster, &machine->i8237, &machine->i8259, 0x220, 1, 5);
@@ -180,11 +180,11 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 		OPL3_init(&machine->OPL3);
 		machine->mixOPL = 1;
 	}
-        */
+        
 	if ((machine->hwflags & MACHINE_HW_RTC) && !(machine->hwflags & MACHINE_HW_SKIP_RTC)) {
 		rtc_init(&machine->CPU);
 	}
-        /*
+        
 	if ((machine->hwflags & MACHINE_HW_UART0_NONE) && !(machine->hwflags & MACHINE_HW_SKIP_UART0)) {
 		uart_init(&machine->UART[0], &machine->i8259, 0x3F8, 4, NULL, NULL, NULL, NULL);
 	}
@@ -193,7 +193,7 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 		mouse_init(&machine->UART[0]);
 		timing_addTimer(mouse_rxpoll, NULL, baudrate / 9, TIMING_ENABLED);
 	}
-        */
+        
 #ifdef ENABLE_TCP_MODEM
 	else if ((machine->hwflags & MACHINE_HW_UART0_TCPMODEM) && !(machine->hwflags & MACHINE_HW_SKIP_UART0)) {
 		uart_init(&machine->UART[0], &machine->i8259, 0x3F8, 4, (void*)tcpmodem_tx, &machine->tcpmodem[0], NULL, NULL);
@@ -202,7 +202,7 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 	}
 #endif
 
-        /*
+        
 	if ((machine->hwflags & MACHINE_HW_UART1_NONE) && !(machine->hwflags & MACHINE_HW_SKIP_UART1)) {
 		uart_init(&machine->UART[1], &machine->i8259, 0x2F8, 3, NULL, NULL, NULL, NULL);
 	}
@@ -211,7 +211,7 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 		mouse_init(&machine->UART[1]);
 		timing_addTimer(mouse_rxpoll, NULL, baudrate / 9, TIMING_ENABLED);
 	}
-        */
+        
 #ifdef ENABLE_TCP_MODEM
 	else if ((machine->hwflags & MACHINE_HW_UART1_TCPMODEM) && !(machine->hwflags & MACHINE_HW_SKIP_UART1)) {
 		uart_init(&machine->UART[1], &machine->i8259, 0x2F8, 3, (void*)tcpmodem_tx, &machine->tcpmodem[1], NULL, NULL);
@@ -232,16 +232,16 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 #endif
 
 	cpu_reset(&machine->CPU);
-        /*
+        
 #ifndef USE_DISK_HLE
 	fdc_init(&fdc, &machine->CPU, &i8259, &i8237);
 	fdc_insert(&fdc, 0, "dos622.img");
 #else
 	biosdisk_init(&machine->CPU);
 #endif
-        */
         
-        /*
+        
+        
 	switch (videocard) {
 	case VIDEO_CARD_CGA:
 		if (cga_init()) return -1;
@@ -250,10 +250,10 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 		if (vga_init()) return -1;
 		break;
 	}
-        */
+        
 	return 0;
 }
-
+*/
 int machine_init_grid(MACHINE_t* machine) {
 	if (machine == NULL) return -1;
 

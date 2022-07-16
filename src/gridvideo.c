@@ -47,7 +47,7 @@ int gridvideo_init() {
 		debug_log(DEBUG_ERROR, "[GRiD Video] Failed to allocate video memory\r\n");
 		return -1;
 	}
-        utility_loadFile(gridvideo_RAM, 3320, "small.bin");
+        utility_loadFile(gridvideo_RAM, 3320, "ROMS/screenLogo.bin");
 
 	for (y = 0; y < 240; y++) {
 		for (x = 0; x < 320; x++) {

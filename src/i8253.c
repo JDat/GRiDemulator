@@ -27,10 +27,12 @@
 #include "i8253.h"
 #include "i8259.h"
 #include "config.h"
-//#include "../modules/audio/pcspeaker.h"
 #include "timing.h"
 #include "ports.h"
 #include "debuglog.h"
+
+#define baseAddress 0x008
+#define addressLen  0x4
 
 uint32_t i8253_timers[3];
 
@@ -214,5 +216,5 @@ void i8253_init(I8253_t* i8253, I8259_t* i8259) {
 	timing_addTimer(i8253_tickCallback, (void*)(&i8253->cbdata), 48000, TIMING_ENABLED); //79545.47
 
 	//ports_cbRegister(0x40, 4, (void*)i8253_read, NULL, (void*)i8253_write, NULL, i8253);
-        ports_cbRegister(0x08, 4, (void*)i8253_read, NULL, (void*)i8253_write, NULL, i8253);
+        ports_cbRegister(baseAddress, addressLen, (void*)i8253_read, NULL, (void*)i8253_write, NULL, i8253);
 }

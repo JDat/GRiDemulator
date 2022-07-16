@@ -31,9 +31,12 @@
 #include "debuglog.h"
 #include <time.h>
 
+#define baseAddress 0xDFF40
+#define addressLen  0x16
+
 //uint8_t rtc_read(void* dummy, uint16_t addr) {
 uint8_t rtc_read(void* dummy, uint32_t addr) {
-        addr = addr - 0xDFF40;
+        addr = addr - baseAddress;
 	debug_log(DEBUG_DETAIL, "[RTC] Read port 0x%02X\n", addr);
         uint8_t ret = 0xFF;
 	
@@ -128,12 +131,12 @@ uint8_t rtc_read(void* dummy, uint32_t addr) {
 
 //void rtc_write(void* dummy, uint16_t addr, uint8_t value) {
 void rtc_write(void* dummy, uint32_t addr, uint8_t value) {
-        addr = addr - 0xDFF40;
+        addr = addr - baseAddress;
         debug_log(DEBUG_DETAIL, "[RTC] Write port 0x%02X: %02X\n", addr, value);
 }
 
 void rtc_init() {
 	debug_log(DEBUG_INFO, "[RTC] Initializing real time clock\r\n");
 	//ports_cbRegister(0x240, 0x18, (void*)rtc_read, NULL, (void*)rtc_write, NULL, NULL);
-        memory_mapCallbackRegister(0xDFF40, 0x16, (void*)rtc_read, (void*)rtc_write, NULL);
+        memory_mapCallbackRegister(baseAddress, addressLen, (void*)rtc_read, (void*)rtc_write, NULL);
 }

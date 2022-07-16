@@ -31,19 +31,22 @@
 #include "debuglog.h"
 //#include <time.h>
 
+#define baseAddress 0xDFE80
+#define addressLen  0x3
+
 uint8_t bubble_read(void* dummy, uint32_t addr) {
-        addr = addr - 0xDFE80;
+        addr = addr - baseAddress;
         debug_log(DEBUG_DETAIL, "[7220] Read port 0x%02X\n", addr);
 
         return 0x00;
 }
 
 void bubble_write(void* dummy, uint32_t addr, uint8_t value) {
-        addr = addr - 0xDFE80;
+        addr = addr - baseAddress;
         debug_log(DEBUG_DETAIL, "[7220] Write port 0x%02X: %02X\n", addr, value);
 }
 
 void bubble_init() {
-	debug_log(DEBUG_INFO, "[7220] Initializing real time clock\r\n");
-        memory_mapCallbackRegister(0xDFE80, 0x4, (void*)bubble_read, (void*)bubble_write, NULL);
+	debug_log(DEBUG_INFO, "[7220] Initializing bubble memory controller\r\n");
+        memory_mapCallbackRegister(baseAddress, addressLen, (void*)bubble_read, (void*)bubble_write, NULL);
 }
