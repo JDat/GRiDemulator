@@ -45,3 +45,47 @@
 [7220] Read port 0x02
 [GPIB] Write port 0x00: 18
 [GPIB] Write port 0x02: 40
+[GPIB] Write port 0x06: 80
+[GPIB] Write port 0x06: 8F
+[GPIB] Write port 0x06: 00
+[GPIB] Write port 0x06: 0F
+[GPIB] Write port 0x06: 8A
+[GPIB] Read port 0x00
+[GPIB] Write port 0x00: 18
+[GPIB] Write port 0x02: 40
+[GPIB] Write port 0x06: 80
+[GPIB] Write port 0x06: 8F
+[GPIB] Write port 0x06: 00
+[GPIB] Write port 0x06: 0F
+[GPIB] Write port 0x06: 8A
+[GPIB] Read port 0x00
+[GPIB] Write port 0x00: 18
+[GPIB] Write port 0x02: 40
+[GPIB] Write port 0x06: 80
+[GPIB] Write port 0x06: 8F
+[GPIB] Write port 0x06: 00
+[GPIB] Write port 0x06: 0F
+[GPIB] Write port 0x06: 8A
+[GPIB] Read port 0x00
+[GPIB] Write port 0x00: 18
+[GPIB] Write port 0x02: 40
+[GPIB] Write port 0x06: 80
+[GPIB] Write port 0x06: 8F
+[GPIB] Write port 0x06: 00
+[GPIB] Write port 0x06: 0F
+[GPIB] Write port 0x06: 8A
+[GPIB] Read port 0x00
+[GPIB] Write port 0x06: 80
+[GPIB] Write port 0x06: 8F
+[GPIB] Write port 0x06: 00
+[GPIB] Write port 0x06: 0F
+[GPIB] Write port 0x06: 8A
+[GPIB] Read port 0x00
+[7220] Write port 0x02: 0A
+[7220] Write port 0x00: 5A
+[7220] Write port 0x02: 0A
+[7220] Write port 0x02: 19
+[7220] Read port 0x02
+[7220] Read port 0x02
+[GPIB] Write port 0x00: 18
+[GPIB] Write port 0x02: 40

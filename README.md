@@ -12,17 +12,18 @@ Lot of work to do.
 Don't complain about functionality in this early stage.
 
 TODO:
-...Finish keyboard driver.
-...Add other GRiD Compass and Compass II models. Need ROM dumps.
-...Improve video driver for other resolutions.
-...Write 8087  Match coprocessor.
-...Write GPIB driver.
-...Write Bubble memory driver.
-...Write serial driver.
-...Write GPIB floppy emulator to get system booting.
-...Still lot of questions about hardware.
-...Rewrite command line arguments.
-...Improve CMake
+* Finish keyboard driver.
+* Add other GRiD Compass and Compass II models. Need ROM dumps.
+* Improve video driver for other resolutions.
+* Write 8087  Match coprocessor.
+* Write GPIB driver.
+* Write virtual GPIB floppy device.
+* Write Bubble memory driver.
+* Write serial driver.
+* Write GPIB floppy emulator to get system booting.
+* Still lot of questions about hardware.
+* Rewrite command line arguments.
+* Improve CMake
 
 Sorry, Windows support and PC XT hardware removed.
 

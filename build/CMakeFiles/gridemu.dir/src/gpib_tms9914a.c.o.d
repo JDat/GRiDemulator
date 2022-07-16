@@ -1,5 +1,5 @@
-CMakeFiles/gridemu.dir/src/gpib.c.o: \
- /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib.c \
+CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o: \
+ /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib_tms9914a.c \
  /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -30,6 +30,6 @@ CMakeFiles/gridemu.dir/src/gpib.c.o: \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
  /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/config.h \
- /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib.h \
+ /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib_tms9914a.h \
  /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/memory.h \
  /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/debuglog.h

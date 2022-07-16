@@ -201,29 +201,29 @@ src/debuglog.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gridemu.dir/build.make CMakeFiles/gridemu.dir/src/debuglog.c.s
 .PHONY : src/debuglog.c.s
 
-src/gpib.o: src/gpib.c.o
-.PHONY : src/gpib.o
+src/gpib_tms9914a.o: src/gpib_tms9914a.c.o
+.PHONY : src/gpib_tms9914a.o
 
 # target to build an object file
-src/gpib.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/gridemu.dir/build.make CMakeFiles/gridemu.dir/src/gpib.c.o
-.PHONY : src/gpib.c.o
+src/gpib_tms9914a.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gridemu.dir/build.make CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o
+.PHONY : src/gpib_tms9914a.c.o
 
-src/gpib.i: src/gpib.c.i
-.PHONY : src/gpib.i
+src/gpib_tms9914a.i: src/gpib_tms9914a.c.i
+.PHONY : src/gpib_tms9914a.i
 
 # target to preprocess a source file
-src/gpib.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/gridemu.dir/build.make CMakeFiles/gridemu.dir/src/gpib.c.i
-.PHONY : src/gpib.c.i
+src/gpib_tms9914a.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gridemu.dir/build.make CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.i
+.PHONY : src/gpib_tms9914a.c.i
 
-src/gpib.s: src/gpib.c.s
-.PHONY : src/gpib.s
+src/gpib_tms9914a.s: src/gpib_tms9914a.c.s
+.PHONY : src/gpib_tms9914a.s
 
 # target to generate assembly for a file
-src/gpib.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/gridemu.dir/build.make CMakeFiles/gridemu.dir/src/gpib.c.s
-.PHONY : src/gpib.c.s
+src/gpib_tms9914a.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gridemu.dir/build.make CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.s
+.PHONY : src/gpib_tms9914a.c.s
 
 src/gridKeyboard8741.o: src/gridKeyboard8741.c.o
 .PHONY : src/gridKeyboard8741.o
@@ -555,9 +555,9 @@ help:
 	@echo "... src/debuglog.o"
 	@echo "... src/debuglog.i"
 	@echo "... src/debuglog.s"
-	@echo "... src/gpib.o"
-	@echo "... src/gpib.i"
-	@echo "... src/gpib.s"
+	@echo "... src/gpib_tms9914a.o"
+	@echo "... src/gpib_tms9914a.i"
+	@echo "... src/gpib_tms9914a.s"
 	@echo "... src/gridKeyboard8741.o"
 	@echo "... src/gridKeyboard8741.i"
 	@echo "... src/gridKeyboard8741.s"

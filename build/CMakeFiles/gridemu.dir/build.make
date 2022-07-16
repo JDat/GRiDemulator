@@ -111,19 +111,19 @@ CMakeFiles/gridemu.dir/src/debuglog.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/gridemu.dir/src/debuglog.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/debuglog.c -o CMakeFiles/gridemu.dir/src/debuglog.c.s
 
-CMakeFiles/gridemu.dir/src/gpib.c.o: CMakeFiles/gridemu.dir/flags.make
-CMakeFiles/gridemu.dir/src/gpib.c.o: ../src/gpib.c
-CMakeFiles/gridemu.dir/src/gpib.c.o: CMakeFiles/gridemu.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jdat/Desktop/GRiD_stuff/GRiDemulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/gridemu.dir/src/gpib.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/gridemu.dir/src/gpib.c.o -MF CMakeFiles/gridemu.dir/src/gpib.c.o.d -o CMakeFiles/gridemu.dir/src/gpib.c.o -c /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib.c
+CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o: CMakeFiles/gridemu.dir/flags.make
+CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o: ../src/gpib_tms9914a.c
+CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o: CMakeFiles/gridemu.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jdat/Desktop/GRiD_stuff/GRiDemulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o -MF CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o.d -o CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o -c /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib_tms9914a.c
 
-CMakeFiles/gridemu.dir/src/gpib.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/gridemu.dir/src/gpib.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib.c > CMakeFiles/gridemu.dir/src/gpib.c.i
+CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib_tms9914a.c > CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.i
 
-CMakeFiles/gridemu.dir/src/gpib.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/gridemu.dir/src/gpib.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib.c -o CMakeFiles/gridemu.dir/src/gpib.c.s
+CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib_tms9914a.c -o CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.s
 
 CMakeFiles/gridemu.dir/src/gridKeyboard8741.c.o: CMakeFiles/gridemu.dir/flags.make
 CMakeFiles/gridemu.dir/src/gridKeyboard8741.c.o: ../src/gridKeyboard8741.c
@@ -312,7 +312,7 @@ gridemu_OBJECTS = \
 "CMakeFiles/gridemu.dir/src/args.c.o" \
 "CMakeFiles/gridemu.dir/src/cpu.c.o" \
 "CMakeFiles/gridemu.dir/src/debuglog.c.o" \
-"CMakeFiles/gridemu.dir/src/gpib.c.o" \
+"CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o" \
 "CMakeFiles/gridemu.dir/src/gridKeyboard8741.c.o" \
 "CMakeFiles/gridemu.dir/src/gridvideo.c.o" \
 "CMakeFiles/gridemu.dir/src/i7220.c.o" \
@@ -333,7 +333,7 @@ gridemu_EXTERNAL_OBJECTS =
 gridemu: CMakeFiles/gridemu.dir/src/args.c.o
 gridemu: CMakeFiles/gridemu.dir/src/cpu.c.o
 gridemu: CMakeFiles/gridemu.dir/src/debuglog.c.o
-gridemu: CMakeFiles/gridemu.dir/src/gpib.c.o
+gridemu: CMakeFiles/gridemu.dir/src/gpib_tms9914a.c.o
 gridemu: CMakeFiles/gridemu.dir/src/gridKeyboard8741.c.o
 gridemu: CMakeFiles/gridemu.dir/src/gridvideo.c.o
 gridemu: CMakeFiles/gridemu.dir/src/i7220.c.o

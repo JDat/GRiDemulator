@@ -68,7 +68,7 @@ CMakeFiles/gridemu.dir/src/machine.c.o: \
  /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gridvideo.h \
  /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/rtc.h \
  /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/i7220.h \
- /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib.h \
+ /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/gpib_tms9914a.h \
  /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/memory.h \
  /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/utility.h \
  /home/jdat/Desktop/GRiD_stuff/GRiDemulator/src/timing.h \

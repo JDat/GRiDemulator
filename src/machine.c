@@ -51,7 +51,7 @@
 #include "gridvideo.h"
 #include "rtc.h"
 #include "i7220.h"
-#include "gpib.h"
+#include "gpib_tms9914a.h"
 #include "memory.h"
 #include "utility.h"
 #include "timing.h"
@@ -264,7 +264,7 @@ int machine_init_grid(MACHINE_t* machine) {
         
         gridKeyboard8741_init();
         bubble_init();
-        gpib_init();
+        tms9914a_init();
 	//i8237_init(&machine->i8237, &machine->CPU);
 	//i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);
 
