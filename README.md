@@ -1,23 +1,35 @@
-GRid Compass and Compass II 1101, 1121, 1129 ans 1139 emulator. 
+GRid Compass and Compass II 1101, 1109, 1121, 1129, 1131 and 1139 emulator. 
 Based on XTulator project by mikechambers84.
-https://github.com/mikechambers84/XTulator
+[https://github.com/mikechambers84/XTulator]
 
 Some ideas come from MAME emulator's GRiD implementation by Sergey Svishchev aka usernameak.
-And big thanks to usernameak personally for his research and consultimg http://deltacxx.insomnia247.nl/gridcompass/
+And big thanks to usernameak personally for his research and consulting [http://deltacxx.insomnia247.nl/gridcompass/]
 
 This is early stage.
+Added CMake system from [https://github.com/user890104/XTulator]
 For now ROM is running up to stage where it tries to boot from GPIB or bubble memry.
 Lot of work to do.
 Don't complain about functionality in this early stage.
 
 TODO:
-*) Write GPIB driver.
-*) Write Bubble memory driver.
-*) Finish keyboard driver.
-*) Improve video driver for other resolutions.
-*) Write serial driver.
-*) Write GPIB follpy emulator to get system booting.
-*) Still lot of questions about hardware.
+. Finish keyboard driver.
+. Add other GRiD Compass and Compass II models. Need ROM dumps.
+. Improve video driver for other resolutions.
+. Write 8087  Match coprocessor.
+. Write GPIB driver.
+. Write Bubble memory driver.
+. Write serial driver.
+. Write GPIB floppy emulator to get system booting.
+. Still lot of questions about hardware.
+. Improve CMake
+
+Sorry, Windows support and PC XT hardware removed.
+
+### Compiling from source under Linux
+`sudo apt-get install libsdl2-dev libpcap-dev cmake`
+`mkdir build && cd build && cmake .. && make`
+
+
 
 Original readme from XTulator author:
 
@@ -55,35 +67,13 @@ Checkmarks below mean that feature is implemented enough to boot and run things 
 - [x] Implement support for multiple machine defnitions (This exists, but only the generic_xt machine boots, the other BIOSes have issues. This is a high priority thing to fix)
 - [x] Intel 8253 timer (Re-implemented, but needs some work to be fully accurate)
 - [x] Intel 8259 interrupt controller (Working, also needs some more attention. This may be the cause of some of the BIOS issues.)
-- [x] Intel 8237 DMA controller (Partially implemented, same as above regarding BIOS boot issues)
 - [x] Intel 8255 PPI controller
 - [x] Re-implement proper system timing
 - [x] Re-implement proper video rendering
-- [x] Rewrite and improve EGA/VGA handling from old emulator (EGA/VGA works now, with some bugs)
-- [ ] Implement proper IDE and floppy controller interfaces (Work begun on FDC)
 - [x] Keyboard input
-- [x] Mouse input
-- [x] PC speaker (Works, but need to figure out why RealSound doesn't work in Links)
-- [x] Adlib/OPL2 (Using Nuked OPL for now. Still working on my own OPL code, which is making noises, but not good noises.)
-- [x] Sound Blaster (SB 2.0 compatibility, but still need to add high speed DMA mode. Glitches with a couple of games I've tried, working on it...)
 - [x] RTC (Need to fix this under non-Win32 OSes)
-- [x] Emulate a Hayes-compatible a serial modem using TCP (somewhat working, only in Windows)
-- [x] Novell NE2000 ethernet (Adapted source from Bochs)
-- [ ] Implement Intel 8080 emulation in the NEC V20 mode (low priority)
 
-### Pre-compiled Win32 release
-
-You can download a pre-compiled Win32 binary [by clicking here](https://xtulator.com/downloads/XTulator-0.20.7.15-pre_alpha.zip). It's v0.20.7.15 pre-alpha. It also includes a sample hard disk image with some very old shareware to test with, as well as the public domain BIOS ROM for the generic_xt machine. To use the NE2000 Ethernet emulation, you will need to install [Npcap](https://nmap.org/npcap/).
-
-### Compiling from source
-
-This project has been tested to compile in Visual Studio 2019, Debian 10 and MacOS, though I may occasionally break Linux/MacOS support as it's not my main platform and I don't always test it at this point. Don't be surprised if it crashes and burns. Interpret "committed to master" as "this worked on Windows" for the time being.
-
-##### Windows (Visual Studio 2019)
-
-The repository includes a Visual Studio 2019 solution and project. You will need to install the [SDL2](http://www.libsdl.org) and [Npcap](https://nmap.org/npcap/) dev libraries.
-
-##### Linux
+### Compiling from source under Linux
 
 Sorry, there's no configure script or makefile yet, so you'l have to compile and link it by hand.
 
@@ -96,20 +86,3 @@ After this, the following line should successfully compile the code.
 <pre><code>gcc -O3 -o XTulator XTulator/*.c XTulator/chipset/*.c XTulator/cpu/cpu.c XTulator/modules/audio/*.c XTulator/modules/disk/*.c XTulator/modules/input/*.c XTulator/modules/io/*.c XTulator/modules/video/*.c -lm -lpthread `pcap-config --cflags --libs` `sdl2-config --cflags --libs`</code></pre>
 
 
-### Some screenshots
-
-![Screenshot 1](https://i.imgur.com/Qkut2rl.png)
-
-![Screenshot 2](https://i.imgur.com/uEgW0WN.png)
-
-![Screenshot 3](https://i.imgur.com/JCkGRdO.png)
-
-![Screenshot 4](https://i.imgur.com/69z2BwQ.png)
-
-![Screenshot 5](https://i.imgur.com/ieLk41s.png)
-
-![Screenshot 6](https://i.imgur.com/0CGsd1F.png)
-
-![Screenshot 7](https://i.imgur.com/wKKxrFj.png)
-
-![Screenshot 8](https://i.imgur.com/CvfuGic.png)
