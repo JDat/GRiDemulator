@@ -1,31 +1,18 @@
 GRid Compass and Compass II 1101, 1109, 1121, 1129, 1131 and 1139 emulator. 
 Based on XTulator project by mikechambers84.
-[https://github.com/mikechambers84/XTulator]
+https://github.com/mikechambers84/XTulator
 
 Some ideas come from MAME emulator's GRiD implementation by Sergey Svishchev aka usernameak.
-And big thanks to usernameak personally for his research and consulting [http://deltacxx.insomnia247.nl/gridcompass/]
+And big thanks to usernameak personally for his research and consulting http://deltacxx.insomnia247.nl/gridcompass/
 
-This is early stage.
-Added CMake system from [https://github.com/user890104/XTulator]
-For now ROM is running up to stage where it tries to boot from GPIB or bubble memry.
-Lot of work to do.
-Don't complain about functionality in this early stage.
+* This is early stage.
+* Added CMake system from https://github.com/user890104/XTulator
+* For now ROM is running up to stage where it tries to boot from GPIB or bubble memory. This is normal in current stage.
+* Lot of work to do.
+* Don't complain about functionality in this early stage.
 
-TODO:
-* Finish keyboard driver.
-* Add other GRiD Compass and Compass II models. Need ROM dumps.
-* Improve video driver for other resolutions.
-* Write 8087  Match coprocessor.
-* Write GPIB driver.
-* Write virtual GPIB floppy device.
-* Write Bubble memory driver.
-* Write serial driver.
-* Write GPIB floppy emulator to get system booting.
-* Still lot of questions about hardware.
-* Rewrite command line arguments.
-* Improve CMake
 
-Sorry, Windows support and PC XT hardware removed.
+Sorry, Windows support and PC XT hardware removed from original code.
 
 ### Compiling from source under Linux
 `sudo apt-get install libsdl2-dev libpcap-dev cmake`
