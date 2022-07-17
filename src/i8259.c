@@ -158,7 +158,5 @@ void i8259_doirq(I8259_t* i8259, uint8_t irqnum) {
 void i8259_init(I8259_t* i8259) {
 	memset(i8259, 0, sizeof(I8259_t));
 	//i8259->intoffset = 8;
-	//ports_cbRegister(0x20, 2, (void*)i8259_read, NULL, (void*)i8259_write, NULL, i8259);
         ports_cbRegister(baseAddress, addressLen, (void*)i8259_read, NULL, (void*)i8259_write, NULL, i8259);
-        //ports_cbRegister(0x2, 2, (void*)i8259_read, NULL, (void*)i8259_write, NULL, i8259);
 }

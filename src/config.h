@@ -25,33 +25,19 @@
 //#define DEBUG_NE2000
 //#define DEBUG_PCAP
 
-#define USE_DISK_HLE
+//#define USE_DISK_HLE
 //#define USE_NUKED_OPL
 //#define USE_NE2000
 
-#ifdef _WIN32
-#define ENABLE_TCP_MODEM
-#endif
-
-#define VIDEO_CARD_MDA		0
-#define VIDEO_CARD_CGA		1
-#define VIDEO_CARD_EGA		2
-#define VIDEO_CARD_VGA		3
-#define VIDEO_CARD_GRID 	4
+#define VIDEO_CARD_GRID 	1
 
 #define SAMPLE_RATE		48000
 #define SAMPLE_BUFFER	4800
 
-#ifdef _WIN32
-#define FUNC_INLINE __forceinline
-#else
 //#define FUNC_INLINE __attribute__((always_inline))
 #define FUNC_INLINE
-#endif
 
-#ifndef _WIN32
 #define _stricmp strcasecmp
-#endif
 
 extern volatile uint8_t running;
 extern uint8_t videocard, showMIPS;

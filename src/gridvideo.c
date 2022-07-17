@@ -68,11 +68,9 @@ int gridvideo_init() {
 	*/
 
 	//TODO: error checking below
-#ifdef _WIN32
-	_beginthread(gridvideo_renderThread, 0, NULL);
-#else
+
 	pthread_create(&gridvideo_renderThreadID, NULL, gridvideo_renderThread, NULL);
-#endif
+
         debug_log(DEBUG_INFO, "[GRiD Video] Attaching to memory\r\n");
 	memory_mapCallbackRegister(0x400, 0x02580, (void*)gridvideo_readmemory, (void*)gridvideo_writememory, NULL);
 

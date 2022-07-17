@@ -26,8 +26,6 @@
 #define MACHINE_ROM_REQUIRED	1
 #define MACHINE_ROM_ISNOTROM	2
 
-#define MACHINE_HW_OPL					0x0000000000000001ULL
-#define MACHINE_HW_BLASTER				0x0000000000000002ULL
 #define MACHINE_HW_UART0_NONE			0x0000000000000004ULL
 #define MACHINE_HW_UART0_MOUSE			0x0000000000000008ULL
 #define MACHINE_HW_UART0_TCPMODEM		0x0000000000000010ULL
@@ -39,8 +37,6 @@
 #define MACHINE_HW_NE2000				0x0000000000000400ULL
 
 //the "skip" HW flags are set in args.c to make sure machine init functions don't override explicit settings from the command line
-#define MACHINE_HW_SKIP_OPL				0x8000000000000000ULL
-#define MACHINE_HW_SKIP_BLASTER			0x4000000000000000ULL
 #define MACHINE_HW_SKIP_UART0			0x2000000000000000ULL
 #define MACHINE_HW_SKIP_UART1			0x1000000000000000ULL
 #define MACHINE_HW_SKIP_DISK			0x0800000000000000ULL
@@ -50,18 +46,13 @@ typedef struct {
 	CPU_t CPU;
 	I8259_t i8259;
 	I8253_t i8253;
-	//I8237_t i8237;
+
 	//I8255_t i8255;
 	//UART_t UART[2];
 #ifdef ENABLE_TCP_MODEM
 	//TCPMODEM_t tcpmodem[2];
 #endif
-	//OPL2_t OPL2;
-	//opl3_chip OPL3;
-	//uint8_t mixOPL;
-	//BLASTER_t blaster;
-	//uint8_t mixBlaster;
-	//PCSPEAKER_t pcspeaker;
+
 #ifdef USE_NE2000
 	//NE2000_t ne2000;
 #endif

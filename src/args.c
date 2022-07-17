@@ -30,12 +30,12 @@
 //#include "chipset/i8237.h"
 //#include "chipset/i8255.h"
 //#include "chipset/uart.h"
-#ifdef ENABLE_TCP_MODEM
+//#ifdef ENABLE_TCP_MODEM
 //#include "modules/io/tcpmodem.h"
-#endif
-#ifdef USE_NE2000
+//#endif
+//#ifdef USE_NE2000
 //#include "modules/io/pcap-win32.h"
-#endif
+//#endif
 //#include "modules/input/mouse.h"
 //#include "modules/disk/biosdisk.h"
 //#include "modules/audio/pcspeaker.h"
@@ -76,7 +76,7 @@ void args_showHelp() {
 	printf(STR_TITLE " command line parameters:\r\n\r\n");
 
 	printf("Machine options:\r\n");
-	printf("  -machine <id>          Emulate machine definition defined by <id>. (Default is generic_xt)\r\n");
+	printf("  -machine <id>          Emulate machine definition defined by <id>. (Default is 1101)\r\n");
 	printf("                         Use -machine list to display <id> options.\r\n");
 	printf("  -speed <mhz>           Run the emulated CPU at approximately <mhz> MHz. (Default is as fast as possible)\r\n");
 	printf("                         There is currently no clock ticks counted per instruction, so the emulator is just going\r\n");
@@ -130,9 +130,9 @@ void args_showHelp() {
 #endif
 */
 	printf("Miscellaneous options:\r\n");
-	printf("  -mem <size>            Initialize emulator with only <size> KB of base memory. (Default is 640)\r\n");
-	printf("                         The maximum size is 736 KB, but this can only work with CGA video and a\r\n");
-	printf("                         system BIOS that will test beyond 640 KB.\r\n");
+//	printf("  -mem <size>            Initialize emulator with only <size> KB of base memory. (Default is 640)\r\n");
+//	printf("                         The maximum size is 736 KB, but this can only work with CGA video and a\r\n");
+//	printf("                         system BIOS that will test beyond 640 KB.\r\n");
 	printf("  -debug <level>         <level> can be: NONE, ERROR, INFO, DETAIL. (Default is INFO)\r\n");
 	printf("  -mips                  Display live MIPS being emulated.\r\n");
 	printf("  -h                     Show this help screen.\r\n");

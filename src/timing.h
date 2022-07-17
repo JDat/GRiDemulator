@@ -22,7 +22,6 @@ void timing_loop();
 uint32_t timing_addTimer(void* callback, void* data, double frequency, uint8_t enabled);
 void timing_updateIntervalFreq(uint32_t tnum, double frequency);
 void timing_updateInterval(uint32_t tnum, uint64_t interval);
-void timing_speedTest();
 void timing_timerEnable(uint32_t tnum);
 void timing_timerDisable(uint32_t tnum);
 uint64_t timing_getFreq();

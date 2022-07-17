@@ -59,9 +59,9 @@ void port_write(CPU_t* cpu, uint16_t portnum, uint8_t value) {
 
 void port_writew(CPU_t* cpu, uint16_t portnum, uint16_t value) {
 	portnum &= 0x0FFF;
-	if (portnum == 0x80) {
-		debug_log(DEBUG_DETAIL, "[PORT] Diagnostic port out: %04X\r\n", value);
-	}
+	//if (portnum == 0x80) {
+	//	debug_log(DEBUG_DETAIL, "[PORT] Diagnostic port out: %04X\r\n", value);
+	//}
 	if (ports_cbWriteW[portnum] != NULL) {
 		(*ports_cbWriteW[portnum])(ports_udata[portnum], portnum, value);
 		return;

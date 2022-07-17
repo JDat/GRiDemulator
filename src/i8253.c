@@ -211,10 +211,8 @@ void i8253_init(I8253_t* i8253, I8259_t* i8259) {
 
 	i8253->cbdata.i8253 = i8253;
 	i8253->cbdata.i8259 = i8259;
-	//i8253->cbdata.pcspeaker = pcspeaker;
 
 	timing_addTimer(i8253_tickCallback, (void*)(&i8253->cbdata), 48000, TIMING_ENABLED); //79545.47
 
-	//ports_cbRegister(0x40, 4, (void*)i8253_read, NULL, (void*)i8253_write, NULL, i8253);
         ports_cbRegister(baseAddress, addressLen, (void*)i8253_read, NULL, (void*)i8253_write, NULL, i8253);
 }

@@ -29,13 +29,9 @@
 #include "debuglog.h"
 #include "cpu.h"
 #include "i8259.h"
-//#include "i8253.h"
-//#include "chipset/i8237.h"
+#include "i8253.h"
 //#include "chipset/i8255.h"
 //#include "chipset/uart.h"
-//#include "modules/audio/pcspeaker.h"
-//#include "modules/audio/opl2.h"
-//#include "modules/audio/blaster.h"
 //#include "modules/disk/biosdisk.h"
 //#include "modules/disk/fdc.h"
 //#include "modules/input/mouse.h"
@@ -46,8 +42,6 @@
 //#include "modules/io/pcap-win32.h"
 #endif
 //#include "modules/io/tcpmodem.h"
-//#include "modules/video/cga.h"
-//#include "modules/video/vga.h"
 #include "gridvideo.h"
 #include "rtc.h"
 #include "i7220.h"
@@ -68,7 +62,8 @@ const MACHINEDEF_t machine_defs[] = {
 	//{ "xi8088", "Xi 8088", machine_init_generic_xt, VIDEO_CARD_CGA, 4.77, MACHINE_HW_UART1_MOUSE | MACHINE_HW_RTC },
 	//{ "zenithss", "Zenith SuperSport 8088", machine_init_generic_xt, VIDEO_CARD_CGA, 4.77, MACHINE_HW_UART1_MOUSE | MACHINE_HW_RTC },
 	//{ "landmark", "Supersoft/Landmark diagnostic ROM", machine_init_generic_xt, VIDEO_CARD_CGA, 4.77, MACHINE_HW_UART1_MOUSE | MACHINE_HW_RTC },
-	{ "grid", "GRiD Compass 1101", machine_init_grid, VIDEO_CARD_GRID, 5, MACHINE_HW_RTC },
+	{ "1101", "GRiD Compass 1101", machine_init_grid, VIDEO_CARD_GRID, 5, MACHINE_HW_RTC },
+        { "1139", "GRiD Compass 1139", machine_init_grid, VIDEO_CARD_GRID, 5, MACHINE_HW_RTC },
         { NULL }
 };
 
@@ -143,14 +138,23 @@ const MACHINEMEM_t machine_mem[][11] = {
 		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
 	},
 */
-	//GRiD compass
+	// GRiD compass
+        // GRid Compass 1101
 	{
 		//{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0x02980, 0x3D680, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },
-		//{ MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1139.bin" },
                 { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1101.bin" },
+		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
+	},
+        // GRid Compass 1139
+	{
+		//{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
+                { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },
+                { MACHINE_MEM_RAM, 0x02980, 0x3D680, MACHINE_ROM_ISNOTROM, NULL },
+                { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },
+                { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1139.bin" },
 		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
 	},
 };
@@ -259,22 +263,15 @@ int machine_init_grid(MACHINE_t* machine) {
 
 	debug_log(DEBUG_INFO, "[MACHINE] Init Grid function start\r\n");
 	i8259_init(&machine->i8259);
-	//i8253_init(&machine->i8253, &machine->i8259, &machine->pcspeaker);
         i8253_init(&machine->i8253, &machine->i8259);
         
         gridKeyboard8741_init();
         bubble_init();
         tms9914a_init();
-	//i8237_init(&machine->i8237, &machine->CPU);
 	//i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);
+        
+        rtc_init(&machine->CPU);
 
-	//check machine HW flags and init devices accordingly
-        
-	if ((machine->hwflags & MACHINE_HW_RTC) && !(machine->hwflags & MACHINE_HW_SKIP_RTC)) {
-		rtc_init(&machine->CPU);
-	}
-        
-        
         /*
 	if ((machine->hwflags & MACHINE_HW_UART0_NONE) && !(machine->hwflags & MACHINE_HW_SKIP_UART0)) {
 		uart_init(&machine->UART[0], &machine->i8259, 0x3F8, 4, NULL, NULL, NULL, NULL);
