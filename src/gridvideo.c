@@ -21,17 +21,15 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <pthread.h>
-pthread_t gridvideo_renderThreadID;
 #include "gridvideo.h"
 #include "config.h"
 #include "timing.h"
 #include "utility.h"
-//#include "ports.h"
 #include "memory.h"
 #include "sdlconsole.h"
 #include "debuglog.h"
 
-//uint8_t gridvideo_font[4096];
+pthread_t gridvideo_renderThreadID;
 uint32_t gridvideo_framebuffer[240][320];
 uint8_t *gridvideo_RAM = NULL;
 
@@ -40,11 +38,14 @@ volatile uint8_t gridvideo_doDraw = 1;
 int gridvideo_init() {
 	int x, y;
 
+#ifdef DEBUG_GRIDVIDEO
 	debug_log(DEBUG_INFO, "[GRiD Video] Initializing GRid Video device\r\n");
-
+#endif
 	gridvideo_RAM = (uint8_t*)malloc(9600);
 	if (gridvideo_RAM == NULL) {
+#ifdef DEBUG_GRIDVIDEO
 		debug_log(DEBUG_ERROR, "[GRiD Video] Failed to allocate video memory\r\n");
+#endif
 		return -1;
 	}
         utility_loadFile(gridvideo_RAM, 3320, "ROMS/screenLogo.bin");
@@ -70,8 +71,9 @@ int gridvideo_init() {
 	//TODO: error checking below
 
 	pthread_create(&gridvideo_renderThreadID, NULL, gridvideo_renderThread, NULL);
-
+#ifdef DEBUG_GRIDVIDEO
         debug_log(DEBUG_INFO, "[GRiD Video] Attaching to memory\r\n");
+#endif
 	memory_mapCallbackRegister(0x400, 0x02580, (void*)gridvideo_readmemory, (void*)gridvideo_writememory, NULL);
 
 	return 0;

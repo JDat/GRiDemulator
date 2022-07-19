@@ -1191,40 +1191,60 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			cpu->savecs = cpu->segregs[regcs];
 			cpu->saveip = cpu->ip;
 			cpu->opcode = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
+#ifdef DEBUG_CPU
 			//debug_log(DEBUG_INFO, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
                         //debug_log(DEBUG_INFO, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
                         //debug_log(DEBUG_INFO, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", cpu->regs.wordregs[regsi], cpu->regs.wordregs[regdi], cpu->regs.wordregs[regbp], cpu->regs.wordregs[regsp]);
                         //debug_log(DEBUG_INFO, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", cpu->segregs[regcs], cpu->segregs[regds], cpu->segregs[reges], cpu->segregs[regss]);
+#endif
                         StepIP(cpu, 1);
 
 			switch (cpu->opcode) {
 				/* segment prefix check */
 			case 0x2E:	/* segment cpu->segregs[regcs] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tsegment CS\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
 				cpu->useseg = cpu->segregs[regcs];
 				cpu->segoverride = 1;
 				break;
 
 			case 0x3E:	/* segment cpu->segregs[regds] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tsegment DS\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
 				cpu->useseg = cpu->segregs[regds];
 				cpu->segoverride = 1;
 				break;
 
 			case 0x26:	/* segment cpu->segregs[reges] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tsegment ES\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
 				cpu->useseg = cpu->segregs[reges];
 				cpu->segoverride = 1;
 				break;
 
 			case 0x36:	/* segment cpu->segregs[regss] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tsegment SS\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
 				cpu->useseg = cpu->segregs[regss];
 				cpu->segoverride = 1;
 				break;
 
 				/* repetition prefix check */
 			case 0xF3:	/* REP/REPE/REPZ */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tREP/REPE/REPZ\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
 				cpu->reptype = 1;
 				break;
 
 			case 0xF2:	/* REPNE/REPNZ */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tREPNE/REPNZ\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
 				cpu->reptype = 2;
 				break;
 
@@ -3107,7 +3127,9 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			cpu_intcall(cpu, 6); /* trip invalid opcode exception. this occurs on the 80186+, 8086/8088 CPUs treat them as NOPs. */
 						   /* technically they aren't exactly like NOPs in most cases, but for our pursoses, that's accurate enough. */
 #endif
+#ifdef DEBUG_CPU
 			debug_log(DEBUG_INFO, "[CPU] Invalid opcode exception at %04X:%04X\r\n", cpu->segregs[regcs], firstip);
+#endif
 			break;
 		}
 
@@ -3124,11 +3146,14 @@ void do8087(CPU_t* cpu) {
         //modregrm(cpu);
         uint8_t fAddrTmp;
         fAddrTmp = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
+#ifdef DEBUG_FPU
         debug_log(DEBUG_INFO, "[8087] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
         debug_log(DEBUG_INFO, "[8087] operand 2nd byte: 0x%02X\r\n", fAddrTmp);
+#endif
         StepIP(cpu, 1);
+#ifdef DEBUG_FPU
         debug_log(DEBUG_INFO, "[8087] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
         debug_log(DEBUG_INFO, "[8087] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", cpu->regs.wordregs[regsi], cpu->regs.wordregs[regdi], cpu->regs.wordregs[regbp], cpu->regs.wordregs[regsp]);
         debug_log(DEBUG_INFO, "[8087] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", cpu->segregs[regcs], cpu->segregs[regds], cpu->segregs[reges], cpu->segregs[regss]);
-
+#endif
 }

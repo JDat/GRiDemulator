@@ -22,8 +22,6 @@
 #include <stdlib.h>
 #include "config.h"
 #include "cpu.h"
-//#include "modules/video/cga.h"
-//#include "modules/video/vga.h"
 #include "utility.h"
 #include "memory.h"
 #include "debuglog.h"
@@ -57,16 +55,22 @@ uint8_t cpu_read(CPU_t* cpu, uint32_t addr32) {
 	if (memory_mapReadCallback[addr32] != NULL) {
 		return (*memory_mapReadCallback[addr32])(memory_udata[addr32], addr32);
 	}
+#ifdef DEBUG_MEMORY
         debug_log(DEBUG_ERROR, "[MEM] Shit while CPU read. Addr: 0x%05X\r\n", addr32);
+#endif
 	return 0xFF;
 }
 
 void memory_mapRegister(uint32_t start, uint32_t len, uint8_t* readb, uint8_t* writeb) {
+#ifdef DEBUG_MEMORY
         debug_log(DEBUG_INFO, "[MEM] mapRegister start. Addr: 0x%05X, len: 0x%05X\r\n", start, len);
+#endif
 	uint32_t i;
 	for (i = 0; i < len; i++) {
 		if ((start + i) >= MEMORY_RANGE) {
+#ifdef DEBUG_MEMORY
                         debug_log(DEBUG_ERROR, "[MEM] Error in mapRegister: wanted: %d, allowed range: %d\r\n", (start + i), MEMORY_RANGE);
+#endif
 			break;
 		}
 		memory_mapRead[start + i] = (readb == NULL) ? NULL : readb + i;
@@ -75,11 +79,15 @@ void memory_mapRegister(uint32_t start, uint32_t len, uint8_t* readb, uint8_t* w
 }
 
 void memory_mapCallbackRegister(uint32_t start, uint32_t count, uint8_t(*readb)(void*, uint32_t), void (*writeb)(void*, uint32_t, uint8_t), void* udata) {
+#ifdef DEBUG_MEMORY
 	debug_log(DEBUG_INFO, "[MEM] mapCallbackRegister. Addr: 0x%05X, len: 0x%05X\r\n", start, count);
+#endif
         uint32_t i;
 	for (i = 0; i < count; i++) {
 		if ((start + i) >= MEMORY_RANGE) {
+#ifdef DEBUG_MEMORY
                         debug_log(DEBUG_ERROR, "[MEM] Error in mapCallbackRegister: wanted: %d, allowed range: %d\r\n", (start + i), MEMORY_RANGE);
+#endif
 			break;
 		}
 		memory_mapReadCallback[start + i] = readb;

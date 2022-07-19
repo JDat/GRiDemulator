@@ -54,7 +54,9 @@ void port_write(CPU_t* cpu, uint16_t portnum, uint8_t value) {
 		(*ports_cbWriteB[portnum])(ports_udata[portnum], portnum, value);
 		return;
 	}
+#ifdef DEBUG_PORTS
         debug_log(DEBUG_DETAIL, "[SHIT] not registered port_write @ %03X, data: %02X\r\n", portnum, value);
+#endif
 }
 
 void port_writew(CPU_t* cpu, uint16_t portnum, uint16_t value) {
@@ -78,7 +80,9 @@ uint8_t port_read(CPU_t* cpu, uint16_t portnum) {
 	if (ports_cbReadB[portnum] != NULL) {
 		return (*ports_cbReadB[portnum])(ports_udata[portnum], portnum);
 	}
+#ifdef DEBUG_PORTS
         debug_log(DEBUG_DETAIL, "[SHIT] not registered port_read @ %03X\r\n", portnum);
+#endif
 	return 0xFF;
 }
 

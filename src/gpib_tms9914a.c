@@ -26,7 +26,6 @@
 #include <string.h>
 #include "config.h"
 #include "gpib_tms9914a.h"
-//#include "ports.h"
 #include "memory.h"
 #include "debuglog.h"
 //#include <time.h>
@@ -36,17 +35,22 @@
 
 uint8_t tms9914a_read(void* dummy, uint32_t addr) {
         addr = addr - baseAddress;
+#ifdef DEBUG_GPIB
         debug_log(DEBUG_DETAIL, "[GPIB] Read port 0x%02X\n", addr);
-
+#endif
         return 0xFF;
 }
 
 void tms9914a_write(void* dummy, uint32_t addr, uint8_t value) {
         addr = addr - baseAddress;
+#ifdef DEBUG_GPIB
         debug_log(DEBUG_DETAIL, "[GPIB] Write port 0x%02X: %02X\n", addr, value);
+#endif
 }
 
 void tms9914a_init() {
-	debug_log(DEBUG_INFO, "[GPIB] Initializing GPiB controller\r\n");
+#ifdef DEBUG_GPIB
+        debug_log(DEBUG_INFO, "[GPIB] Initializing GPiB controller\r\n");
+#endif
         memory_mapCallbackRegister(baseAddress, addressLen, (void*)tms9914a_read, (void*)tms9914a_write, NULL);
 }

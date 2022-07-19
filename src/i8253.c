@@ -206,7 +206,9 @@ void i8253_tickCallback(I8253CB_t* i8253cb) {
 
 //void i8253_init(I8253_t* i8253, I8259_t* i8259, PCSPEAKER_t* pcspeaker) {
 void i8253_init(I8253_t* i8253, I8259_t* i8259) {
+#ifdef DEBUG_PIT
         debug_log(DEBUG_DETAIL, "[8253] init\r\n");
+#endif
 	memset(i8253, 0, sizeof(I8253_t));
 
 	i8253->cbdata.i8253 = i8253;

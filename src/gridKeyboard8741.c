@@ -45,12 +45,14 @@ uint8_t gridKeyboard8741_read(void* dummy, uint32_t addr) {
 	//scanCode = sdlconsole_getScancode();
   //scanCode = machine.KeyState.scancode;
   uint8_t ret;
-  
+#ifdef DEBUG_KEYBOARD
   debug_log(DEBUG_DETAIL, "[KEY] Read port 0x%02X\n", addr);
-  
+#endif
   switch (addr) {
     case 0:
+#ifdef DEBUG_KEYBOARD
       debug_log(DEBUG_DETAIL, "[KEY] scancode 0x%02X\n", scanCode);
+#endif
       keybReady = false;
       ret = scanCode;
       scanCode = 0xFF;
@@ -65,12 +67,15 @@ uint8_t gridKeyboard8741_read(void* dummy, uint32_t addr) {
 
 void gridKeyboard8741_write(void* dummy, uint32_t addr, uint8_t value) {
 	addr = addr - 0xDFFC0;
+#ifdef DEBUG_KEYBOARD
   debug_log(DEBUG_DETAIL, "[KEY] Write port 0x%02X: %02X\n", addr, value);
+#endif
   keybReady = false;
 }
 
 void gridKeyboard8741_init() {
+#ifdef DEBUG_KEYBOARD
         debug_log(DEBUG_INFO, "[KEY] Attaching to memory\r\n");
+#endif
         memory_mapCallbackRegister(0xDFFC0, 0x4, (void*)gridKeyboard8741_read, (void*)gridKeyboard8741_write, NULL);
-
 }

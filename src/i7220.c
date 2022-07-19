@@ -36,17 +36,22 @@
 
 uint8_t bubble_read(void* dummy, uint32_t addr) {
         addr = addr - baseAddress;
+#ifdef DEBUG_BUBBLEMEM
         debug_log(DEBUG_DETAIL, "[7220] Read port 0x%02X\n", addr);
-
+#endif
         return 0x00;
 }
 
 void bubble_write(void* dummy, uint32_t addr, uint8_t value) {
         addr = addr - baseAddress;
+#ifdef DEBUG_BUBBLEMEM
         debug_log(DEBUG_DETAIL, "[7220] Write port 0x%02X: %02X\n", addr, value);
+#endif
 }
 
 void bubble_init() {
-	debug_log(DEBUG_INFO, "[7220] Initializing bubble memory controller\r\n");
+#ifdef DEBUG_BUBBLEMEM
+        debug_log(DEBUG_INFO, "[7220] Initializing bubble memory controller\r\n");
+#endif
         memory_mapCallbackRegister(baseAddress, addressLen, (void*)bubble_read, (void*)bubble_write, NULL);
 }

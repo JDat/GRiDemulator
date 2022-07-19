@@ -36,7 +36,9 @@
 
 uint8_t rtc_read(void* dummy, uint32_t addr) {
         addr = addr - baseAddress;
+#ifdef DEBUG_RTC
 	debug_log(DEBUG_DETAIL, "[RTC] Read port 0x%02X\n", addr);
+#endif
         uint8_t ret = 0xFF;
 	
         struct tm *tdata;
@@ -112,11 +114,15 @@ uint8_t rtc_read(void* dummy, uint32_t addr) {
 //void rtc_write(void* dummy, uint16_t addr, uint8_t value) {
 void rtc_write(void* dummy, uint32_t addr, uint8_t value) {
         addr = addr - baseAddress;
+#ifdef DEBUG_RTC
         debug_log(DEBUG_DETAIL, "[RTC] Write port 0x%02X: %02X\n", addr, value);
+#endif
         // time set from GRiD sofware not implemented yet
 }
 
 void rtc_init() {
+#ifdef DEBUG_RTC
 	debug_log(DEBUG_INFO, "[RTC] Initializing real time clock\r\n");
+#endif
         memory_mapCallbackRegister(baseAddress, addressLen, (void*)rtc_read, (void*)rtc_write, NULL);
 }
