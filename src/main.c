@@ -38,7 +38,7 @@
 //#include "modules/io/pcap-win32.h"
 //#endif
 
-char* usemachine = "grid"; //default
+char* usemachine = "grid1101"; //default
 
 char title[64]; //assuming 64 isn't safe if somebody starts messing with STR_TITLE and STR_VERSION
 
@@ -90,9 +90,6 @@ int main(int argc, char *argv[]) {
 	ports_init();
 	timing_init();
 	memory_init();
-#ifdef _WIN32
-	menus_setMachine(&machine);
-#endif
 
 	//machine.pcap_if = -1;
 	if (args_parse(&machine, argc, argv)) {

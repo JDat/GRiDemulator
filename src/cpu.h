@@ -21,7 +21,7 @@
 #define _CPU_H_
 
 #include <stdint.h>
-#include "cpuconf.h"
+//#include "cpuconf.h"
 #include "i8259.h"
 
 union _bytewordregs_ {
@@ -76,7 +76,7 @@ typedef struct {
 #define regbh 7
 #endif
 
-#define StepIP(mycpu, x)	mycpu->ip += x
+//#define StepIP(mycpu, x)	mycpu->ip += x
 #define getmem8(mycpu, x, y)	cpu_read(mycpu, segbase(x) + y)
 #define getmem16(mycpu, x, y)	cpu_readw(mycpu, segbase(x) + y)
 #define putmem8(mycpu, x, y, z)	cpu_write(mycpu, segbase(x) + y, z)
@@ -110,7 +110,7 @@ typedef struct {
 	x->df = (tmp >> 10) & 1; \
 	x->of = (tmp >> 11) & 1; \
 }
-
+/*
 #define modregrm(x) { \
 	x->addrbyte = getmem8(x, x->segregs[regcs], x->ip); \
 	StepIP(x, 1); \
@@ -150,21 +150,8 @@ typedef struct {
 	x->disp16 = 0; \
 	} \
 }
-
+*/
 /*
-struct {
-    const char  *name,
-    uint32_t    SDLname,
-    uint32_t    unshifted,
-    uint32_t    shift,
-    uint32_t    code,
-    uint32_t    codeShift,
-    uint32_t    ctrl,
-    uint32_t    shiftCtrl,
-    uint32_t    codeCtrl,
-    uint32_t    codeShiftCtrl
-} t_8087command;
-
 const t_8087command opcodesMatrix8087[64] = {
         { NULL },
         { NULL }
@@ -172,6 +159,9 @@ const t_8087command opcodesMatrix8087[64] = {
 */
         
 void do8087(CPU_t* cpu);
+void StepIP(CPU_t* cpu, uint8_t x);
+void modregrm(CPU_t* x);
+
 uint8_t cpu_read(CPU_t* cpu, uint32_t addr);
 uint16_t cpu_readw(CPU_t* cpu, uint32_t addr);
 void cpu_write(CPU_t* cpu, uint32_t addr32, uint8_t value);

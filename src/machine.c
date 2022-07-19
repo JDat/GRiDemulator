@@ -333,7 +333,8 @@ int machine_init(MACHINE_t* machine, char* id) {
 			return -1;
 		}
 
-		if (_stricmp(id, machine_defs[num].id) == 0) {
+		//if (_stricmp(id, machine_defs[num].id) == 0) {
+                if (strcasecmp(id, machine_defs[num].id) == 0) {
 			match = 1;
 		}
 		else {

@@ -1,4 +1,4 @@
-[MACHINE] Initializing machine: "GRiD Compass 1101" (grid)
+[MACHINE] Initializing machine: "GRiD Compass 1101" (1101)
 [MEM] mapRegister start. Addr: 0x00000, len: 0x00400
 [MEM] mapRegister start. Addr: 0x02980, len: 0x3D680
 [MEM] mapRegister start. Addr: 0xC0000, len: 0x0FFFF
@@ -12,7 +12,7 @@
 [GPIB] Initializing GPiB controller
 [MEM] mapCallbackRegister. Addr: 0xDFF80, len: 0x00008
 [RTC] Initializing real time clock
-[MEM] mapCallbackRegister. Addr: 0xDFF40, len: 0x00016
+[MEM] mapCallbackRegister. Addr: 0xDFF40, len: 0x00010
 [GRiD Video] Initializing GRid Video device
 [GRiD Video] Attaching to memory
 [MEM] mapCallbackRegister. Addr: 0x00400, len: 0x02580
@@ -51,41 +51,3 @@
 [GPIB] Write port 0x06: 0F
 [GPIB] Write port 0x06: 8A
 [GPIB] Read port 0x00
-[GPIB] Write port 0x00: 18
-[GPIB] Write port 0x02: 40
-[GPIB] Write port 0x06: 80
-[GPIB] Write port 0x06: 8F
-[GPIB] Write port 0x06: 00
-[GPIB] Write port 0x06: 0F
-[GPIB] Write port 0x06: 8A
-[GPIB] Read port 0x00
-[GPIB] Write port 0x00: 18
-[GPIB] Write port 0x02: 40
-[GPIB] Write port 0x06: 80
-[GPIB] Write port 0x06: 8F
-[GPIB] Write port 0x06: 00
-[GPIB] Write port 0x06: 0F
-[GPIB] Write port 0x06: 8A
-[GPIB] Read port 0x00
-[GPIB] Write port 0x00: 18
-[GPIB] Write port 0x02: 40
-[GPIB] Write port 0x06: 80
-[GPIB] Write port 0x06: 8F
-[GPIB] Write port 0x06: 00
-[GPIB] Write port 0x06: 0F
-[GPIB] Write port 0x06: 8A
-[GPIB] Read port 0x00
-[GPIB] Write port 0x06: 80
-[GPIB] Write port 0x06: 8F
-[GPIB] Write port 0x06: 00
-[GPIB] Write port 0x06: 0F
-[GPIB] Write port 0x06: 8A
-[GPIB] Read port 0x00
-[7220] Write port 0x02: 0A
-[7220] Write port 0x00: 5A
-[7220] Write port 0x02: 0A
-[7220] Write port 0x02: 19
-[7220] Read port 0x02
-[7220] Read port 0x02
-[GPIB] Write port 0x00: 18
-[GPIB] Write port 0x02: 40

@@ -36,16 +36,59 @@ const uint8_t parity[0x100] = {
 	0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1
 };
 
-FUNC_INLINE void cpu_writew(CPU_t* cpu, uint32_t addr32, uint16_t value) {
+void StepIP(CPU_t* cpu, uint8_t x) {
+        cpu->ip += x;
+}
+
+void modregrm(CPU_t* x) {
+	x->addrbyte = getmem8(x, x->segregs[regcs], x->ip);
+	StepIP(x, 1);
+	x->mode = x->addrbyte >> 6;
+	x->reg = (x->addrbyte >> 3) & 7;
+	x->rm = x->addrbyte & 7;
+	switch(x->mode) {
+                case 0:
+                        if(x->rm == 6) {
+                                x->disp16 = getmem16(x, x->segregs[regcs], x->ip);
+                                StepIP(x, 2);
+                        }
+                        if(((x->rm == 2) || (x->rm == 3)) && !x->segoverride) {
+                                x->useseg = x->segregs[regss];
+                        }
+                        break;
+         
+                case 1:
+                        x->disp16 = signext(getmem8(x, x->segregs[regcs], x->ip));
+                        StepIP(x, 1);
+                        if(((x->rm == 2) || (x->rm == 3) || (x->rm == 6)) && !x->segoverride) {
+                                x->useseg = x->segregs[regss];
+                        }
+                        break;
+         
+                case 2:
+                        x->disp16 = getmem16(x, x->segregs[regcs], x->ip);
+                        StepIP(x, 2);
+                        if(((x->rm == 2) || (x->rm == 3) || (x->rm == 6)) && !x->segoverride) {
+                                x->useseg = x->segregs[regss];
+                        }
+                        break;
+         
+                default:
+                        x->disp8 = 0;
+                        x->disp16 = 0;
+	}
+}
+
+void cpu_writew(CPU_t* cpu, uint32_t addr32, uint16_t value) {
 	cpu_write(cpu, addr32, (uint8_t)value);
 	cpu_write(cpu, addr32 + 1, (uint8_t)(value >> 8));
 }
 
-FUNC_INLINE uint16_t cpu_readw(CPU_t* cpu, uint32_t addr32) {
+uint16_t cpu_readw(CPU_t* cpu, uint32_t addr32) {
 	return ((uint16_t)cpu_read(cpu, addr32) | (uint16_t)(cpu_read(cpu, addr32 + 1) << 8));
 }
 
-FUNC_INLINE void flag_szp8(CPU_t* cpu, uint8_t value) {
+void flag_szp8(CPU_t* cpu, uint8_t value) {
 	if (!value) {
 		cpu->zf = 1;
 	}
@@ -63,7 +106,7 @@ FUNC_INLINE void flag_szp8(CPU_t* cpu, uint8_t value) {
 	cpu->pf = parity[value]; /* retrieve parity state from lookup table */
 }
 
-FUNC_INLINE void flag_szp16(CPU_t* cpu, uint16_t value) {
+void flag_szp16(CPU_t* cpu, uint16_t value) {
 	if (!value) {
 		cpu->zf = 1;
 	}
@@ -81,19 +124,19 @@ FUNC_INLINE void flag_szp16(CPU_t* cpu, uint16_t value) {
 	cpu->pf = parity[value & 255];	/* retrieve parity state from lookup table */
 }
 
-FUNC_INLINE void flag_log8(CPU_t* cpu, uint8_t value) {
+void flag_log8(CPU_t* cpu, uint8_t value) {
 	flag_szp8(cpu, value);
 	cpu->cf = 0;
 	cpu->of = 0; /* bitwise logic ops always clear carry and overflow */
 }
 
-FUNC_INLINE void flag_log16(CPU_t* cpu, uint16_t value) {
+void flag_log16(CPU_t* cpu, uint16_t value) {
 	flag_szp16(cpu, value);
 	cpu->cf = 0;
 	cpu->of = 0; /* bitwise logic ops always clear carry and overflow */
 }
 
-FUNC_INLINE void flag_adc8(CPU_t* cpu, uint8_t v1, uint8_t v2, uint8_t v3) {
+void flag_adc8(CPU_t* cpu, uint8_t v1, uint8_t v2, uint8_t v3) {
 
 	/* v1 = destination operand, v2 = source operand, v3 = carry flag */
 	uint16_t	dst;
@@ -122,7 +165,7 @@ FUNC_INLINE void flag_adc8(CPU_t* cpu, uint8_t v1, uint8_t v2, uint8_t v3) {
 	}
 }
 
-FUNC_INLINE void flag_adc16(CPU_t* cpu, uint16_t v1, uint16_t v2, uint16_t v3) {
+void flag_adc16(CPU_t* cpu, uint16_t v1, uint16_t v2, uint16_t v3) {
 
 	uint32_t	dst;
 
@@ -150,7 +193,7 @@ FUNC_INLINE void flag_adc16(CPU_t* cpu, uint16_t v1, uint16_t v2, uint16_t v3) {
 	}
 }
 
-FUNC_INLINE void flag_add8(CPU_t* cpu, uint8_t v1, uint8_t v2) {
+void flag_add8(CPU_t* cpu, uint8_t v1, uint8_t v2) {
 	/* v1 = destination operand, v2 = source operand */
 	uint16_t	dst;
 
@@ -178,7 +221,7 @@ FUNC_INLINE void flag_add8(CPU_t* cpu, uint8_t v1, uint8_t v2) {
 	}
 }
 
-FUNC_INLINE void flag_add16(CPU_t* cpu, uint16_t v1, uint16_t v2) {
+void flag_add16(CPU_t* cpu, uint16_t v1, uint16_t v2) {
 	/* v1 = destination operand, v2 = source operand */
 	uint32_t	dst;
 
@@ -206,7 +249,7 @@ FUNC_INLINE void flag_add16(CPU_t* cpu, uint16_t v1, uint16_t v2) {
 	}
 }
 
-FUNC_INLINE void flag_sbb8(CPU_t* cpu, uint8_t v1, uint8_t v2, uint8_t v3) {
+void flag_sbb8(CPU_t* cpu, uint8_t v1, uint8_t v2, uint8_t v3) {
 
 	/* v1 = destination operand, v2 = source operand, v3 = carry flag */
 	uint16_t	dst;
@@ -236,7 +279,7 @@ FUNC_INLINE void flag_sbb8(CPU_t* cpu, uint8_t v1, uint8_t v2, uint8_t v3) {
 	}
 }
 
-FUNC_INLINE void flag_sbb16(CPU_t* cpu, uint16_t v1, uint16_t v2, uint16_t v3) {
+void flag_sbb16(CPU_t* cpu, uint16_t v1, uint16_t v2, uint16_t v3) {
 
 	/* v1 = destination operand, v2 = source operand, v3 = carry flag */
 	uint32_t	dst;
@@ -266,7 +309,7 @@ FUNC_INLINE void flag_sbb16(CPU_t* cpu, uint16_t v1, uint16_t v2, uint16_t v3) {
 	}
 }
 
-FUNC_INLINE void flag_sub8(CPU_t* cpu, uint8_t v1, uint8_t v2) {
+void flag_sub8(CPU_t* cpu, uint8_t v1, uint8_t v2) {
 
 	/* v1 = destination operand, v2 = source operand */
 	uint16_t	dst;
@@ -295,7 +338,7 @@ FUNC_INLINE void flag_sub8(CPU_t* cpu, uint8_t v1, uint8_t v2) {
 	}
 }
 
-FUNC_INLINE void flag_sub16(CPU_t* cpu, uint16_t v1, uint16_t v2) {
+void flag_sub16(CPU_t* cpu, uint16_t v1, uint16_t v2) {
 
 	/* v1 = destination operand, v2 = source operand */
 	uint32_t	dst;
@@ -324,77 +367,77 @@ FUNC_INLINE void flag_sub16(CPU_t* cpu, uint16_t v1, uint16_t v2) {
 	}
 }
 
-FUNC_INLINE void op_adc8(CPU_t* cpu) {
+void op_adc8(CPU_t* cpu) {
 	cpu->res8 = cpu->oper1b + cpu->oper2b + cpu->cf;
 	flag_adc8(cpu, cpu->oper1b, cpu->oper2b, cpu->cf);
 }
 
-FUNC_INLINE void op_adc16(CPU_t* cpu) {
+void op_adc16(CPU_t* cpu) {
 	cpu->res16 = cpu->oper1 + cpu->oper2 + cpu->cf;
 	flag_adc16(cpu, cpu->oper1, cpu->oper2, cpu->cf);
 }
 
-FUNC_INLINE void op_add8(CPU_t* cpu) {
+void op_add8(CPU_t* cpu) {
 	cpu->res8 = cpu->oper1b + cpu->oper2b;
 	flag_add8(cpu, cpu->oper1b, cpu->oper2b);
 }
 
-FUNC_INLINE void op_add16(CPU_t* cpu) {
+void op_add16(CPU_t* cpu) {
 	cpu->res16 = cpu->oper1 + cpu->oper2;
 	flag_add16(cpu, cpu->oper1, cpu->oper2);
 }
 
-FUNC_INLINE void op_and8(CPU_t* cpu) {
+void op_and8(CPU_t* cpu) {
 	cpu->res8 = cpu->oper1b & cpu->oper2b;
 	flag_log8(cpu, cpu->res8);
 }
 
-FUNC_INLINE void op_and16(CPU_t* cpu) {
+void op_and16(CPU_t* cpu) {
 	cpu->res16 = cpu->oper1 & cpu->oper2;
 	flag_log16(cpu, cpu->res16);
 }
 
-FUNC_INLINE void op_or8(CPU_t* cpu) {
+void op_or8(CPU_t* cpu) {
 	cpu->res8 = cpu->oper1b | cpu->oper2b;
 	flag_log8(cpu, cpu->res8);
 }
 
-FUNC_INLINE void op_or16(CPU_t* cpu) {
+void op_or16(CPU_t* cpu) {
 	cpu->res16 = cpu->oper1 | cpu->oper2;
 	flag_log16(cpu, cpu->res16);
 }
 
-FUNC_INLINE void op_xor8(CPU_t* cpu) {
+void op_xor8(CPU_t* cpu) {
 	cpu->res8 = cpu->oper1b ^ cpu->oper2b;
 	flag_log8(cpu, cpu->res8);
 }
 
-FUNC_INLINE void op_xor16(CPU_t* cpu) {
+void op_xor16(CPU_t* cpu) {
 	cpu->res16 = cpu->oper1 ^ cpu->oper2;
 	flag_log16(cpu, cpu->res16);
 }
 
-FUNC_INLINE void op_sub8(CPU_t* cpu) {
+void op_sub8(CPU_t* cpu) {
 	cpu->res8 = cpu->oper1b - cpu->oper2b;
 	flag_sub8(cpu, cpu->oper1b, cpu->oper2b);
 }
 
-FUNC_INLINE void op_sub16(CPU_t* cpu) {
+void op_sub16(CPU_t* cpu) {
 	cpu->res16 = cpu->oper1 - cpu->oper2;
 	flag_sub16(cpu, cpu->oper1, cpu->oper2);
 }
 
-FUNC_INLINE void op_sbb8(CPU_t* cpu) {
+void op_sbb8(CPU_t* cpu) {
 	cpu->res8 = cpu->oper1b - (cpu->oper2b + cpu->cf);
 	flag_sbb8(cpu, cpu->oper1b, cpu->oper2b, cpu->cf);
 }
 
-FUNC_INLINE void op_sbb16(CPU_t* cpu) {
+void op_sbb16(CPU_t* cpu) {
 	cpu->res16 = cpu->oper1 - (cpu->oper2 + cpu->cf);
 	flag_sbb16(cpu, cpu->oper1, cpu->oper2, cpu->cf);
 }
 
-FUNC_INLINE void getea(CPU_t* cpu, uint8_t rmval) {
+void getea(CPU_t* cpu, uint8_t rmval) {
 	uint32_t	tempea;
 
 	tempea = 0;
@@ -462,12 +505,12 @@ FUNC_INLINE void getea(CPU_t* cpu, uint8_t rmval) {
 	cpu->ea = (tempea & 0xFFFF) + (cpu->useseg << 4);
 }
 
-FUNC_INLINE void push(CPU_t* cpu, uint16_t pushval) {
+void push(CPU_t* cpu, uint16_t pushval) {
 	cpu->regs.wordregs[regsp] = cpu->regs.wordregs[regsp] - 2;
 	putmem16(cpu, cpu->segregs[regss], cpu->regs.wordregs[regsp], pushval);
 }
 
-FUNC_INLINE uint16_t pop(CPU_t* cpu) {
+uint16_t pop(CPU_t* cpu) {
 
 	uint16_t	tempval;
 
@@ -487,7 +530,7 @@ void cpu_reset(CPU_t* cpu) {
 	cpu->trap_toggle = 0;
 }
 
-FUNC_INLINE uint16_t readrm16(CPU_t* cpu, uint8_t rmval) {
+uint16_t readrm16(CPU_t* cpu, uint8_t rmval) {
 	//debug_log(DEBUG_INFO, "cpu readmem16\r\n");
 	if (cpu->mode < 3) {
 		getea(cpu, rmval);
@@ -498,7 +541,7 @@ FUNC_INLINE uint16_t readrm16(CPU_t* cpu, uint8_t rmval) {
 	}
 }
 
-FUNC_INLINE uint8_t readrm8(CPU_t* cpu, uint8_t rmval) {
+uint8_t readrm8(CPU_t* cpu, uint8_t rmval) {
 	//debug_log(DEBUG_INFO, "cpu readmem8\r\n");
 	if (cpu->mode < 3) {
 		getea(cpu, rmval);
@@ -509,7 +552,7 @@ FUNC_INLINE uint8_t readrm8(CPU_t* cpu, uint8_t rmval) {
 	}
 }
 
-FUNC_INLINE void writerm16(CPU_t* cpu, uint8_t rmval, uint16_t value) {
+void writerm16(CPU_t* cpu, uint8_t rmval, uint16_t value) {
 	//debug_log(DEBUG_INFO, "cpu writemem16\r\n");
 	if (cpu->mode < 3) {
 		getea(cpu, rmval);
@@ -521,7 +564,7 @@ FUNC_INLINE void writerm16(CPU_t* cpu, uint8_t rmval, uint16_t value) {
 	}
 }
 
-FUNC_INLINE void writerm8(CPU_t* cpu, uint8_t rmval, uint8_t value) {
+void writerm8(CPU_t* cpu, uint8_t rmval, uint8_t value) {
 	//debug_log(DEBUG_INFO, "cpu writemem8\r\n");
 	if (cpu->mode < 3) {
 		getea(cpu, rmval);
@@ -532,7 +575,7 @@ FUNC_INLINE void writerm8(CPU_t* cpu, uint8_t rmval, uint8_t value) {
 	}
 }
 
-FUNC_INLINE uint8_t op_grp2_8(CPU_t* cpu, uint8_t cnt) {
+uint8_t op_grp2_8(CPU_t* cpu, uint8_t cnt) {
 
 	uint16_t	s;
 	uint16_t	shift;
@@ -541,9 +584,9 @@ FUNC_INLINE uint8_t op_grp2_8(CPU_t* cpu, uint8_t cnt) {
 
 	s = cpu->oper1b;
 	oldcf = cpu->cf;
-#ifdef CPU_LIMIT_SHIFT_COUNT
-	cnt &= 0x1F;
-#endif
+//#ifdef CPU_LIMIT_SHIFT_COUNT
+//	cnt &= 0x1F;
+//#endif
 	switch (cpu->reg) {
 	case 0: /* ROL r/m8 */
 		for (shift = 1; shift <= cnt; shift++) {
@@ -661,7 +704,7 @@ FUNC_INLINE uint8_t op_grp2_8(CPU_t* cpu, uint8_t cnt) {
 	return s & 0xFF;
 }
 
-FUNC_INLINE uint16_t op_grp2_16(CPU_t* cpu, uint8_t cnt) {
+uint16_t op_grp2_16(CPU_t* cpu, uint8_t cnt) {
 
 	uint32_t	s;
 	uint32_t	shift;
@@ -670,9 +713,9 @@ FUNC_INLINE uint16_t op_grp2_16(CPU_t* cpu, uint8_t cnt) {
 
 	s = cpu->oper1;
 	oldcf = cpu->cf;
-#ifdef CPU_LIMIT_SHIFT_COUNT
-	cnt &= 0x1F;
-#endif
+//#ifdef CPU_LIMIT_SHIFT_COUNT
+//	cnt &= 0x1F;
+//#endif
 	switch (cpu->reg) {
 	case 0: /* ROL r/m8 */
 		for (shift = 1; shift <= cnt; shift++) {
@@ -788,7 +831,7 @@ FUNC_INLINE uint16_t op_grp2_16(CPU_t* cpu, uint8_t cnt) {
 	return (uint16_t)s & 0xFFFF;
 }
 
-FUNC_INLINE void op_div8(CPU_t* cpu, uint16_t valdiv, uint8_t divisor) {
+void op_div8(CPU_t* cpu, uint16_t valdiv, uint8_t divisor) {
 	if (divisor == 0) {
 		cpu_intcall(cpu, 0);
 		return;
@@ -803,7 +846,7 @@ FUNC_INLINE void op_div8(CPU_t* cpu, uint16_t valdiv, uint8_t divisor) {
 	cpu->regs.byteregs[regal] = valdiv / (uint16_t)divisor;
 }
 
-FUNC_INLINE void op_idiv8(CPU_t* cpu, uint16_t valdiv, uint8_t divisor) {
+void op_idiv8(CPU_t* cpu, uint16_t valdiv, uint8_t divisor) {
 	//TODO: Rewrite IDIV code, I wrote this in 2011. It can be made far more efficient.
 	uint16_t	s1;
 	uint16_t	s2;
@@ -837,7 +880,7 @@ FUNC_INLINE void op_idiv8(CPU_t* cpu, uint16_t valdiv, uint8_t divisor) {
 	cpu->regs.byteregs[regal] = (uint8_t)d1;
 }
 
-FUNC_INLINE void op_grp3_8(CPU_t* cpu) {
+void op_grp3_8(CPU_t* cpu) {
 	cpu->oper1 = signext(cpu->oper1b);
 	cpu->oper2 = signext(cpu->oper2b);
 	switch (cpu->reg) {
@@ -874,9 +917,9 @@ FUNC_INLINE void op_grp3_8(CPU_t* cpu) {
 			cpu->cf = 0;
 			cpu->of = 0;
 		}
-#ifdef CPU_CLEAR_ZF_ON_MUL
+//#ifdef CPU_CLEAR_ZF_ON_MUL
 		cpu->zf = 0;
-#endif
+//#endif
 		break;
 
 	case 5: /* IMUL */
@@ -901,9 +944,9 @@ FUNC_INLINE void op_grp3_8(CPU_t* cpu) {
 			cpu->cf = 0;
 			cpu->of = 0;
 		}
-#ifdef CPU_CLEAR_ZF_ON_MUL
+//#ifdef CPU_CLEAR_ZF_ON_MUL
 		cpu->zf = 0;
-#endif
+//#endif
 		break;
 
 	case 6: /* DIV */
@@ -916,7 +959,7 @@ FUNC_INLINE void op_grp3_8(CPU_t* cpu) {
 	}
 }
 
-FUNC_INLINE void op_div16(CPU_t* cpu, uint32_t valdiv, uint16_t divisor) {
+void op_div16(CPU_t* cpu, uint32_t valdiv, uint16_t divisor) {
 	if (divisor == 0) {
 		cpu_intcall(cpu, 0);
 		return;
@@ -931,7 +974,7 @@ FUNC_INLINE void op_div16(CPU_t* cpu, uint32_t valdiv, uint16_t divisor) {
 	cpu->regs.wordregs[regax] = valdiv / (uint32_t)divisor;
 }
 
-FUNC_INLINE void op_idiv16(CPU_t* cpu, uint32_t valdiv, uint16_t divisor) {
+void op_idiv16(CPU_t* cpu, uint32_t valdiv, uint16_t divisor) {
 	//TODO: Rewrite IDIV code, I wrote this in 2011. It can be made far more efficient.
 	uint32_t	d1;
 	uint32_t	d2;
@@ -966,7 +1009,7 @@ FUNC_INLINE void op_idiv16(CPU_t* cpu, uint32_t valdiv, uint16_t divisor) {
 	cpu->regs.wordregs[regdx] = d2;
 }
 
-FUNC_INLINE void op_grp3_16(CPU_t* cpu) {
+void op_grp3_16(CPU_t* cpu) {
 	switch (cpu->reg) {
 	case 0:
 	case 1: /* TEST */
@@ -1002,9 +1045,9 @@ FUNC_INLINE void op_grp3_16(CPU_t* cpu) {
 			cpu->cf = 0;
 			cpu->of = 0;
 		}
-#ifdef CPU_CLEAR_ZF_ON_MUL
+//#ifdef CPU_CLEAR_ZF_ON_MUL
 		cpu->zf = 0;
-#endif
+//#endif
 		break;
 
 	case 5: /* IMUL */
@@ -1029,9 +1072,9 @@ FUNC_INLINE void op_grp3_16(CPU_t* cpu) {
 			cpu->cf = 0;
 			cpu->of = 0;
 		}
-#ifdef CPU_CLEAR_ZF_ON_MUL
+//#ifdef CPU_CLEAR_ZF_ON_MUL
 		cpu->zf = 0;
-#endif
+//#endif
 		break;
 
 	case 6: /* DIV */
@@ -1044,7 +1087,7 @@ FUNC_INLINE void op_grp3_16(CPU_t* cpu) {
 	}
 }
 
-FUNC_INLINE void op_grp5(CPU_t* cpu) {
+void op_grp5(CPU_t* cpu) {
 	switch (cpu->reg) {
 	case 0: /* INC Ev */
 		cpu->oper2 = 1;
@@ -1091,7 +1134,7 @@ FUNC_INLINE void op_grp5(CPU_t* cpu) {
 	}
 }
 
-FUNC_INLINE void cpu_intcall(CPU_t* cpu, uint8_t intnum) {
+void cpu_intcall(CPU_t* cpu, uint8_t intnum) {
 	if (cpu->int_callback[intnum] != NULL) {
 		(*cpu->int_callback[intnum])(cpu, intnum);
 		return;
@@ -1306,11 +1349,11 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			push(cpu, cpu->segregs[regcs]);
 			break;
 
-#ifdef CPU_ALLOW_POP_CS //only the 8086/8088 does this.
+//#ifdef CPU_ALLOW_POP_CS //only the 8086/8088 does this.
 		case 0xF: //0F POP CS
 			cpu->segregs[regcs] = pop(cpu);
 			break;
-#endif
+//#endif
 
 		case 0x10:	/* 10 ADC Eb Gb */
 			modregrm(cpu);
@@ -1838,11 +1881,7 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			break;
 
 		case 0x54:	/* 54 PUSH eSP */
-#ifdef USE_286_STYLE_PUSH_SP
-			push(cpu, cpu->regs.wordregs[regsp]);
-#else
 			push(cpu, cpu->regs.wordregs[regsp] - 2);
-#endif
 			break;
 
 		case 0x55:	/* 55 PUSH eBP */
@@ -1889,212 +1928,9 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			cpu->regs.wordregs[regdi] = pop(cpu);
 			break;
 
-#ifndef CPU_8086
-		case 0x60:	/* 60 PUSHA (80186+) */
-			cpu->oldsp = cpu->regs.wordregs[regsp];
-			push(cpu, cpu->regs.wordregs[regax]);
-			push(cpu, cpu->regs.wordregs[regcx]);
-			push(cpu, cpu->regs.wordregs[regdx]);
-			push(cpu, cpu->regs.wordregs[regbx]);
-			push(cpu, cpu->oldsp);
-			push(cpu, cpu->regs.wordregs[regbp]);
-			push(cpu, cpu->regs.wordregs[regsi]);
-			push(cpu, cpu->regs.wordregs[regdi]);
-			break;
-
-		case 0x61:	/* 61 POPA (80186+) */
-			cpu->regs.wordregs[regdi] = pop(cpu);
-			cpu->regs.wordregs[regsi] = pop(cpu);
-			cpu->regs.wordregs[regbp] = pop(cpu);
-			cpu->regs.wordregs[regsp] += 2;
-			cpu->regs.wordregs[regbx] = pop(cpu);
-			cpu->regs.wordregs[regdx] = pop(cpu);
-			cpu->regs.wordregs[regcx] = pop(cpu);
-			cpu->regs.wordregs[regax] = pop(cpu);
-			break;
-
-		case 0x62: /* 62 BOUND Gv, Ev (80186+) */
-			modregrm(cpu);
-			getea(cpu, cpu->rm);
-			if (signext32(getreg16(cpu, cpu->reg)) < signext32(getmem16(cpu, cpu->ea >> 4, cpu->ea & 15))) {
-				cpu_intcall(cpu, 5); //bounds check exception
-			}
-			else {
-				cpu->ea += 2;
-				if (signext32(getreg16(cpu, cpu->reg)) > signext32(getmem16(cpu, cpu->ea >> 4, cpu->ea & 15))) {
-					cpu_intcall(cpu, 5); //bounds check exception
-				}
-			}
-			break;
-
-		case 0x68:	/* 68 PUSH Iv (80186+) */
-			push(cpu, getmem16(cpu, cpu->segregs[regcs], cpu->ip));
-			StepIP(cpu, 2);
-			break;
-
-		case 0x69:	/* 69 IMUL Gv Ev Iv (80186+) */
-			modregrm(cpu);
-			cpu->temp1 = readrm16(cpu, cpu->rm);
-			cpu->temp2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
-			StepIP(cpu, 2);
-			if ((cpu->temp1 & 0x8000L) == 0x8000L) {
-				cpu->temp1 = cpu->temp1 | 0xFFFF0000L;
-			}
-
-			if ((cpu->temp2 & 0x8000L) == 0x8000L) {
-				cpu->temp2 = cpu->temp2 | 0xFFFF0000L;
-			}
-
-			cpu->temp3 = cpu->temp1 * cpu->temp2;
-			putreg16(cpu, cpu->reg, cpu->temp3 & 0xFFFFL);
-			if (cpu->temp3 & 0xFFFF0000L) {
-				cpu->cf = 1;
-				cpu->of = 1;
-			}
-			else {
-				cpu->cf = 0;
-				cpu->of = 0;
-			}
-			break;
-
-		case 0x6A:	/* 6A PUSH Ib (80186+) */
-			push(cpu, (uint16_t)getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-			StepIP(cpu, 1);
-			break;
-
-		case 0x6B:	/* 6B IMUL Gv Eb Ib (80186+) */
-			modregrm(cpu);
-			cpu->temp1 = readrm16(cpu, cpu->rm);
-			cpu->temp2 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-			StepIP(cpu, 1);
-			if ((cpu->temp1 & 0x8000L) == 0x8000L) {
-				cpu->temp1 = cpu->temp1 | 0xFFFF0000L;
-			}
-
-			if ((cpu->temp2 & 0x8000L) == 0x8000L) {
-				cpu->temp2 = cpu->temp2 | 0xFFFF0000L;
-			}
-
-			cpu->temp3 = cpu->temp1 * cpu->temp2;
-			putreg16(cpu, cpu->reg, cpu->temp3 & 0xFFFFL);
-			if (cpu->temp3 & 0xFFFF0000L) {
-				cpu->cf = 1;
-				cpu->of = 1;
-			}
-			else {
-				cpu->cf = 0;
-				cpu->of = 0;
-			}
-			break;
-
-		case 0x6C:	/* 6E INSB */
-			if (cpu->reptype && (cpu->regs.wordregs[regcx] == 0)) {
-				break;
-			}
-
-			putmem8(cpu, cpu->segregs[reges], cpu->regs.wordregs[regdi], port_read(cpu, cpu->regs.wordregs[regdx]));
-			if (cpu->df) {
-				cpu->regs.wordregs[regsi] = cpu->regs.wordregs[regsi] - 1;
-				cpu->regs.wordregs[regdi] = cpu->regs.wordregs[regdi] - 1;
-			}
-			else {
-				cpu->regs.wordregs[regsi] = cpu->regs.wordregs[regsi] + 1;
-				cpu->regs.wordregs[regdi] = cpu->regs.wordregs[regdi] + 1;
-			}
-
-			if (cpu->reptype) {
-				cpu->regs.wordregs[regcx] = cpu->regs.wordregs[regcx] - 1;
-			}
-
-			loopcount++;
-			if (!cpu->reptype) {
-				break;
-			}
-
-			cpu->ip = firstip;
-			break;
-
-		case 0x6D:	/* 6F INSW */
-			if (cpu->reptype && (cpu->regs.wordregs[regcx] == 0)) {
-				break;
-			}
-
-			putmem16(cpu, cpu->segregs[reges], cpu->regs.wordregs[regdi], port_readw(cpu, cpu->regs.wordregs[regdx]));
-			if (cpu->df) {
-				cpu->regs.wordregs[regsi] = cpu->regs.wordregs[regsi] - 2;
-				cpu->regs.wordregs[regdi] = cpu->regs.wordregs[regdi] - 2;
-			}
-			else {
-				cpu->regs.wordregs[regsi] = cpu->regs.wordregs[regsi] + 2;
-				cpu->regs.wordregs[regdi] = cpu->regs.wordregs[regdi] + 2;
-			}
-
-			if (cpu->reptype) {
-				cpu->regs.wordregs[regcx] = cpu->regs.wordregs[regcx] - 1;
-			}
-
-			loopcount++;
-			if (!cpu->reptype) {
-				break;
-			}
-
-			cpu->ip = firstip;
-			break;
-
-		case 0x6E:	/* 6E OUTSB */
-			if (cpu->reptype && (cpu->regs.wordregs[regcx] == 0)) {
-				break;
-			}
-
-			port_write(cpu, cpu->regs.wordregs[regdx], getmem8(cpu, cpu->useseg, cpu->regs.wordregs[regsi]));
-			if (cpu->df) {
-				cpu->regs.wordregs[regsi] = cpu->regs.wordregs[regsi] - 1;
-				cpu->regs.wordregs[regdi] = cpu->regs.wordregs[regdi] - 1;
-			}
-			else {
-				cpu->regs.wordregs[regsi] = cpu->regs.wordregs[regsi] + 1;
-				cpu->regs.wordregs[regdi] = cpu->regs.wordregs[regdi] + 1;
-			}
-
-			if (cpu->reptype) {
-				cpu->regs.wordregs[regcx] = cpu->regs.wordregs[regcx] - 1;
-			}
-
-			loopcount++;
-			if (!cpu->reptype) {
-				break;
-			}
-
-			cpu->ip = firstip;
-			break;
-
-		case 0x6F:	/* 6F OUTSW */
-			if (cpu->reptype && (cpu->regs.wordregs[regcx] == 0)) {
-				break;
-			}
-
-			port_writew(cpu, cpu->regs.wordregs[regdx], getmem16(cpu, cpu->useseg, cpu->regs.wordregs[regsi]));
-			if (cpu->df) {
-				cpu->regs.wordregs[regsi] = cpu->regs.wordregs[regsi] - 2;
-				cpu->regs.wordregs[regdi] = cpu->regs.wordregs[regdi] - 2;
-			}
-			else {
-				cpu->regs.wordregs[regsi] = cpu->regs.wordregs[regsi] + 2;
-				cpu->regs.wordregs[regdi] = cpu->regs.wordregs[regdi] + 2;
-			}
-
-			if (cpu->reptype) {
-				cpu->regs.wordregs[regcx] = cpu->regs.wordregs[regcx] - 1;
-			}
-
-			loopcount++;
-			if (!cpu->reptype) {
-				break;
-			}
-
-			cpu->ip = firstip;
-			break;
-#endif
+//**********************************************************************
+// Opcodes 0x60 - 0x6F not used in 8086
+//**********************************************************************
 
 		case 0x70:	/* 70 JO Jb */
 			cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
@@ -2458,11 +2294,11 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			break;
 
 		case 0x9C:	/* 9C PUSHF */
-#ifdef CPU_SET_HIGH_FLAGS
+//#ifdef CPU_SET_HIGH_FLAGS
 			push(cpu, makeflagsword(cpu) | 0xF800);
-#else
-			push(cpu, makeflagsword(cpu) | 0x0800);
-#endif
+//#else
+//			push(cpu, makeflagsword(cpu) | 0x0800);
+//#endif
 			break;
 
 		case 0x9D:	/* 9D POPF */
@@ -2945,31 +2781,31 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			StepIP(cpu, 2);
 			break;
 
-		case 0xC8:	/* C8 ENTER (80186+) */
-			cpu->stacksize = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
-			StepIP(cpu, 2);
-			cpu->nestlev = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-			StepIP(cpu, 1);
-			push(cpu, cpu->regs.wordregs[regbp]);
-			cpu->frametemp = cpu->regs.wordregs[regsp];
-			if (cpu->nestlev) {
-				for (cpu->temp16 = 1; cpu->temp16 < cpu->nestlev; ++cpu->temp16) {
-					cpu->regs.wordregs[regbp] = cpu->regs.wordregs[regbp] - 2;
-					push(cpu, cpu->regs.wordregs[regbp]);
-				}
+		//case 0xC8:	/* C8 ENTER (80186+) */
+			//cpu->stacksize = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
+			//StepIP(cpu, 2);
+			//cpu->nestlev = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
+			//StepIP(cpu, 1);
+			//push(cpu, cpu->regs.wordregs[regbp]);
+			//cpu->frametemp = cpu->regs.wordregs[regsp];
+			//if (cpu->nestlev) {
+				//for (cpu->temp16 = 1; cpu->temp16 < cpu->nestlev; ++cpu->temp16) {
+					//cpu->regs.wordregs[regbp] = cpu->regs.wordregs[regbp] - 2;
+					//push(cpu, cpu->regs.wordregs[regbp]);
+				//}
 
-				push(cpu, cpu->frametemp); //cpu->regs.wordregs[regsp]);
-			}
+				//push(cpu, cpu->frametemp); //cpu->regs.wordregs[regsp]);
+			//}
 
-			cpu->regs.wordregs[regbp] = cpu->frametemp;
-			cpu->regs.wordregs[regsp] = cpu->regs.wordregs[regbp] - cpu->stacksize;
+			//cpu->regs.wordregs[regbp] = cpu->frametemp;
+			//cpu->regs.wordregs[regsp] = cpu->regs.wordregs[regbp] - cpu->stacksize;
 
-			break;
+			//break;
 
-		case 0xC9:	/* C9 LEAVE (80186+) */
-			cpu->regs.wordregs[regsp] = cpu->regs.wordregs[regbp];
-			cpu->regs.wordregs[regbp] = pop(cpu);
-			break;
+		//case 0xC9:	/* C9 LEAVE (80186+) */
+			//cpu->regs.wordregs[regsp] = cpu->regs.wordregs[regbp];
+			//cpu->regs.wordregs[regbp] = pop(cpu);
+			//break;
 
 		case 0xCA:	/* CA RETF Iw */
 			cpu->oper1 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
@@ -3055,11 +2891,10 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			cpu->sf = 0;
 			break;
 
-		case 0xD6:	/* D6 XLAT on V20/V30, SALC on 8086/8088 */
-#ifndef CPU_NO_SALC
+		case 0xD6:	/* D6 SALC */
+
 			cpu->regs.byteregs[regal] = cpu->cf ? 0xFF : 0x00;
 			break;
-#endif
 
 		case 0xD7:	/* D7 XLAT */
 			cpu->regs.byteregs[regal] = cpu_read(cpu, cpu->useseg * 16 + (cpu->regs.wordregs[regbx]) + cpu->regs.byteregs[regal]);
@@ -3271,8 +3106,8 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 #ifdef CPU_ALLOW_ILLEGAL_OP_EXCEPTION
 			cpu_intcall(cpu, 6); /* trip invalid opcode exception. this occurs on the 80186+, 8086/8088 CPUs treat them as NOPs. */
 						   /* technically they aren't exactly like NOPs in most cases, but for our pursoses, that's accurate enough. */
-			debug_log(DEBUG_INFO, "[CPU] Invalid opcode exception at %04X:%04X\r\n", cpu->segregs[regcs], firstip);
 #endif
+			debug_log(DEBUG_INFO, "[CPU] Invalid opcode exception at %04X:%04X\r\n", cpu->segregs[regcs], firstip);
 			break;
 		}
 
