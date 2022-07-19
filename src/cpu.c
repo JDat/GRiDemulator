@@ -23,6 +23,9 @@
 #include "config.h"
 #include "debuglog.h"
 
+//not used in 8086. Will call int 0x6
+//define CPU_ALLOW_ILLEGAL_OP_EXCEPTION
+
 const uint8_t byteregtable[8] = { regal, regcl, regdl, regbl, regah, regch, regdh, regbh };
 
 const uint8_t parity[0x100] = {
@@ -1206,7 +1209,7 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 				/* segment prefix check */
 			case 0x2E:	/* segment cpu->segregs[regcs] */
 #ifdef DEBUG_DIASASM
-                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tsegment CS\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tsegment CS\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
 				cpu->useseg = cpu->segregs[regcs];
 				cpu->segoverride = 1;
@@ -1214,7 +1217,7 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 
 			case 0x3E:	/* segment cpu->segregs[regds] */
 #ifdef DEBUG_DIASASM
-                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tsegment DS\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tsegment DS\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
 				cpu->useseg = cpu->segregs[regds];
 				cpu->segoverride = 1;
@@ -1222,7 +1225,7 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 
 			case 0x26:	/* segment cpu->segregs[reges] */
 #ifdef DEBUG_DIASASM
-                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tsegment ES\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tsegment ES\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
 				cpu->useseg = cpu->segregs[reges];
 				cpu->segoverride = 1;
@@ -1230,7 +1233,7 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 
 			case 0x36:	/* segment cpu->segregs[regss] */
 #ifdef DEBUG_DIASASM
-                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tsegment SS\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tsegment SS\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
 				cpu->useseg = cpu->segregs[regss];
 				cpu->segoverride = 1;
@@ -1239,14 +1242,14 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 				/* repetition prefix check */
 			case 0xF3:	/* REP/REPE/REPZ */
 #ifdef DEBUG_DIASASM
-                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tREP/REPE/REPZ\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tREP/REPE/REPZ\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
 				cpu->reptype = 1;
 				break;
 
 			case 0xF2:	/* REPNE/REPNZ */
 #ifdef DEBUG_DIASASM
-                                debug_log(DEBUG_DETAIL, "[dasm] %04X:%04X, opcode: %02X\tREPNE/REPNZ\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tREPNE/REPNZ\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
 				cpu->reptype = 2;
 				break;
@@ -1345,9 +1348,9 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			cpu->oper1 = getreg16(cpu, cpu->reg);
 			cpu->oper2 = readrm16(cpu, cpu->rm);
 			op_or16(cpu);
-			if ((cpu->oper1 == 0xF802) && (cpu->oper2 == 0xF802)) {
-				cpu->sf = 0;	/* cheap hack to make Wolf 3D think we're a 286 so it plays */
-			}
+			//if ((cpu->oper1 == 0xF802) && (cpu->oper2 == 0xF802)) {
+			//	cpu->sf = 0;	/* cheap hack to make Wolf 3D think we're a 286 so it plays */
+			//}
 
 			putreg16(cpu, cpu->reg, cpu->res16);
 			break;
@@ -1369,11 +1372,18 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			break;
 
 		case 0xE:	/* 0E PUSH cpu->segregs[regcs] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 0E\tpush cs\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
 			push(cpu, cpu->segregs[regcs]);
 			break;
 
 //#ifdef CPU_ALLOW_POP_CS //only the 8086/8088 does this.
 		case 0xF: //0F POP CS
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 0F\tpop cs\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			cpu->segregs[regcs] = pop(cpu);
 			break;
 //#endif
@@ -1427,10 +1437,18 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			break;
 
 		case 0x16:	/* 16 PUSH cpu->segregs[regss] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 16\tpush ss\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			push(cpu, cpu->segregs[regss]);
 			break;
 
 		case 0x17:	/* 17 POP cpu->segregs[regss] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 0E\tpop ss\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			cpu->segregs[regss] = pop(cpu);
 			break;
 
@@ -1483,10 +1501,18 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			break;
 
 		case 0x1E:	/* 1E PUSH cpu->segregs[regds] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 0E\tpush ds\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			push(cpu, cpu->segregs[regds]);
 			break;
 
 		case 0x1F:	/* 1F POP cpu->segregs[regds] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 0E\tpop ds\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			cpu->segregs[regds] = pop(cpu);
 			break;
 
@@ -3023,9 +3049,9 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 
 		case 0xE6:	/* E6 OUT Ib cpu->regs.byteregs[regal] */
 			cpu->oper1b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-#ifdef DEBUG_DIASASM
-			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X\tout %02X,al (%02X)\r\n", cpu->segregs[regcs], cpu->ip, cpu->oper1b, cpu->regs.byteregs[regal]);
-#endif
+//#ifdef DEBUG_DIASASM
+//			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X\tout %02X,al (%02X)\r\n", cpu->segregs[regcs], cpu->ip, cpu->oper1b, cpu->regs.byteregs[regal]);
+//#endif
 
 			StepIP(cpu, 1);
 			port_write(cpu, cpu->oper1b, cpu->regs.byteregs[regal]);
@@ -3033,39 +3059,69 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 
 		case 0xE7:	/* E7 OUT Ib eAX */
 			cpu->oper1b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-#ifdef DEBUG_DIASASM
-			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X\tout %02X,ax (%04X)\r\n", cpu->segregs[regcs], cpu->ip, cpu->oper1b,cpu->regs.wordregs[regax]);
-#endif
+//#ifdef DEBUG_DIASASM
+//			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X\tout %02X,ax (%04X)\r\n", cpu->segregs[regcs], cpu->ip, cpu->oper1b,cpu->regs.wordregs[regax]);
+//#endif
 
 			StepIP(cpu, 1);
 			port_writew(cpu, cpu->oper1b, cpu->regs.wordregs[regax]);
 			break;
 
 		case 0xE8:	/* E8 CALL Jv */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: E8\tcall near ", cpu->segregs[regcs], cpu->ip);
+#endif
 			cpu->oper1 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
 			StepIP(cpu, 2);
 			push(cpu, cpu->ip);
 			cpu->ip = cpu->ip + cpu->oper1;
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "%04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
 			break;
 
 		case 0xE9:	/* E9 JMP Jv */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: E9\tjmp near ", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			cpu->oper1 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
 			StepIP(cpu, 2);
 			cpu->ip = cpu->ip + cpu->oper1;
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "%04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			break;
 
 		case 0xEA:	/* EA JMP Ap */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: EA\tjmp far ", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			cpu->oper1 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
 			StepIP(cpu, 2);
 			cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
 			cpu->ip = cpu->oper1;
 			cpu->segregs[regcs] = cpu->oper2;
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "%04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			break;
 
 		case 0xEB:	/* EB JMP Jb */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: EB\tjmp short ", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			cpu->oper1 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
 			StepIP(cpu, 1);
 			cpu->ip = cpu->ip + cpu->oper1;
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "%04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			break;
 
 		case 0xEC:	/* EC IN cpu->regs.byteregs[regal] regdx */
@@ -3089,9 +3145,17 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			break;
 
 		case 0xF0:	/* F0 LOCK */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: F0\tlock\r\n");
+#endif
+
 			break;
 
 		case 0xF4:	/* F4 HLT */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: F4\thlt\r\n");
+#endif
+
 			cpu->hltstate = 1;
 			break;
 
@@ -3102,6 +3166,10 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			else {
 				cpu->cf = 0;
 			}
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: F5\tcmc\r\n");
+#endif
+
 			break;
 
 		case 0xF6:	/* F6 GRP3a Eb */
@@ -3123,26 +3191,50 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			break;
 
 		case 0xF8:	/* F8 CLC */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: F8\tclc\r\n");
+#endif
+
 			cpu->cf = 0;
 			break;
 
 		case 0xF9:	/* F9 STC */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: F9\tstc\r\n");
+#endif
+
 			cpu->cf = 1;
 			break;
 
 		case 0xFA:	/* FA CLI */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: FA\tcli\r\n");
+#endif
+
 			cpu->ifl = 0;
 			break;
 
 		case 0xFB:	/* FB STI */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: FB\tsti\r\n");
+#endif
+
 			cpu->ifl = 1;
 			break;
 
 		case 0xFC:	/* FC CLD */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: FC\tcld\r\n");
+#endif
+
 			cpu->df = 0;
 			break;
 
 		case 0xFD:	/* FD STD */
+#ifdef DEBUG_DIASASM
+			debug_log(DEBUG_DETAIL, "[DASM] %04X:%04XFD\tstd\r\n");
+#endif
+
 			cpu->df = 1;
 			break;
 
@@ -3178,7 +3270,7 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 						   /* technically they aren't exactly like NOPs in most cases, but for our pursoses, that's accurate enough. */
 #endif
 #ifdef DEBUG_CPU
-			debug_log(DEBUG_INFO, "[CPU] Invalid opcode exception at %04X:%04X\r\n", cpu->segregs[regcs], firstip);
+			debug_log(DEBUG_INFO, "[CPU] Invalid opcode exception at %04X:%04X opcode: %02X\r\n", cpu->segregs[regcs], firstip, cpu->opcode);
 #endif
 			break;
 		}
