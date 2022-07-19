@@ -1,21 +1,5 @@
 [MACHINE] Initializing machine: "GRiD Compass 1101" (1101)
-[MEM] mapRegister start. Addr: 0x00000, len: 0x00400
-[MEM] mapRegister start. Addr: 0x02980, len: 0x3D680
-[MEM] mapRegister start. Addr: 0xC0000, len: 0x0FFFF
-[MEM] mapRegister start. Addr: 0xFC000, len: 0x04000
 [MACHINE] Init Grid function start
-[8253] init
-[KEY] Attaching to memory
-[MEM] mapCallbackRegister. Addr: 0xDFFC0, len: 0x00004
-[7220] Initializing bubble memory controller
-[MEM] mapCallbackRegister. Addr: 0xDFE80, len: 0x00003
-[GPIB] Initializing GPiB controller
-[MEM] mapCallbackRegister. Addr: 0xDFF80, len: 0x00008
-[RTC] Initializing real time clock
-[MEM] mapCallbackRegister. Addr: 0xDFF40, len: 0x00010
-[GRiD Video] Initializing GRid Video device
-[GRiD Video] Attaching to memory
-[MEM] mapCallbackRegister. Addr: 0x00400, len: 0x02580
 [MACHINE] Init Grid function end
 [MACHINE] Throttling speed to approximately a 5.00 MHz 8086 (350000 instructions/sec)
 [dasm] FC01:0449, opcode: F3	REP/REPE/REPZ
@@ -10645,78 +10629,97 @@
 [dasm] FC01:0458, opcode: F3	REP/REPE/REPZ
 [dasm] FC01:0458, opcode: F3	REP/REPE/REPZ
 [dasm] FC01:0464, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 13
-[I8259] Write port 0x0: 13
-[I8259] ICW1 = 13
-[PORT] port_write @ 002 <- 20
-[I8259] Write port 0x2: 20
-[I8259] ICW2 = 20
-[PORT] port_write @ 002 <- 0D
-[I8259] Write port 0x2: D
-[I8259] ICW4 = 0D
-[PORT] port_write @ 002 <- FF
-[I8259] Write port 0x2: FF
-[I8259] ICW5 = FF
+[DASM] FC01:0078	out 00,al (13)
+[DASM] FC01:007C	out 02,al (20)
+[DASM] FC01:0080	out 02,al (0D)
+[DASM] FC01:0084	out 02,al (FF)
+[DASM] FC01:0086	RET
 [dasm] FC01:0300, opcode: 2E	segment CS
-[KEY] Read port 0x02
-[KEY] Write port 0x02: 00
+[DASM] FC01:0038	RET
 [dasm] FC01:031B, opcode: 26	segment ES
-[KEY] Read port 0x00
-[KEY] scancode 0x00
-[KEY] Read port 0x02
-[KEY] Write port 0x02: 18
+[DASM] FC01:0038	RET
+[DASM] FC01:0338	Call: FC01:00BE
 [dasm] FC01:00CA, opcode: 2E	segment CS
+[DASM] FC01:00E7	RETF ???
+[DASM] FC01:0341	Call: FC01:0086
 [dasm] FC01:0090, opcode: 2E	segment CS
-[PORT] port_read @ 002
-[I8259] Read port 0x2
-[PORT] port_write @ 002 <- EF
-[I8259] Write port 0x2: EF
-[I8259] ICW5 = EF
+[DASM] FC01:009D	out 02,al (EF)
+[DASM] FC01:00A1	RETF ???
+[DASM] FC01:037D	Call: FC01:0245
 [dasm] FC01:0247, opcode: 2E	segment CS
+[DASM] FC01:02FD	RETF ???
+[DASM] FC01:038E	Call: FC01:00BE
 [dasm] FC01:00CA, opcode: 2E	segment CS
+[DASM] FC01:00E7	RETF ???
+[DASM] FC01:039F	Call: FC01:00BE
 [dasm] FC01:00CA, opcode: 2E	segment CS
+[DASM] FC01:00E7	RETF ???
+[DASM] FC01:03A4	RET
+[DASM] FC01:0421	RET
+[DASM] FC01:0236	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 62
-[I8259] Write port 0x0: 62
-[I8259] OCW2 = 62
+[DASM] FC01:00FA	out 00,al (62)
+[DASM] FC01:00FE	RETF ???
+[DASM] FC01:023C	RET
+[DASM] FC01:0475	Call: FC01:0CB8
 [dasm] FC01:0CBA, opcode: 2E	segment CS
+[DASM] FC01:0CDE	Call: FC01:125C
 [dasm] FC01:1266, opcode: 26	segment ES
 [dasm] FC01:1269, opcode: 26	segment ES
 [dasm] FC01:1270, opcode: 26	segment ES
 [dasm] FC01:1277, opcode: 26	segment ES
 [dasm] FC01:127B, opcode: 26	segment ES
+[DASM] FC01:1284	RETF ???
+[DASM] FC01:0CEF	Call: FC01:125C
 [dasm] FC01:1266, opcode: 26	segment ES
 [dasm] FC01:1269, opcode: 26	segment ES
 [dasm] FC01:1270, opcode: 26	segment ES
 [dasm] FC01:1277, opcode: 26	segment ES
 [dasm] FC01:127B, opcode: 26	segment ES
+[DASM] FC01:1284	RETF ???
+[DASM] FC01:0CF4	Call: FC01:10DE
 [dasm] FC01:0DE0, opcode: 2E	segment CS
+[DASM] FC01:10EA	Call: FC01:125C
 [dasm] FC01:1266, opcode: 26	segment ES
 [dasm] FC01:1269, opcode: 26	segment ES
 [dasm] FC01:1270, opcode: 26	segment ES
 [dasm] FC01:1277, opcode: 26	segment ES
 [dasm] FC01:127B, opcode: 26	segment ES
+[DASM] FC01:1284	RETF ???
 [dasm] FC01:0DD4, opcode: 2E	segment CS
+[DASM] FC01:10F9	Call: FC01:125C
 [dasm] FC01:1266, opcode: 26	segment ES
 [dasm] FC01:1269, opcode: 26	segment ES
 [dasm] FC01:1270, opcode: 26	segment ES
 [dasm] FC01:1277, opcode: 26	segment ES
 [dasm] FC01:127B, opcode: 26	segment ES
+[DASM] FC01:1284	RETF ???
+[DASM] FC01:1104	Call: FC01:0BBA
+[DASM] FC01:0BC4	Call: FC01:0562
 [dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
 [dasm] FC01:0BDD, opcode: 2E	segment CS
+[DASM] FC01:0BEB	Call: FC01:13E3
 [dasm] FC01:13FB, opcode: 26	segment ES
 [dasm] FC01:135E, opcode: 26	segment ES
 [dasm] FC01:1370, opcode: 26	segment ES
 [dasm] FC01:1374, opcode: 26	segment ES
+[DASM] FC01:13E1	RET ???
 [dasm] FC01:1410, opcode: 26	segment ES
+[DASM] FC01:1417	RETF ???
+[DASM] FC01:0BF3	RETF ???
+[DASM] FC01:1110	RETF
 [dasm] FC01:0D25, opcode: 26	segment ES
 [dasm] FC01:0D2A, opcode: 26	segment ES
 [dasm] FC01:0D2F, opcode: 26	segment ES
+[DASM] FC01:0D36	Call: FC01:0A4C
+[DASM] FC01:0A68	Call: FC01:125C
 [dasm] FC01:1266, opcode: 26	segment ES
 [dasm] FC01:1269, opcode: 26	segment ES
 [dasm] FC01:1270, opcode: 26	segment ES
 [dasm] FC01:1277, opcode: 26	segment ES
 [dasm] FC01:127B, opcode: 26	segment ES
+[DASM] FC01:1284	RETF ???
 [dasm] FC01:0A79, opcode: F3	REP/REPE/REPZ
 [dasm] FC01:0A79, opcode: F3	REP/REPE/REPZ
 [dasm] FC01:0A79, opcode: F3	REP/REPE/REPZ
@@ -10737,11 +10740,17 @@
 [dasm] FC01:0A87, opcode: 26	segment ES
 [dasm] FC01:0A8B, opcode: 26	segment ES
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:05E2	Call: FC01:13E3
 [dasm] FC01:13FB, opcode: 26	segment ES
 [dasm] FC01:135E, opcode: 26	segment ES
 [dasm] FC01:1370, opcode: 26	segment ES
 [dasm] FC01:1374, opcode: 26	segment ES
+[DASM] FC01:13E1	RET ???
 [dasm] FC01:1410, opcode: 26	segment ES
+[DASM] FC01:1417	RETF ???
+[DASM] FC01:05E9	RET ???
+[DASM] FC01:0A98	RETF ???
 [dasm] FC01:0D4C, opcode: F3	REP/REPE/REPZ
 [dasm] FC01:0D4C, opcode: F3	REP/REPE/REPZ
 [dasm] FC01:0D4C, opcode: F3	REP/REPE/REPZ
@@ -10832,11 +10841,14 @@
 [dasm] FC01:0D70, opcode: 26	segment ES
 [dasm] FC01:0D77, opcode: 26	segment ES
 [dasm] FC01:0D7C, opcode: 26	segment ES
+[DASM] FC01:0D83	Call: FC01:0A4C
+[DASM] FC01:0A68	Call: FC01:125C
 [dasm] FC01:1266, opcode: 26	segment ES
 [dasm] FC01:1269, opcode: 26	segment ES
 [dasm] FC01:1270, opcode: 26	segment ES
 [dasm] FC01:1277, opcode: 26	segment ES
 [dasm] FC01:127B, opcode: 26	segment ES
+[DASM] FC01:1284	RETF ???
 [dasm] FC01:0A79, opcode: F3	REP/REPE/REPZ
 [dasm] FC01:0A79, opcode: F3	REP/REPE/REPZ
 [dasm] FC01:0A79, opcode: F3	REP/REPE/REPZ
@@ -10857,575 +10869,863 @@
 [dasm] FC01:0A87, opcode: 26	segment ES
 [dasm] FC01:0A8B, opcode: 26	segment ES
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:05E2	Call: FC01:13E3
 [dasm] FC01:13F1, opcode: 26	segment ES
 [dasm] FC01:1370, opcode: 26	segment ES
 [dasm] FC01:1374, opcode: 26	segment ES
+[DASM] FC01:13E1	RET ???
 [dasm] FC01:1410, opcode: 26	segment ES
+[DASM] FC01:1417	RETF ???
+[DASM] FC01:05E9	RET ???
+[DASM] FC01:0A98	RETF ???
 [dasm] FC01:0D92, opcode: 26	segment ES
 [dasm] FC01:0D97, opcode: 26	segment ES
 [dasm] FC01:0D9F, opcode: 26	segment ES
 [dasm] FC01:0DA4, opcode: 26	segment ES
+[DASM] FC01:0DA8	Call: FC00:0000
 [8087] exec: Addr: FC00:0002, opcode: DB
 [8087] operand 2nd byte: 0xE3
 [8087] regs: AX: FC01, BX: 0482, CX: 00FF, DX: FFFF
 [8087] regs: SI: 0000, DI: 0030, BP: 0000, SP: 2FF4
 [8087] regs: CS: FC00, DS: 0298, ES: 1FC0, SS: 3000
+[DASM] FC00:0004	RETF
+[DASM] FC01:0DB1	Call: FC01:0190
+[DASM] FC01:01A6	Call: FC01:0086
 [dasm] FC01:0090, opcode: 2E	segment CS
-[PORT] port_read @ 002
-[I8259] Read port 0x2
-[PORT] port_write @ 002 <- E7
-[I8259] Write port 0x2: E7
-[I8259] ICW5 = E7
+[DASM] FC01:009D	out 02,al (E7)
+[DASM] FC01:00A1	RETF ???
 [dasm] FC01:01B2, opcode: 2E	segment CS
+[DASM] FC01:01B8	RETF ???
+[DASM] FC01:0DBA	Call: FC01:0724
 [dasm] FC01:0726, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0608	RET
 [dasm] FC01:0706, opcode: 26	segment ES
 [dasm] FC01:070B, opcode: 26	segment ES
 [dasm] FC01:0710, opcode: 26	segment ES
+[DASM] FC01:0724	RET
+[DASM] FC01:04BC	IRET
 [dasm] FE7E:0518, opcode: 2E	segment CS
 [dasm] FE7E:0521, opcode: 2E	segment CS
+[DASM] FE7E:0537	Call: FC01:0100
 [dasm] FC01:0102, opcode: 2E	segment CS
+[DASM] FC01:011D	RETF ???
+[DASM] FE7E:054C	Call: FC01:0245
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0247, opcode: 2E	segment CS
 [dasm] FC01:003F, opcode: 2E	segment CS
-[KEY] Read port 0x02
-[KEY] Write port 0x02: 19
+[DASM] FC01:0038	RET
+[DASM] FC01:005C	RET
+[DASM] FC01:02FD	RETF ???
+[DASM] FE7E:03E3	Call: FC01:0B31
+[DASM] FC01:0B3E	Call: FC01:0562
 [dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
 [dasm] FC01:0553, opcode: 2E	segment CS
+[DASM] FC01:0560	RET ???
 [dasm] FC01:0B53, opcode: 2E	segment CS
 [dasm] FC01:04D7, opcode: 2E	segment CS
 [dasm] FC01:04DF, opcode: 26	segment ES
+[DASM] FC01:04E3	RET
+[DASM] FC01:0B67	Call: FC01:0724
 [dasm] FC01:0726, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0608	RET
 [dasm] FC01:0631, opcode: 26	segment ES
+[DASM] FC01:063E	RET ???
 [dasm] FC01:06DE, opcode: 26	segment ES
 [dasm] FC01:06E3, opcode: 26	segment ES
 [dasm] FC01:06E8, opcode: 26	segment ES
 [dasm] FC01:0706, opcode: 26	segment ES
 [dasm] FC01:070B, opcode: 26	segment ES
 [dasm] FC01:0710, opcode: 26	segment ES
+[DASM] FC01:0724	RET
+[DASM] FC01:04BC	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
 [dasm] FC01:0C95, opcode: 26	segment ES
 [dasm] FC01:04C9, opcode: 2E	segment CS
 [dasm] FC01:04D1, opcode: 26	segment ES
+[DASM] FC01:04D5	RET
+[DASM] FC01:0CAE	Call: FC01:0724
 [dasm] FC01:0726, opcode: 2E	segment CS
 [dasm] FC01:0753, opcode: 26	segment ES
 [dasm] FC01:075B, opcode: 26	segment ES
@@ -11435,6 +11735,9 @@
 [dasm] FC01:0706, opcode: 26	segment ES
 [dasm] FC01:070B, opcode: 26	segment ES
 [dasm] FC01:0710, opcode: 26	segment ES
+[DASM] FC01:0724	RET
+[DASM] FC01:0773	RETF ???
+[DASM] FC01:0B6F	RETF ???
 [dasm] FE7E:03FC, opcode: 2E	segment CS
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
@@ -11458,302 +11761,445 @@
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:0192, opcode: 2E	segment CS
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
 [dasm] FC01:1D00, opcode: 26	segment ES
+[DASM] FC01:1D03	RET
 [dasm] FC01:183A, opcode: 26	segment ES
-[GPIB] Write port 0x06: 80
 [dasm] FC01:183E, opcode: 26	segment ES
-[GPIB] Write port 0x06: 8F
 [dasm] FC01:1842, opcode: 26	segment ES
-[GPIB] Write port 0x06: 00
 [dasm] FC01:184A, opcode: 26	segment ES
-[GPIB] Write port 0x06: 0F
 [dasm] FC01:184E, opcode: 26	segment ES
-[GPIB] Write port 0x06: 8A
 [dasm] FC01:1BF9, opcode: 26	segment ES
-[GPIB] Read port 0x00
+[DASM] FC01:1C09	RET
 [dasm] FC01:185E, opcode: 26	segment ES
+[DASM] FC01:1868	Call: FC01:0B31
+[DASM] FC01:0B3E	Call: FC01:0562
 [dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
 [dasm] FC01:0553, opcode: 2E	segment CS
+[DASM] FC01:0560	RET ???
 [dasm] FC01:0B53, opcode: 2E	segment CS
 [dasm] FC01:04D7, opcode: 2E	segment CS
 [dasm] FC01:04DF, opcode: 26	segment ES
+[DASM] FC01:04E3	RET
+[DASM] FC01:0B67	Call: FC01:0724
 [dasm] FC01:0726, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0608	RET
 [dasm] FC01:0631, opcode: 26	segment ES
+[DASM] FC01:063E	RET ???
 [dasm] FC01:06DE, opcode: 26	segment ES
 [dasm] FC01:06E3, opcode: 26	segment ES
 [dasm] FC01:06E8, opcode: 26	segment ES
 [dasm] FC01:0706, opcode: 26	segment ES
 [dasm] FC01:070B, opcode: 26	segment ES
 [dasm] FC01:0710, opcode: 26	segment ES
+[DASM] FC01:0724	RET
+[DASM] FC01:0773	RETF ???
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
 [dasm] FC01:0C95, opcode: 26	segment ES
 [dasm] FC01:04C9, opcode: 2E	segment CS
 [dasm] FC01:04D1, opcode: 26	segment ES
+[DASM] FC01:04D5	RET
+[DASM] FC01:0CAE	Call: FC01:0724
 [dasm] FC01:0726, opcode: 2E	segment CS
 [dasm] FC01:0753, opcode: 26	segment ES
 [dasm] FC01:075B, opcode: 26	segment ES
@@ -11763,26 +12209,58 @@
 [dasm] FC01:0706, opcode: 26	segment ES
 [dasm] FC01:070B, opcode: 26	segment ES
 [dasm] FC01:0710, opcode: 26	segment ES
+[DASM] FC01:0724	RET
+[DASM] FC01:0773	RETF ???
+[DASM] FC01:0B6F	RETF ???
+[DASM] FC01:1895	Call: FC01:0BBA
+[DASM] FC01:0BC4	Call: FC01:0562
 [dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
 [dasm] FC01:0BDD, opcode: 2E	segment CS
+[DASM] FC01:0BEB	Call: FC01:13E3
 [dasm] FC01:13FB, opcode: 26	segment ES
 [dasm] FC01:135E, opcode: 26	segment ES
 [dasm] FC01:1374, opcode: 26	segment ES
+[DASM] FC01:13E1	RET ???
 [dasm] FC01:1410, opcode: 26	segment ES
+[DASM] FC01:1417	RETF ???
+[DASM] FC01:0BF3	RETF ???
+[DASM] FC01:18A1	Call: FC01:0BBA
+[DASM] FC01:0BC4	Call: FC01:0562
 [dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
 [dasm] FC01:0BDD, opcode: 2E	segment CS
+[DASM] FC01:0BEB	Call: FC01:13E3
 [dasm] FC01:13FB, opcode: 26	segment ES
 [dasm] FC01:135E, opcode: 26	segment ES
 [dasm] FC01:1374, opcode: 26	segment ES
+[DASM] FC01:13E1	RET ???
 [dasm] FC01:1410, opcode: 26	segment ES
+[DASM] FC01:1417	RETF ???
+[DASM] FC01:0BF3	RETF ???
+[DASM] FC01:18B2	Call: FC01:00BE
 [dasm] FC01:00CA, opcode: 2E	segment CS
+[DASM] FC01:00E7	RETF ???
+[DASM] FC01:18BF	Call: FC01:011F
 [dasm] FC01:0121, opcode: 2E	segment CS
+[DASM] FC01:013C	RETF ???
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
+[DASM] FC01:1C90	Call: FC01:0775
 [dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
 [dasm] FC01:051C, opcode: 26	segment ES
+[DASM] FC01:054A	RET ???
+[DASM] FC01:080E	RETF ???
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
+[DASM] FC01:1C9B	RET
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
+[DASM] FC01:182B	RETF
+[DASM] FE7E:01AF	RET ???
 [dasm] FE7E:03FC, opcode: 2E	segment CS
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
@@ -11809,11 +12287,8 @@
 [dasm] FE3C:0036, opcode: 26	segment ES
 [dasm] FE3C:0048, opcode: 2E	segment CS
 [dasm] FE3C:0190, opcode: 26	segment ES
-[7220] Write port 0x02: 0A
 [dasm] FE3C:0197, opcode: 26	segment ES
-[7220] Write port 0x00: 5A
 [dasm] FE3C:019F, opcode: 26	segment ES
-[7220] Write port 0x02: 0A
 [dasm] FE3C:01AC, opcode: 26	segment ES
 [dasm] FE3C:01B1, opcode: 26	segment ES
 [dasm] FE3C:01C0, opcode: F2	REPNE/REPNZ
@@ -11839,116 +12314,171 @@
 [dasm] FE3C:01C6, opcode: 26	segment ES
 [dasm] FE3C:01CC, opcode: 26	segment ES
 [dasm] FE3C:01D6, opcode: 26	segment ES
-[7220] Write port 0x02: 19
 [dasm] FE3C:00A5, opcode: 26	segment ES
-[7220] Read port 0x02
 [dasm] FE3C:00C2, opcode: 26	segment ES
-[7220] Read port 0x02
+[DASM] FE3C:00E8	RET
+[DASM] FE3C:01E4	Call: FC01:0B31
+[DASM] FC01:0B3E	Call: FC01:0562
 [dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
 [dasm] FC01:0553, opcode: 2E	segment CS
+[DASM] FC01:0560	RET ???
 [dasm] FC01:0B53, opcode: 2E	segment CS
 [dasm] FC01:04D7, opcode: 2E	segment CS
 [dasm] FC01:04DF, opcode: 26	segment ES
+[DASM] FC01:04E3	RET
+[DASM] FC01:0B67	Call: FC01:0724
 [dasm] FC01:0726, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0608	RET
 [dasm] FC01:0631, opcode: 26	segment ES
+[DASM] FC01:063E	RET ???
 [dasm] FC01:06DE, opcode: 26	segment ES
 [dasm] FC01:06E3, opcode: 26	segment ES
 [dasm] FC01:06E8, opcode: 26	segment ES
 [dasm] FC01:0706, opcode: 26	segment ES
 [dasm] FC01:070B, opcode: 26	segment ES
 [dasm] FC01:0710, opcode: 26	segment ES
+[DASM] FC01:0724	RET
+[DASM] FC01:0773	RETF ???
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
 [dasm] FC01:0C95, opcode: 26	segment ES
 [dasm] FC01:04C9, opcode: 2E	segment CS
 [dasm] FC01:04D1, opcode: 26	segment ES
+[DASM] FC01:04D5	RET
+[DASM] FC01:0CAE	Call: FC01:0724
 [dasm] FC01:0726, opcode: 2E	segment CS
 [dasm] FC01:0753, opcode: 26	segment ES
 [dasm] FC01:075B, opcode: 26	segment ES
@@ -11958,8 +12488,14 @@
 [dasm] FC01:0706, opcode: 26	segment ES
 [dasm] FC01:070B, opcode: 26	segment ES
 [dasm] FC01:0710, opcode: 26	segment ES
+[DASM] FC01:0724	RET
+[DASM] FC01:0773	RETF ???
+[DASM] FC01:0B6F	RETF ???
+[DASM] FE3C:0267	RET
 [dasm] FE3C:007C, opcode: 26	segment ES
 [dasm] FE3C:0085, opcode: 26	segment ES
+[DASM] FE3C:008A	RETF
+[DASM] FE7E:01AF	RET ???
 [dasm] FE7E:03FC, opcode: 2E	segment CS
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
@@ -11989,8 +12525,13 @@
 [dasm] FED3:00FB, opcode: 26	segment ES
 [dasm] FED3:0525, opcode: 26	segment ES
 [dasm] FED3:052C, opcode: 26	segment ES
+[DASM] FED3:0558	Call: FC01:0775
 [dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
+[DASM] FC01:080E	RETF ???
 [dasm] FED3:0563, opcode: 26	segment ES
+[DASM] FED3:056A	RETF ???
+[DASM] FE7E:01AF	RET ???
 [dasm] FE7E:03FC, opcode: 2E	segment CS
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
@@ -12020,8 +12561,13 @@
 [dasm] FED3:00FB, opcode: 26	segment ES
 [dasm] FED3:0525, opcode: 26	segment ES
 [dasm] FED3:052C, opcode: 26	segment ES
+[DASM] FED3:0558	Call: FC01:0775
 [dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
+[DASM] FC01:080E	RETF ???
 [dasm] FED3:0563, opcode: 26	segment ES
+[DASM] FED3:056A	RETF ???
+[DASM] FE7E:01AF	RET ???
 [dasm] FE7E:03FC, opcode: 2E	segment CS
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
@@ -12051,8 +12597,13 @@
 [dasm] FED3:00FB, opcode: 26	segment ES
 [dasm] FED3:0525, opcode: 26	segment ES
 [dasm] FED3:052C, opcode: 26	segment ES
+[DASM] FED3:0558	Call: FC01:0775
 [dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
+[DASM] FC01:080E	RETF ???
 [dasm] FED3:0563, opcode: 26	segment ES
+[DASM] FED3:056A	RETF ???
+[DASM] FE7E:01AF	RET ???
 [dasm] FE7E:03FC, opcode: 2E	segment CS
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:0186, opcode: F2	REPNE/REPNZ
@@ -12082,1060 +12633,15 @@
 [dasm] FED3:00FB, opcode: 26	segment ES
 [dasm] FED3:0525, opcode: 26	segment ES
 [dasm] FED3:052C, opcode: 26	segment ES
+[DASM] FED3:0558	Call: FC01:0775
 [dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
+[DASM] FC01:080E	RETF ???
 [dasm] FED3:0563, opcode: 26	segment ES
+[DASM] FED3:056A	RETF ???
+[DASM] FE7E:01AF	RET ???
 [dasm] FE7E:04A7, opcode: 2E	segment CS
-[dasm] FE7E:04A7, opcode: 2E	segment CS
-[dasm] FE7E:029C, opcode: 2E	segment CS
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FED3:0010, opcode: 2E	segment CS
-[dasm] FED3:003A, opcode: 26	segment ES
-[dasm] FED3:004D, opcode: 26	segment ES
-[dasm] FED3:00B6, opcode: 26	segment ES
-[dasm] FED3:00BC, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FED3:0563, opcode: 26	segment ES
-[dasm] FE7E:02BF, opcode: 2E	segment CS
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FED3:0010, opcode: 2E	segment CS
-[dasm] FED3:003A, opcode: 26	segment ES
-[dasm] FED3:004D, opcode: 26	segment ES
-[dasm] FED3:00F1, opcode: 26	segment ES
-[dasm] FED3:00FB, opcode: 26	segment ES
-[dasm] FED3:010C, opcode: 26	segment ES
-[dasm] FED3:0125, opcode: 26	segment ES
-[dasm] FED3:0129, opcode: 26	segment ES
-[dasm] FED3:0138, opcode: 26	segment ES
-[dasm] FED3:013F, opcode: 26	segment ES
-[dasm] FED3:0149, opcode: 26	segment ES
-[dasm] FED3:014D, opcode: 26	segment ES
-[dasm] FED3:0151, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0BDD, opcode: 2E	segment CS
-[dasm] FC01:13FB, opcode: 26	segment ES
-[dasm] FC01:135E, opcode: 26	segment ES
-[dasm] FC01:1374, opcode: 26	segment ES
-[dasm] FC01:1410, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0BDD, opcode: 2E	segment CS
-[dasm] FC01:13FB, opcode: 26	segment ES
-[dasm] FC01:135E, opcode: 26	segment ES
-[dasm] FC01:1374, opcode: 26	segment ES
-[dasm] FC01:1410, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:051C, opcode: 26	segment ES
-[dasm] FED3:01A0, opcode: 26	segment ES
-[dasm] FED3:01BE, opcode: 26	segment ES
-[dasm] FED3:01C2, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0838, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:1D0C, opcode: 26	segment ES
-[dasm] FC01:1DA0, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:051C, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FED3:01D9, opcode: 26	segment ES
-[dasm] FED3:020D, opcode: 26	segment ES
-[dasm] FED3:0211, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0838, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:1B57, opcode: 26	segment ES
-[dasm] FC01:1B5A, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:1D00, opcode: 26	segment ES
-[dasm] FC01:1C6C, opcode: 26	segment ES
-[GPIB] Write port 0x00: 18
-[dasm] FC01:1C71, opcode: 26	segment ES
-[GPIB] Write port 0x02: 40
-[dasm] FC01:0090, opcode: 2E	segment CS
-[PORT] port_read @ 002
-[I8259] Read port 0x2
-[PORT] port_write @ 002 <- C7
-[I8259] Write port 0x2: C7
-[I8259] ICW5 = C7
-[dasm] FC01:1B90, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:04D7, opcode: 2E	segment CS
-[dasm] FC01:04DF, opcode: 26	segment ES
-[dasm] FC01:0553, opcode: 2E	segment CS
-[dasm] FC01:088A, opcode: 26	segment ES
-[dasm] FC01:0726, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0631, opcode: 26	segment ES
-[dasm] FC01:06DE, opcode: 26	segment ES
-[dasm] FC01:06E3, opcode: 26	segment ES
-[dasm] FC01:06E8, opcode: 26	segment ES
-[dasm] FC01:0706, opcode: 26	segment ES
-[dasm] FC01:070B, opcode: 26	segment ES
-[dasm] FC01:0710, opcode: 26	segment ES
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0C87, opcode: 26	segment ES
-[dasm] FC01:0C95, opcode: 26	segment ES
-[dasm] FC01:04C9, opcode: 2E	segment CS
-[dasm] FC01:04D1, opcode: 26	segment ES
-[dasm] FC01:0726, opcode: 2E	segment CS
-[dasm] FC01:0753, opcode: 26	segment ES
-[dasm] FC01:075B, opcode: 26	segment ES
-[dasm] FC01:06DE, opcode: 26	segment ES
-[dasm] FC01:06E3, opcode: 26	segment ES
-[dasm] FC01:06E8, opcode: 26	segment ES
-[dasm] FC01:0706, opcode: 26	segment ES
-[dasm] FC01:070B, opcode: 26	segment ES
-[dasm] FC01:0710, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:051C, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:181A, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:051C, opcode: 26	segment ES
-[dasm] FED3:0563, opcode: 26	segment ES
-[dasm] FE7E:02E2, opcode: 2E	segment CS
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FED3:0010, opcode: 2E	segment CS
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0838, opcode: 26	segment ES
-[dasm] FED3:003A, opcode: 26	segment ES
-[dasm] FED3:004D, opcode: 26	segment ES
-[dasm] FED3:00B6, opcode: 26	segment ES
-[dasm] FED3:00BC, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:051C, opcode: 26	segment ES
-[dasm] FED3:0563, opcode: 26	segment ES
-[dasm] FE7E:02FD, opcode: 2E	segment CS
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
-[dasm] FED3:0010, opcode: 2E	segment CS
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0838, opcode: 26	segment ES
-[dasm] FED3:003A, opcode: 26	segment ES
-[dasm] FED3:004D, opcode: 26	segment ES
-[dasm] FED3:008A, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0838, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:1D00, opcode: 26	segment ES
-[dasm] FC01:183A, opcode: 26	segment ES
-[GPIB] Write port 0x06: 80
-[dasm] FC01:183E, opcode: 26	segment ES
-[GPIB] Write port 0x06: 8F
-[dasm] FC01:1842, opcode: 26	segment ES
-[GPIB] Write port 0x06: 00
-[dasm] FC01:184A, opcode: 26	segment ES
-[GPIB] Write port 0x06: 0F
-[dasm] FC01:184E, opcode: 26	segment ES
-[GPIB] Write port 0x06: 8A
-[dasm] FC01:1BF9, opcode: 26	segment ES
-[GPIB] Read port 0x00
-[dasm] FC01:185E, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0553, opcode: 2E	segment CS
-[dasm] FC01:0B53, opcode: 2E	segment CS
-[dasm] FC01:04D7, opcode: 2E	segment CS
-[dasm] FC01:04DF, opcode: 26	segment ES
-[dasm] FC01:0726, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0631, opcode: 26	segment ES
-[dasm] FC01:06DE, opcode: 26	segment ES
-[dasm] FC01:06E3, opcode: 26	segment ES
-[dasm] FC01:06E8, opcode: 26	segment ES
-[dasm] FC01:0706, opcode: 26	segment ES
-[dasm] FC01:070B, opcode: 26	segment ES
-[dasm] FC01:0710, opcode: 26	segment ES
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0141, opcode: 2E	segment CS
-[dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
-[dasm] FC01:0155, opcode: 2E	segment CS
-[dasm] FC01:0C45, opcode: 2E	segment CS
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:0C95, opcode: 26	segment ES
-[dasm] FC01:04C9, opcode: 2E	segment CS
-[dasm] FC01:04D1, opcode: 26	segment ES
-[dasm] FC01:0726, opcode: 2E	segment CS
-[dasm] FC01:0753, opcode: 26	segment ES
-[dasm] FC01:075B, opcode: 26	segment ES
-[dasm] FC01:06DE, opcode: 26	segment ES
-[dasm] FC01:06E3, opcode: 26	segment ES
-[dasm] FC01:06E8, opcode: 26	segment ES
-[dasm] FC01:0706, opcode: 26	segment ES
-[dasm] FC01:070B, opcode: 26	segment ES
-[dasm] FC01:0710, opcode: 26	segment ES
-[dasm] FC01:17EE, opcode: 26	segment ES
-[dasm] FC01:1D0C, opcode: 26	segment ES
-[dasm] FC01:1DA0, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:051C, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:1CEF, opcode: 26	segment ES
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:051C, opcode: 26	segment ES
-[dasm] FED3:0563, opcode: 26	segment ES
+[DASM] FE7E:03D7	RET ???
 [dasm] FE7E:04A7, opcode: 2E	segment CS
 [dasm] FE7E:029C, opcode: 2E	segment CS
 [dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
@@ -13158,18 +12664,19 @@
 [dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
+[DASM] FE7E:00F7	RET ???
 [dasm] FED3:0010, opcode: 2E	segment CS
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0838, opcode: 26	segment ES
 [dasm] FED3:003A, opcode: 26	segment ES
 [dasm] FED3:004D, opcode: 26	segment ES
 [dasm] FED3:00B6, opcode: 26	segment ES
 [dasm] FED3:00BC, opcode: 26	segment ES
+[DASM] FED3:0558	Call: FC01:0775
 [dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:04BD, opcode: 2E	segment CS
-[dasm] FC01:051C, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
+[DASM] FC01:080E	RETF ???
 [dasm] FED3:0563, opcode: 26	segment ES
+[DASM] FED3:056A	RETF ???
+[DASM] FE7E:0254	RET ???
 [dasm] FE7E:02BF, opcode: 2E	segment CS
 [dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
@@ -13191,10 +12698,8 @@
 [dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
 [dasm] FE7E:00CB, opcode: F2	REPNE/REPNZ
+[DASM] FE7E:00F7	RET ???
 [dasm] FED3:0010, opcode: 2E	segment CS
-[dasm] FC01:04EC, opcode: 26	segment ES
-[dasm] FC01:0564, opcode: 2E	segment CS
-[dasm] FC01:0838, opcode: 26	segment ES
 [dasm] FED3:003A, opcode: 26	segment ES
 [dasm] FED3:004D, opcode: 26	segment ES
 [dasm] FED3:00F1, opcode: 26	segment ES
@@ -13207,351 +12712,610 @@
 [dasm] FED3:0149, opcode: 26	segment ES
 [dasm] FED3:014D, opcode: 26	segment ES
 [dasm] FED3:0151, opcode: 26	segment ES
+[DASM] FED3:0163	Call: FC01:0BBA
+[DASM] FC01:0BC4	Call: FC01:0562
+[dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
+[dasm] FC01:0BDD, opcode: 2E	segment CS
+[DASM] FC01:0BEB	Call: FC01:13E3
+[dasm] FC01:13FB, opcode: 26	segment ES
+[dasm] FC01:135E, opcode: 26	segment ES
+[dasm] FC01:1374, opcode: 26	segment ES
+[DASM] FC01:13E1	RET ???
+[dasm] FC01:1410, opcode: 26	segment ES
+[DASM] FC01:1417	RETF ???
+[DASM] FC01:0BF3	RETF ???
+[DASM] FED3:0175	Call: FC01:0BBA
+[DASM] FC01:0BC4	Call: FC01:0562
+[dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
+[dasm] FC01:0BDD, opcode: 2E	segment CS
+[DASM] FC01:0BEB	Call: FC01:13E3
+[dasm] FC01:13FB, opcode: 26	segment ES
+[dasm] FC01:135E, opcode: 26	segment ES
+[dasm] FC01:1374, opcode: 26	segment ES
+[DASM] FC01:13E1	RET ???
+[dasm] FC01:1410, opcode: 26	segment ES
+[DASM] FC01:1417	RETF ???
+[DASM] FC01:0BF3	RETF ???
+[DASM] FED3:0193	Call: FC01:0775
+[dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
+[dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[dasm] FC01:051C, opcode: 26	segment ES
+[DASM] FC01:054A	RET ???
+[DASM] FC01:080E	RETF ???
 [dasm] FED3:01A0, opcode: 26	segment ES
 [dasm] FED3:01BE, opcode: 26	segment ES
 [dasm] FED3:01C2, opcode: 26	segment ES
+[DASM] FED3:01D1	Call: FC01:1761
+[DASM] FC01:1783	Call: FC01:0810
 [dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
+[DASM] FC01:0833	Call: FC01:0562
 [dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
 [dasm] FC01:0838, opcode: 26	segment ES
+[DASM] FC01:08A9	RETF ???
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
 [dasm] FC01:1D0C, opcode: 26	segment ES
 [dasm] FC01:1DA0, opcode: 26	segment ES
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
+[DASM] FC01:1C90	Call: FC01:0775
 [dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
 [dasm] FC01:051C, opcode: 26	segment ES
+[DASM] FC01:054A	RET ???
+[DASM] FC01:080E	RETF ???
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
+[DASM] FC01:1C9B	RET
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
+[DASM] FC01:182B	RETF
 [dasm] FED3:01D9, opcode: 26	segment ES
 [dasm] FED3:020D, opcode: 26	segment ES
 [dasm] FED3:0211, opcode: 26	segment ES
+[DASM] FED3:0220	Call: FC01:1761
+[DASM] FC01:1783	Call: FC01:0810
 [dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
+[DASM] FC01:0833	Call: FC01:0562
 [dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
 [dasm] FC01:0838, opcode: 26	segment ES
+[DASM] FC01:08A9	RETF ???
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
 [dasm] FC01:1B57, opcode: 26	segment ES
 [dasm] FC01:1B5A, opcode: 26	segment ES
 [dasm] FC01:1CEF, opcode: 26	segment ES
+[DASM] FC01:1CF2	RET
 [dasm] FC01:1D00, opcode: 26	segment ES
+[DASM] FC01:1D03	RET
+[DASM] FC01:1B70	RET
 [dasm] FC01:1C6C, opcode: 26	segment ES
-[GPIB] Write port 0x00: 18
 [dasm] FC01:1C71, opcode: 26	segment ES
-[GPIB] Write port 0x02: 40
+[DASM] FC01:1CCF	Call: FC01:0086
 [dasm] FC01:0090, opcode: 2E	segment CS
-[PORT] port_read @ 002
-[I8259] Read port 0x2
-[PORT] port_write @ 002 <- C7
-[I8259] Write port 0x2: C7
-[I8259] ICW5 = C7
+[DASM] FC01:009D	out 02,al (C7)
+[DASM] FC01:00A1	RETF ???
+[DASM] FC01:1CDA	RET
+[DASM] FC01:1C86	RET
+[DASM] FC01:1B78	RET
 [dasm] FC01:1B90, opcode: 26	segment ES
+[DASM] FC01:1C86	RET
+[DASM] FC01:1BA5	Call: FC01:0810
 [dasm] FC01:04EC, opcode: 26	segment ES
+[DASM] FC01:04F8	RET ???
+[DASM] FC01:0852	Call: FC01:0562
 [dasm] FC01:0564, opcode: 2E	segment CS
+[DASM] FC01:056D	RETF
 [dasm] FC01:04D7, opcode: 2E	segment CS
 [dasm] FC01:04DF, opcode: 26	segment ES
+[DASM] FC01:04E3	RET
 [dasm] FC01:0553, opcode: 2E	segment CS
+[DASM] FC01:0560	RET ???
 [dasm] FC01:088A, opcode: 26	segment ES
+[DASM] FC01:0893	Call: FC01:0724
 [dasm] FC01:0726, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0608	RET
 [dasm] FC01:0631, opcode: 26	segment ES
+[DASM] FC01:063E	RET ???
 [dasm] FC01:06DE, opcode: 26	segment ES
 [dasm] FC01:06E3, opcode: 26	segment ES
 [dasm] FC01:06E8, opcode: 26	segment ES
 [dasm] FC01:0706, opcode: 26	segment ES
 [dasm] FC01:070B, opcode: 26	segment ES
 [dasm] FC01:0710, opcode: 26	segment ES
+[DASM] FC01:0724	RET
+[DASM] FC01:0773	RETF ???
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
 [dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
 [dasm] FC01:00F5, opcode: 2E	segment CS
-[PORT] port_write @ 000 <- 63
-[I8259] Write port 0x0: 63
-[I8259] OCW2 = 63
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
 [dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
 [dasm] FC01:0C45, opcode: 2E	segment CS
 [dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
+[dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
+[dasm] FC01:00F5, opcode: 2E	segment CS
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
+[dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
+[dasm] FC01:0C45, opcode: 2E	segment CS
+[dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
+[dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
+[dasm] FC01:00F5, opcode: 2E	segment CS
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
+[dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
+[dasm] FC01:0C45, opcode: 2E	segment CS
+[dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
+[dasm] FC01:0141, opcode: 2E	segment CS
+[DASM] FC01:0150	Call: FC01:00E9
+[dasm] FC01:00F5, opcode: 2E	segment CS
+[DASM] FC01:00FA	out 00,al (63)
+[DASM] FC01:00FE	RETF ???
+[dasm] FC01:0155, opcode: 2E	segment CS
+[DASM] FC01:0162	Call: FC01:0C40
+[dasm] FC01:0C45, opcode: 2E	segment CS
+[dasm] FC01:04BD, opcode: 2E	segment CS
+[DASM] FC01:04C7	RET
+[DASM] FC01:0CB5	RETF
+[DASM] FC01:0170	IRET
