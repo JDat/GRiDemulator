@@ -63,7 +63,7 @@ void tms9914a_write(void* dummy, uint32_t addr, uint8_t value) {
             break;
           default:
 #ifdef DEBUG_GPIB
-            debug_log(DEBUG_DETAIL, "[GPIB] Write port 0x%02X: %02X\n", addr, value);
+            debug_log(DEBUG_DETAIL, "[GPIB] Write port 0x%02X: 0x%02X\n", addr, value);
 #endif
             break;
         }
