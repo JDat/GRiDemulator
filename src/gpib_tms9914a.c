@@ -26,15 +26,28 @@
 #include <string.h>
 #include "config.h"
 #include "gpib_tms9914a.h"
+#include "gpib_tms9914a_registers.h"
 #include "memory.h"
 #include "debuglog.h"
 //#include <time.h>
 
 #define baseAddress 0xDFF80
-#define addressLen  0x8
+#define addressLen  0xF
 
+// Auxiliary commands
+
+void doAuxCmd(uint8_t value) {
+        uint8_t bitFlag, command;
+        bitFlag = (value  & 0b10000000) >> 7;
+        command = (value & 0b00011111);
+#ifdef DEBUG_GPIB
+        debug_log(DEBUG_DETAIL, "[GPIB] Flag: %i\tAux cmd: 0x%02X, %s\n", bitFlag, auxCmd[command].cmd, auxCmd[command].name);
+#endif
+
+}
 uint8_t tms9914a_read(void* dummy, uint32_t addr) {
         addr = addr - baseAddress;
+        addr = addr >> 1;
 #ifdef DEBUG_GPIB
         debug_log(DEBUG_DETAIL, "[GPIB] Read port 0x%02X\n", addr);
 #endif
@@ -43,9 +56,17 @@ uint8_t tms9914a_read(void* dummy, uint32_t addr) {
 
 void tms9914a_write(void* dummy, uint32_t addr, uint8_t value) {
         addr = addr - baseAddress;
+        addr = addr >> 1;
+        switch(addr) {
+          case 3:
+            doAuxCmd(value);
+            break;
+          default:
 #ifdef DEBUG_GPIB
-        debug_log(DEBUG_DETAIL, "[GPIB] Write port 0x%02X: %02X\n", addr, value);
+            debug_log(DEBUG_DETAIL, "[GPIB] Write port 0x%02X: %02X\n", addr, value);
 #endif
+            break;
+        }
 }
 
 void tms9914a_init() {

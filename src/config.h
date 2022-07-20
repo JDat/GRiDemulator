@@ -9,8 +9,8 @@
 //#define DEBUG_TIMING
 
 //#define DEBUG_CPU
-#define DEBUG_FPU
-#define DEBUG_DIASASM
+//#define DEBUG_FPU
+//#define DEBUG_DIASASM
 //#define DEBUG_MEMORY
 //#define DEBUG_PORTS
 
@@ -19,7 +19,7 @@
 //#define DEBUG_PIC
 //#define DEBUG_PIT
 //#define DEBUG_RTC
-//#define DEBUG_GPIB
+#define DEBUG_GPIB
 //#define DEBUG_BUBBLEMEM
 //#define DEBUG_DMA
 //#define DEBUG_PPI
