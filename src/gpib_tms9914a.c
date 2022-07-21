@@ -46,12 +46,21 @@ void doAuxCmd(uint8_t value) {
 
 }
 uint8_t tms9914a_read(void* dummy, uint32_t addr) {
+        uint8_t ret;
         addr = addr - baseAddress;
         addr = addr >> 1;
+        switch(addr) {
+          case 0:
+            //ret=0b00000000;
+            ret = 0x10;
+            break;
+          default:
 #ifdef DEBUG_GPIB
-        debug_log(DEBUG_DETAIL, "[GPIB] Read port 0x%02X\n", addr);
+            debug_log(DEBUG_DETAIL, "[GPIB] Read port 0x%02X\n", addr);
 #endif
-        return 0xFF;
+          ret = 0;
+        }
+        return ret;
 }
 
 void tms9914a_write(void* dummy, uint32_t addr, uint8_t value) {

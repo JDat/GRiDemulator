@@ -3280,9 +3280,9 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 	}
 }
 
-void cpu_registerIntCallback(CPU_t* cpu, uint8_t interrupt, void (*cb)(CPU_t*, uint8_t)) {
-	cpu->int_callback[interrupt] = cb;
-}
+//void cpu_registerIntCallback(CPU_t* cpu, uint8_t interrupt, void (*cb)(CPU_t*, uint8_t)) {
+	//cpu->int_callback[interrupt] = cb;
+//}
 
 void do8087(CPU_t* cpu) {
         //modregrm(cpu);

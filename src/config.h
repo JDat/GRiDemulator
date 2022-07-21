@@ -15,7 +15,7 @@
 //#define DEBUG_PORTS
 
 //#define DEBUG_KEYBOARD
-//#define DEBUG_GRIDVIDEO
+#define DEBUG_GRIDVIDEO
 //#define DEBUG_PIC
 //#define DEBUG_PIT
 //#define DEBUG_RTC
@@ -33,7 +33,8 @@
 //#define USE_DISK_HLE
 //#define USE_NE2000
 
-#define VIDEO_CARD_GRID 	1
+#define VIDEO_CARD_GRID1101 	1
+#define VIDEO_CARD_GRID1139 	2
 
 #define SAMPLE_RATE		48000
 #define SAMPLE_BUFFER	4800

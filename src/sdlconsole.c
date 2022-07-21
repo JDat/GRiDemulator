@@ -100,12 +100,18 @@ void sdlconsole_setTitle(char* title) { //appends something to the main title, d
 void sdlconsole_blit(uint32_t *pixels, int w, int h, int stride) {
 	static uint64_t lasttime = 0;
 	uint64_t curtime;
+        SDL_Rect rect;
 	curtime = timing_getCur();
 
 	if ((w != sdlconsole_curw) || (h != sdlconsole_curh)) {
 		sdlconsole_setWindow(w, h);
 	}
+        rect.x = 0;
+        rect.y = 0;
+        rect.w = w;
+        rect.h = h;
 	SDL_UpdateTexture(sdlconsole_texture, NULL, pixels, stride);
+        //SDL_UpdateTexture(sdlconsole_texture, &rect, pixels, stride);
 	SDL_RenderClear(sdlconsole_renderer);
 	SDL_RenderCopy(sdlconsole_renderer, sdlconsole_texture, NULL, NULL);
 	SDL_RenderPresent(sdlconsole_renderer);
@@ -249,8 +255,10 @@ uint8_t sdlconsole_translateScancode(SDL_Keycode keyval) {
 uint8_t sdlconsole_translateScancode(SDL_Keycode keyval) {
 	uint8_t i;
 	for (i = 0; i < sizeof(keyTranslateMatrix)/sizeof(keyTranslateMatrix[0]); i++) {
-		if (keyval == (SDL_Keycode)keyTranslateMatrix[i][0]) {
-			return keyTranslateMatrix[i][1];
+		//if (keyval == (SDL_Keycode)keyTranslateMatrix[i][0]) {
+                if (keyval == (SDL_Keycode)keyTranslateMatrix[i].sdlKeyName) {
+			//return keyTranslateMatrix[i][1];
+                        return keyTranslateMatrix[i].unshifted;
 		}
 	}
 	return 0x00;

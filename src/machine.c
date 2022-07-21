@@ -62,8 +62,8 @@ const MACHINEDEF_t machine_defs[] = {
 	//{ "xi8088", "Xi 8088", machine_init_generic_xt, VIDEO_CARD_CGA, 4.77, MACHINE_HW_UART1_MOUSE | MACHINE_HW_RTC },
 	//{ "zenithss", "Zenith SuperSport 8088", machine_init_generic_xt, VIDEO_CARD_CGA, 4.77, MACHINE_HW_UART1_MOUSE | MACHINE_HW_RTC },
 	//{ "landmark", "Supersoft/Landmark diagnostic ROM", machine_init_generic_xt, VIDEO_CARD_CGA, 4.77, MACHINE_HW_UART1_MOUSE | MACHINE_HW_RTC },
-	{ "1101", "GRiD Compass 1101", machine_init_grid, VIDEO_CARD_GRID, 5, MACHINE_HW_RTC },
-        { "1139", "GRiD Compass 1139", machine_init_grid, VIDEO_CARD_GRID, 5, MACHINE_HW_RTC },
+	{ "1101", "GRiD Compass 1101", machine_init_grid, VIDEO_CARD_GRID1101, 5, MACHINE_HW_RTC },
+        { "1139", "GRiD Compass 1139", machine_init_grid, VIDEO_CARD_GRID1139, 5, MACHINE_HW_RTC },
         { NULL }
 };
 
@@ -141,7 +141,6 @@ const MACHINEMEM_t machine_mem[][11] = {
 	// GRiD compass
         // GRid Compass 1101
 	{
-		//{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0x02980, 0x3D680, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },
@@ -150,9 +149,8 @@ const MACHINEMEM_t machine_mem[][11] = {
 	},
         // GRid Compass 1139
 	{
-		//{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },
-                { MACHINE_MEM_RAM, 0x02980, 0x3D680, MACHINE_ROM_ISNOTROM, NULL },
+                { MACHINE_MEM_RAM, 0x04400, 0x7BC00, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },
                 { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1139.bin" },
 		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
@@ -261,7 +259,7 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 int machine_init_grid(MACHINE_t* machine) {
 	if (machine == NULL) return -1;
 
-	debug_log(DEBUG_INFO, "[MACHINE] Init Grid function start\r\n");
+	//debug_log(DEBUG_INFO, "[MACHINE] Init Grid function start\r\n");
 	i8259_init(&machine->i8259);
         i8253_init(&machine->i8253, &machine->i8259);
         
@@ -320,7 +318,7 @@ int machine_init_grid(MACHINE_t* machine) {
 
 	if (gridvideo_init()) return -1;
 
-	debug_log(DEBUG_INFO, "[MACHINE] Init Grid function end\r\n");
+	//debug_log(DEBUG_INFO, "[MACHINE] Init Grid function end\r\n");
 	return 0;
 }
 

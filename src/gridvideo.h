@@ -7,6 +7,7 @@
 #define GRID_SCREEN_COLOR    0xffeb00   // Amber color 0xffeb00 Sharp datasheet tells 585 nm wavelenght
 int gridvideo_init();
 //void gridvideo_update(uint32_t start_x, uint32_t start_y, uint32_t end_x, uint32_t end_y);
+
 void gridvideo_update();
 void gridvideo_scanlineCallback(void* dummy);
 void *gridvideo_renderThread(void* cpu);

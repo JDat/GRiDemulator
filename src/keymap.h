@@ -5,9 +5,9 @@
 //#include <SDL.h>
 #include <SDL2/SDL.h>
 
-/*
-typedef struct _keyTranslateMatrixEntry{
-    const char  name[25];
+
+struct _keyTranslateMatrixEntry{
+    char        name[25];
     uint32_t    sdlKeyName;
     uint8_t     unshifted;
     uint8_t     shift;
@@ -17,10 +17,10 @@ typedef struct _keyTranslateMatrixEntry{
     uint8_t     shiftCtrl;
     uint8_t     codeCtrl;
     uint8_t     codeShiftCtr;
-} keyTranslateMatrixEntry;
-*/
-/*
-const keyTranslateMatrixEntry keyTranslateMatrix[55][10] = {
+};
+
+
+struct _keyTranslateMatrixEntry keyTranslateMatrix[] = {
 
 //Name          /SDL_Key        unshi   shift   code    cdSh    ctrl    shCt    cdCt    cdShCt
 {"\'",          SDLK_QUOTE,     0x27,   0x22,   0x60,   0x5C,   0x07,   0x02,   0x00,   0x1C},
@@ -77,8 +77,8 @@ const keyTranslateMatrixEntry keyTranslateMatrix[55][10] = {
 {"UpArrow",     SDLK_UP,        0xC5,   0xCF,   0xD3,   0xD7,   0x85,   0xBF,   0x93,   0x97}
 
 };
-*/
 
+/*
 const uint32_t keyTranslateMatrix[55][9] = {
 
 //Name          /SDL_Key        unshi   shift   code    cdSh    ctrl    shCt    cdCt    cdShCt
@@ -136,5 +136,5 @@ const uint32_t keyTranslateMatrix[55][9] = {
 {SDLK_UP,        0xC5,   0xCF,   0xD3,   0xD7,   0x85,   0xBF,   0x93,   0x97}
 
 };
-
+*/
 #endif

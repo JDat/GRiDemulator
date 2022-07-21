@@ -84,8 +84,9 @@ int main(int argc, char *argv[]) {
 
 	sprintf(title, "%s v%s pre alpha", STR_TITLE, STR_VERSION);
 
-	printf("%s (c)2020 Mike Chambers\r\n", title);
-	printf("[A portable, open source 80186 PC emulator]\r\n\r\n");
+	//printf("%s (c)2020 Mike Chambers\r\n", title);
+        printf("%s\r\n", title);
+	//printf("[A portable, open source 80186 PC emulator]\r\n\r\n");
 
 	ports_init();
 	timing_init();
@@ -140,20 +141,20 @@ int main(int argc, char *argv[]) {
 		//sdlaudio_updateSampleTiming();
 		if (++curloop == 100) {
 			switch (sdlconsole_loop()) {
-			case SDLCONSOLE_EVENT_KEY:
-				//machine.KeyState.scancode = sdlconsole_getScancode();
-				//machine.KeyState.isNew = 1;
-                                gridKeyboard8741_getScanCode(sdlconsole_getScancode());
-				//i8259_doirq(&machine.i8259, 1);
-                                i8259_doirq(&machine.i8259, 4);
-				break;
-			case SDLCONSOLE_EVENT_QUIT:
-				running = 0;
-				break;
-			case SDLCONSOLE_EVENT_DEBUG_1:
-				break;
-			case SDLCONSOLE_EVENT_DEBUG_2:
-				break;
+                                case SDLCONSOLE_EVENT_KEY:
+                                        //machine.KeyState.scancode = sdlconsole_getScancode();
+                                        //machine.KeyState.isNew = 1;
+                                        gridKeyboard8741_getScanCode(sdlconsole_getScancode());
+                                        //i8259_doirq(&machine.i8259, 1);
+                                        i8259_doirq(&machine.i8259, 4);
+                                        break;
+                                case SDLCONSOLE_EVENT_QUIT:
+                                        running = 0;
+                                        break;
+                                case SDLCONSOLE_EVENT_DEBUG_1:
+                                        break;
+                                case SDLCONSOLE_EVENT_DEBUG_2:
+                                        break;
 			}
 
 
