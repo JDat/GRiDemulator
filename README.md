@@ -16,8 +16,15 @@ Sorry, Windows support and PC XT hardware removed from original code.
 
 ### Compiling from source under Linux
 `sudo apt-get install libsdl2-dev libpcap-dev cmake`
+
 `mkdir build && cd build && cmake .. && make`
 
+### Under under Linux
+Make shure you have boot ROMs in ROM directory
+
+`./gridemu -machine 1101 -debug detail`
+
+`./gridemu -machine 1101 -debug detail`
 
 
 Original readme from XTulator author:

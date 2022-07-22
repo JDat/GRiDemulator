@@ -37,7 +37,7 @@
 #define VIDEO_CARD_GRID1139 	2
 
 #define SAMPLE_RATE		48000
-#define SAMPLE_BUFFER	4800
+//#define SAMPLE_BUFFER	4800
 
 //#define _stricmp strcasecmp
 

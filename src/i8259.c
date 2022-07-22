@@ -149,11 +149,12 @@ uint8_t i8259_nextintr(I8259_t* i8259) {
 }
 
 void i8259_doirq(I8259_t* i8259, uint8_t irqnum) {
-        if ( irqnum != 3) {
 #ifdef DEBUG_PIC 
+        if ( irqnum != 3) {
                 debug_log(DEBUG_DETAIL, "[I8259] IRQ %u raised\r\n", irqnum);
-#endif
         }
+#endif
+
 	i8259->irr |= (1 << irqnum) & (~i8259->imr);
 }
 

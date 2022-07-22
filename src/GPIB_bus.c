@@ -5,7 +5,7 @@
 #include "config.h"
 #include "debuglog.h"
 #include "machine.h"
-#incluide "GPIB_bus.h"
+#include "GPIB_bus.h"
 
 uint8_t GPIBbusStatus;
 uint8_t GPIBbusData;
@@ -22,6 +22,6 @@ void GPIBbusDataSet(uint8_t data) {
         GPIBbusData = data;
 }
 
-uint8_t GPIBbusStatusGet() {
+uint8_t GPIBbusDataGet() {
         return GPIBbusData;
 }

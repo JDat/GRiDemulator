@@ -45,7 +45,7 @@
 #include "gridvideo.h"
 #include "rtc.h"
 #include "i7220.h"
-#include "gpib_tms9914a.h"
+#include "tms9914a.h"
 #include "memory.h"
 #include "utility.h"
 #include "timing.h"

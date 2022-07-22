@@ -12,6 +12,6 @@ void GPIBbusStatusSet(uint8_t status);
 uint8_t GPIBbusStatusGet();
 
 void GPIBbusDataSet(uint8_t data);
-uint8_t GPIBbusStatusGet()
+uint8_t GPIBbusDataGet();
 
 #endif

@@ -14,4 +14,5 @@ file(GLOB src src/*.c)
 #add_executable(xtulator ${XT} ${chipset} ${cpu} ${audio} ${disk} ${input} ${io} ${video})
 add_executable(gridemu ${src})
 
-target_link_libraries(gridemu m pthread SDL2 pcap)
+#target_link_libraries(gridemu m pthread SDL2 pcap)
+target_link_libraries(gridemu m pthread SDL2)
