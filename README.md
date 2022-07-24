@@ -19,12 +19,16 @@ Sorry, Windows support and PC XT hardware removed from original code.
 
 `mkdir build && cd build && cmake .. && make`
 
-### Under under Linux
+### Running under Linux
 Make shure you have boot ROMs in ROM directory
 
-`./gridemu -machine 1101 -debug detail`
+`./gridemu -machine 1101`
+
+`./gridemu -machine 1139`
 
 `./gridemu -machine 1101 -debug detail`
+
+`./gridemu -machine 1101 -debug detail 2> test.log`
 
 
 Original readme from XTulator author:

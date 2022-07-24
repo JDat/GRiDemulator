@@ -6,9 +6,18 @@
 #include "debuglog.h"
 #include "machine.h"
 #include "GPIB_bus.h"
+#include "utility.h"
 
 uint8_t GPIBbusStatus;
 uint8_t GPIBbusData;
+
+void GPIBbusIFCset(bool pin)  {
+        bitWrite(GPIBbusStatus, pinIFC, pin);
+}
+
+bool GPIBbusIFCget()  {
+        return bitRead(GPIBbusStatus, pinIFC);
+}
 
 void GPIBbusStatusSet(uint8_t status) {
         GPIBbusStatus = status;

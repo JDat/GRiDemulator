@@ -53,22 +53,30 @@ void do_aux_cmd(unsigned cmd , bool set_bit) {
       //fixme
       break;
     case AUXCMD_SIC:
-    if ( bitRead(auxBits, flagSIC) != set_bit ) {
-        bitWrite(auxBits, flagSIC, set_bit);
-        //update ifc
-        //set_signal(IEEE_488_IFC , m_sic);
-    }
-    /*
-      if (m_sic != set_bit) {
-        m_sic = set_bit;
-        update_ifc();
-        if (!controller_reset() && m_sic && m_c_state == FSM_C_CIDS) {
-          m_c_state = FSM_C_CADS;
-          m_ext_state_change = true;
-        }
-        update_fsm();
+      if ( bitRead(auxBits, flagSIC) != set_bit ) {
+          bitWrite(auxBits, flagSIC, set_bit);
+          //update ifc
+          //set_signal(IEEE_488_IFC , m_sic);
+          GPIBbusIFCset(bitRead(auxBits, flagSIC));
+          /*
+          if (!controller_reset() && m_sic && m_c_state == FSM_C_CIDS) {
+            m_c_state = FSM_C_CADS;
+            m_ext_state_change = true;
+          }
+          update_fsm();
+          */
       }
-      */
+          /*
+          // ok if (m_sic != set_bit) {
+            // ok m_sic = set_bit;
+            // ok update_ifc();
+            if (!controller_reset() && m_sic && m_c_state == FSM_C_CIDS) {
+              m_c_state = FSM_C_CADS;
+              m_ext_state_change = true;
+            }
+            update_fsm();
+          }
+          */
       break;
     default:
       break;

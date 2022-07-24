@@ -2,11 +2,23 @@
 #define _GPIB_BUS_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define DEVICE_COUNT 16
 
-uint8_t GPIBbusStatus;
-uint8_t GPIBbusData;
+enum {
+    pinSRQ  = 0,
+    pinATN  = 1,
+    pinEOI  = 2,
+    pinDAV  = 3,
+    pinNRFD = 4,
+    pinNDAC = 5,
+    pinIFC  = 6,
+    pinREN  = 7
+};
+
+void GPIBbusIFCset(bool pin);
+bool GPIBbusIFCget();
 
 void GPIBbusStatusSet(uint8_t status);
 uint8_t GPIBbusStatusGet();
