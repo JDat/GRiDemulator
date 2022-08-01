@@ -18,7 +18,7 @@
 */
 
 /*
-	Bubble memory
+	TMS914A GPIB controller
 */
 
 #include <stdio.h>
@@ -43,6 +43,9 @@
 uint8_t registers[16];
 uint32_t auxBits;
 bool irqLine;
+uint8_t controllerState;
+bool externalStateChange;
+bool reflection;
 
 I8259_t* i8259;
 
@@ -51,6 +54,7 @@ void do_aux_cmd(unsigned cmd , bool set_bit) {
   switch(cmd) {
     case AUXCMD_SWRST:
       //fixme
+      do_swrst();
       break;
     case AUXCMD_SIC:
       if ( bitRead(auxBits, flagSIC) != set_bit ) {
@@ -58,25 +62,15 @@ void do_aux_cmd(unsigned cmd , bool set_bit) {
           //update ifc
           //set_signal(IEEE_488_IFC , m_sic);
           GPIBbusIFCset(bitRead(auxBits, flagSIC));
-          /*
-          if (!controller_reset() && m_sic && m_c_state == FSM_C_CIDS) {
-            m_c_state = FSM_C_CADS;
-            m_ext_state_change = true;
+          
+          if ( !controller_reset() && bitRead(auxBits, flagSIC) && (controllerState  == FSM_C_CIDS) ) {
+            controllerState = FSM_C_CADS;
+            externalStateChange = true;
+            // need to implement. Dohh! 900 lines of code.
+            //update_fsm();
           }
-          update_fsm();
-          */
+          
       }
-          /*
-          // ok if (m_sic != set_bit) {
-            // ok m_sic = set_bit;
-            // ok update_ifc();
-            if (!controller_reset() && m_sic && m_c_state == FSM_C_CIDS) {
-              m_c_state = FSM_C_CADS;
-              m_ext_state_change = true;
-            }
-            update_fsm();
-          }
-          */
       break;
     default:
       break;
@@ -101,6 +95,12 @@ uint8_t tms9914a_read(void* dummy, uint32_t addr) {
             //ret = registers[regIntStatus0];
             ret = 0xff;
             registers[regIntStatus0] = 0;
+            update_int();
+            break;
+          case regIntStatus1:
+            //ret = registers[regIntStatus1];
+            ret = 0xff;
+            registers[regIntStatus1] = 0;
             update_int();
             break;
           case regDataOut:
@@ -130,13 +130,28 @@ void tms9914a_write(void* dummy, uint32_t addr, uint8_t value) {
         addr = addr >> 1;
         addr += 8;
         switch(addr) {
+          case regIntMask0:
+#ifdef DEBUG_GPIB
+            debug_log(DEBUG_DETAIL, "[GPIB] Write regIntMask0: 0x%02X\n", value);
+#endif
+            break;
+          case regIntMask1:
+#ifdef DEBUG_GPIB
+            debug_log(DEBUG_DETAIL, "[GPIB] Write regIntMask1: 0x%02X\n", value);
+#endif
+            break;
           case regAuxCmd:
             //doAuxCmd(value);
             do_aux_cmd(value & auxCmdMask, (value & auxBitMask) >> 7);
             break;
+          case regDataOut:
+#ifdef DEBUG_GPIB
+            debug_log(DEBUG_DETAIL, "[GPIB] Write regDataOut: 0x%02X\n", value);
+#endif
+            break;
           default:
 #ifdef DEBUG_GPIB
-            debug_log(DEBUG_DETAIL, "[GPIB] Write port 0x%02X: 0x%02X\n", addr, value);
+            debug_log(DEBUG_DETAIL, "[GPIB] Write port 0x%02X: 0x%02X\n", addr - 8, value);
 #endif
             break;
         }
@@ -184,4 +199,33 @@ void update_int() {
     i8259_doirq(i8259, 5);
 	}
 
+}
+
+bool controller_reset() {
+  return bitRead(auxBits, flagSWRST) || get_ifcin();
+	//return m_swrst || get_ifcin();
+}
+
+bool get_ifcin() {
+	return GPIBbusIFCget && !bitRead(auxBits, flagSIC);
+  //return get_signal(IEEE_488_IFC) && !m_sic;
+}
+
+void do_swrst() {
+  
+}
+
+void update_fsm() {
+	if (reflection) {
+		return;
+	}
+
+  reflection = true;
+  
+  bool changed = true;
+	uint8_t prev_state;
+  while (changed) {
+    changed = externalStateChange;
+    externalStateChange = false;
+  }
 }

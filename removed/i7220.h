@@ -32,53 +32,47 @@
 #ifndef MAME_MACHINE_I7220_H
 #define MAME_MACHINE_I7220_H
 
-//#pragma once
-
-#include <stdbool.h>
+#pragma once
 
 #define I7110_MBM_SIZE (128 * 1024) // 1 megabit
 #define I7115_MBM_SIZE (512 * 1024) // 4 megabit
 
-#define BUBBLEFIFOSIZE 40
-
-//class i7220_device : public device_t,
-//					 public device_image_interface
-//{
-//public:
+class i7220_device : public device_t,
+					 public device_image_interface
+{
+public:
 	// construction/destruction
-	//i7220_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i7220_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
 
-	//auto irq_callback() { return intrq_cb.bind(); }
-	//auto drq_callback() { return drq_cb.bind(); }
+	auto irq_callback() { return intrq_cb.bind(); }
+	auto drq_callback() { return drq_cb.bind(); }
 
-	//void set_data_size(int data_size) { m_data_size = data_size; }
+	void set_data_size(int data_size) { m_data_size = data_size; }
 
 	// image-level overrides
-	uint8_t call_load();
+	virtual image_init_result call_load() override;
 
-	//bool is_readable()  const noexcept override { return true; }
-	//bool is_writeable() const noexcept override { return true; }
-	//bool is_creatable() const noexcept override { return false; }
-	//bool is_reset_on_load() const noexcept override { return false; }
-	//const char *file_extensions() const noexcept override { return "bubble"; }
-	//const char *image_type_name() const noexcept override { return "bubble"; }
-	//const char *image_brief_type_name() const noexcept override { return "mbm"; }
+	virtual bool is_readable()  const noexcept override { return true; }
+	virtual bool is_writeable() const noexcept override { return true; }
+	virtual bool is_creatable() const noexcept override { return false; }
+	virtual bool is_reset_on_load() const noexcept override { return false; }
+	virtual const char *file_extensions() const noexcept override { return "bubble"; }
+	virtual const char *image_type_name() const noexcept override { return "bubble"; }
+	virtual const char *image_brief_type_name() const noexcept override { return "mbm"; }
 
-	uint8_t bubble_read(void* dummy, uint32_t offset);
-	void bubble_write(void* dummy, uint32_t offset, uint8_t data);
-        uint8_t bubble_init();
-        void  bubble_timer();
+	uint8_t read(offs_t offset);
+	void write(offs_t offset, uint8_t data);
 
-//protected:
+protected:
 	// device-level overrides
-	void device_start();
-	void device_reset();
+	virtual void device_start() override;
+	virtual void device_reset() override;
 
-	//TIMER_CALLBACK_MEMBER(general_continue);
+	TIMER_CALLBACK_MEMBER(general_continue);
 
 	int m_data_size;
 
-//private:
+private:
 	enum {
 		PHASE_IDLE, PHASE_CMD, PHASE_EXEC, PHASE_RESULT
 	};
@@ -162,12 +156,12 @@
 	};
 
 	struct bubble_info {
-		//emu_timer *tm;
+		emu_timer *tm;
 		int main_state, sub_state;
 		int limit, counter;
 	};
 
-	//void delay_cycles(emu_timer *tm, int cycles);
+	void delay_cycles(emu_timer *tm, int cycles);
 	void set_drq(bool state);
 	void set_irq(bool state);
 
@@ -199,7 +193,7 @@
 	int m_main_phase;
 	bool m_drq;
 	bool m_irq;
-	struct bubble_info m_bi;
+	bubble_info m_bi;
 
 	uint8_t m_buf[32];
 	int m_blr_count;
@@ -207,8 +201,8 @@
 	int m_ar_addr;
 	int m_ar_mbm;
 
-	//devcb_write_line intrq_cb;
-	//devcb_write_line drq_cb;
+	devcb_write_line intrq_cb;
+	devcb_write_line drq_cb;
 
 	uint8_t m_regs[16];
 	uint8_t m_rac;
@@ -217,12 +211,11 @@
 	uint16_t m_blr;
 	uint16_t m_ar;
 	int m_fifo_size;
-	//util::fifo<uint8_t, 40> m_fifo;
-        uint8_t m_fifo[BUBBLEFIFOSIZE];
-//};
+	util::fifo<uint8_t, 40> m_fifo;
+};
 
 
 // device type definition
-//DECLARE_DEVICE_TYPE(I7220, i7220_device)
+DECLARE_DEVICE_TYPE(I7220, i7220_device)
 
 #endif // MAME_MACHINE_I7220_H

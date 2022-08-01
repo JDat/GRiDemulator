@@ -1,9 +1,24 @@
-GRid Compass and Compass II 1101, 1109, 1121, 1129, 1131 and 1139 emulator. 
+GRid Compass and Compass II emulator.
+Models:
+
+* 1100
+* 1101 (have ROM)
+* 1109
+* 1121
+* 1128-VP
+* 1129
+* 1131
+* 1139 (have ROM)
+
 Based on XTulator project by mikechambers84.
+
 https://github.com/mikechambers84/XTulator
 
-Some ideas come from MAME emulator's GRiD implementation by Sergey Svishchev aka usernameak.
-And big thanks to usernameak personally for his research and consulting http://deltacxx.insomnia247.nl/gridcompass/
+Some ideas come from MAME emulator's GRiD implementation by usernameak.
+
+And big thanks to usernameak personally for his research and consulting
+
+http://deltacxx.insomnia247.nl/gridcompass/
 
 * This is early stage.
 * Added CMake system from https://github.com/user890104/XTulator
@@ -33,7 +48,7 @@ Make shure you have boot ROMs in ROM directory
 
 Original readme from XTulator author:
 
-# XTulator - A portable, open source (GPLv2) 80186 PC emulator
+### XTulator - A portable, open source (GPLv2) 80186 PC emulator
 
 ### About
 
@@ -55,12 +70,6 @@ This is actually a rewrite of an emulator I wrote many years ago. It was poorly 
 
 WARNING: This software is still currently in the early stages, and not really ready for general use. If you enjoy testing experimental new software, this is for you!
 
-It supports multiple machine definitions which are selectable via the command line. (-machine option, use -h for help) Only the "generic_xt" machine is currently bootable. This is currently making use of the [Super PC/Turbo XT BIOS](http://www.phatcode.net/downloads.php?id=101) from [phatcode.net](http://www.phatcode.net) which is attributed to Ya'akov Miles and Jon Petrosky.
-
-I hope to get the stock IBM XT and other BIOSes bootable in the near future. They don't seem to like something about my chipset implementation, which is my highest priority bug at the moment.
-
-You cannot change floppy images on the fly yet unless you're using the Windows build. I'm trying to come up with a cross-platform GUI method to do this and change other options in real-time. If you need to install an OS and programs on a hard disk image under Linux/Mac, it may be best for now to do that in something like QEMU or Fake86, and then boot the HDD image in XTulator.
-
 Checkmarks below mean that feature is implemented enough to boot and run things with the "generic_xt" machine definition. See comments below for details.
 
 - [x] CPU - Complete
@@ -72,17 +81,3 @@ Checkmarks below mean that feature is implemented enough to boot and run things 
 - [x] Re-implement proper video rendering
 - [x] Keyboard input
 - [x] RTC (Need to fix this under non-Win32 OSes)
-
-### Compiling from source under Linux
-
-Sorry, there's no configure script or makefile yet, so you'l have to compile and link it by hand.
-
-You will need the SDL2 and pcap dev libraries. On Debian/Ubuntu and related distributions, you can install it with the following line.
-
-<pre><code>sudo apt-get install libsdl2-dev libpcap-dev</code></pre>
-
-After this, the following line should successfully compile the code.
-
-<pre><code>gcc -O3 -o XTulator XTulator/*.c XTulator/chipset/*.c XTulator/cpu/cpu.c XTulator/modules/audio/*.c XTulator/modules/disk/*.c XTulator/modules/input/*.c XTulator/modules/io/*.c XTulator/modules/video/*.c -lm -lpthread `pcap-config --cflags --libs` `sdl2-config --cflags --libs`</code></pre>
-
-

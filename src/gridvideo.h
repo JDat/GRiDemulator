@@ -5,6 +5,7 @@
 #include "cpu.h"
 
 #define GRID_SCREEN_COLOR    0xffeb00   // Amber color 0xffeb00 Sharp datasheet tells 585 nm wavelenght
+//#define GRID_SCREEN_COLOR    0xffC000   // Amber color 0xffC000 By wikipedia and online color pickers
 int gridvideo_init();
 //void gridvideo_update(uint32_t start_x, uint32_t start_y, uint32_t end_x, uint32_t end_y);
 

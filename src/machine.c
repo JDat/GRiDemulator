@@ -264,7 +264,9 @@ int machine_init_grid(MACHINE_t* machine) {
         i8253_init(&machine->i8253, &machine->i8259);
         
         gridKeyboard8741_init();
-        bubble_init();
+        if (bubble_init()) {
+                return -1;
+        }
         tms9914a_init();
 	//i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);
         
@@ -280,6 +282,7 @@ int machine_init_grid(MACHINE_t* machine) {
 		timing_addTimer(mouse_rxpoll, NULL, baudrate / 9, TIMING_ENABLED);
 	}
         */
+/*
 #ifdef ENABLE_TCP_MODEM
 	else if ((machine->hwflags & MACHINE_HW_UART0_TCPMODEM) && !(machine->hwflags & MACHINE_HW_SKIP_UART0)) {
 		uart_init(&machine->UART[0], &machine->i8259, 0x3F8, 4, (void*)tcpmodem_tx, &machine->tcpmodem[0], NULL, NULL);
@@ -287,7 +290,7 @@ int machine_init_grid(MACHINE_t* machine) {
 		timing_addTimer(tcpmodem_rxpoll, &machine->tcpmodem[0], baudrate / 9, TIMING_ENABLED);
 	}
 #endif
-
+*/
         /*
 	if ((machine->hwflags & MACHINE_HW_UART1_NONE) && !(machine->hwflags & MACHINE_HW_SKIP_UART1)) {
 		uart_init(&machine->UART[1], &machine->i8259, 0x2F8, 3, NULL, NULL, NULL, NULL);
@@ -298,6 +301,7 @@ int machine_init_grid(MACHINE_t* machine) {
 		timing_addTimer(mouse_rxpoll, NULL, baudrate / 9, TIMING_ENABLED);
 	}
         */
+/*
 #ifdef ENABLE_TCP_MODEM
 	else if ((machine->hwflags & MACHINE_HW_UART1_TCPMODEM) && !(machine->hwflags & MACHINE_HW_SKIP_UART1)) {
 		uart_init(&machine->UART[1], &machine->i8259, 0x2F8, 3, (void*)tcpmodem_tx, &machine->tcpmodem[1], NULL, NULL);
@@ -305,7 +309,7 @@ int machine_init_grid(MACHINE_t* machine) {
 		timing_addTimer(tcpmodem_rxpoll, &machine->tcpmodem[1], baudrate / 9, TIMING_ENABLED);
 	}
 #endif
-
+*/
 	cpu_reset(&machine->CPU);
 /*
 #ifndef USE_DISK_HLE

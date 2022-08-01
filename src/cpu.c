@@ -26,6 +26,8 @@
 //not used in 8086. Will call int 0x6
 //define CPU_ALLOW_ILLEGAL_OP_EXCEPTION
 
+uint16_t prevSeg=0xFFFF;
+
 const uint8_t byteregtable[8] = { regal, regcl, regdl, regbl, regah, regch, regdh, regbh };
 
 const uint8_t parity[0x100] = {
@@ -1197,6 +1199,12 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			cpu->savecs = cpu->segregs[regcs];
 			cpu->saveip = cpu->ip;
 			cpu->opcode = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
+                        if (cpu->segregs[regcs] != prevSeg) {
+#ifdef DEBUG_CPU
+                                debug_log(DEBUG_DETAIL, "[cpu] New CS! exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
+                                prevSeg = cpu->segregs[regcs];
+                        }
 #ifdef DEBUG_CPU
 			debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
                         debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
@@ -1269,6 +1277,10 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			cpu->oper2b = getreg8(cpu, cpu->reg);
 			op_add8(cpu);
 			writerm8(cpu, cpu->rm, cpu->res8);
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 00\tadd %05X, \r\n", cpu->segregs[regcs], cpu->ip, cpu->rm, cpu->reg);
+#endif
+
 			break;
 
 		case 0x1:	/* 01 ADD Ev Gv */
@@ -1313,9 +1325,16 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 
 		case 0x6:	/* 06 PUSH cpu->segregs[reges] */
 			push(cpu, cpu->segregs[reges]);
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 0E\tpush es\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
 			break;
 
 		case 0x7:	/* 07 POP cpu->segregs[reges] */
+#ifdef DEBUG_DIASASM
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 0E\tpop es\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+
 			cpu->segregs[reges] = pop(cpu);
 			break;
 

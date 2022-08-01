@@ -35,6 +35,7 @@ enum {
 	AUXCMD_RSV2 = 0x18
 };
 
+// Auriliary command desctiption for debug
 struct _auxCmd {
   uint8_t cmd;
   char name[32];
@@ -68,6 +69,7 @@ struct _auxCmd auxCmd[] = {
   {AUXCMD_RSV2,   "Request Service Bit 2"}  
 };
 
+// Auxiliary bits
 enum {
   flagSWRST   = 0,
   flagDACR    = 1,
@@ -96,7 +98,7 @@ enum {
   flagRSV2    = 24
 };
 
-// Registers
+// Registers (I/O access by CPU)
 enum {
   // Read registers
   regIntStatus0       = 0,
@@ -116,6 +118,7 @@ enum {
   regDataOut          = 15
 };
 
+// Register flags
 enum {
   flagINT0  = 0,
   flagINT1  = 1,
@@ -162,5 +165,24 @@ enum {
   flagRSVL  = 1
 };
 
+// Controller states
+enum {
+  FSM_C_CIDS,
+  FSM_C_CADS,
+  FSM_C_CACS,
+  FSM_C_CSBS,
+  FSM_C_CWAS,
+  FSM_C_CSHS,
+  FSM_C_CSWS,
+  FSM_C_CAWS,
+  FSM_C_CPWS
+};
+  
 void update_int();
+bool controller_reset();
+bool get_ifcin();
+void do_aux_cmd(unsigned cmd , bool set_bit);
+void do_swrst();
+void update_fsm();
+
 #endif

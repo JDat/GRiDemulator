@@ -11,11 +11,11 @@
 uint8_t GPIBbusStatus;
 uint8_t GPIBbusData;
 
-void GPIBbusIFCset(bool pin)  {
+void GPIBbusIFCset(bool pin) {
         bitWrite(GPIBbusStatus, pinIFC, pin);
 }
 
-bool GPIBbusIFCget()  {
+bool GPIBbusIFCget() {
         return bitRead(GPIBbusStatus, pinIFC);
 }
 
