@@ -106,8 +106,11 @@ uint8_t bubble_init() {
                 return -1;
         }
         timing_addTimer(bubble_timer, (void*)(NULL), 500000, TIMING_ENABLED); //79545.47
+        set_data_size(3);       // 3 bubble memory modules
         return 0;
 }
+
+void set_data_size(int data_size) { m_data_size = data_size; }
 
 void device_reset()
 {
@@ -533,6 +536,7 @@ void read_data_continue()
 {
 	for (;;)
 	{
+                size_t ret;
 		switch (m_bi.sub_state)
 		{
 		case INITIALIZE:
@@ -543,14 +547,15 @@ void read_data_continue()
 			break;
 
 		case SECTOR_READ:
-			fread(m_buf, 32, 1, bubbleFile);
+			debug_log(DEBUG_INFO, "[7220] [file access] read data\n");
+                        ret = fread(m_buf, 32, 1, bubbleFile);
 			m_bi.sub_state = WAIT_FSA_REPLY;
 			//delay_cycles(m_bi.tm, 270 * 20); // p. 4-14 of BPK72UM
                         delay_cycles(270 * 20); // p. 4-14 of BPK72UM
 			break;
 
 		case WAIT_FSA_REPLY:
-			debug_log(DEBUG_INFO, "BMC read data: ct %02d limit %02d\n", m_bi.counter, m_bi.limit);
+			//debug_log(DEBUG_INFO, "[7220] [file access] read data: ct %02d limit %02d\n", m_bi.counter, m_bi.limit);
 			if (m_bi.counter < m_bi.limit)
 			{
 				for (int a = 0; a < 32; a++)
@@ -598,7 +603,7 @@ void write_data_continue()
 			return;
 
 		case WAIT_FIFO:
-			debug_log(DEBUG_INFO, "BMC write data: fifo %02d ct %02d limit %02d\n", m_fifo_size, m_bi.counter, m_bi.limit);
+			debug_log(DEBUG_INFO, "[7220] [file access] write data: fifo %02d ct %02d limit %02d\n", m_fifo_size, m_bi.counter, m_bi.limit);
 			if (m_fifo_size >= 32)
 			{
 				for (int a = 0; a < 32; a++)

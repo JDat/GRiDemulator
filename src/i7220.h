@@ -51,7 +51,7 @@
 	//auto irq_callback() { return intrq_cb.bind(); }
 	//auto drq_callback() { return drq_cb.bind(); }
 
-	//void set_data_size(int data_size) { m_data_size = data_size; }
+	void set_data_size(int data_size);
 
 	// image-level overrides
 	uint8_t call_load();
