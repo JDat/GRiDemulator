@@ -73,11 +73,10 @@ WARNING: This software is still currently in the early stages, and not really re
 Checkmarks below mean that feature is implemented enough to boot and run things with the "generic_xt" machine definition. See comments below for details.
 
 - [x] CPU - Complete
-- [x] Implement support for multiple machine defnitions (This exists, but only the generic_xt machine boots, the other BIOSes have issues. This is a high priority thing to fix)
+- [x] Implement support for multiple machine defnitions.
 - [x] Intel 8253 timer (Re-implemented, but needs some work to be fully accurate)
 - [x] Intel 8259 interrupt controller (Working, also needs some more attention. This may be the cause of some of the BIOS issues.)
-- [x] Intel 8255 PPI controller
 - [x] Re-implement proper system timing
 - [x] Re-implement proper video rendering
 - [x] Keyboard input
-- [x] RTC (Need to fix this under non-Win32 OSes)
+- [x] RTC

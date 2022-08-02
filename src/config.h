@@ -21,15 +21,15 @@
 //#define DEBUG_RTC
 //#define DEBUG_GPIB
 #define DEBUG_BUBBLEMEM
+//#define DEBUG_UART
+//#define DEBUG_MODEM
+
+//#define DEBUG_TCPMODEM
 //#define DEBUG_DMA
 //#define DEBUG_PPI
-//#define DEBUG_UART
-//#define DEBUG_TCPMODEM
-
 //#define DEBUG_FDC
 //#define DEBUG_NE2000
 //#define DEBUG_PCAP
-
 //#define USE_DISK_HLE
 //#define USE_NE2000
 

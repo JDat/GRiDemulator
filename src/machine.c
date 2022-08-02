@@ -44,6 +44,8 @@
 //#include "modules/io/tcpmodem.h"
 #include "gridvideo.h"
 #include "rtc.h"
+#include "i8274.h"
+#include "modem.h"
 #include "i7220.h"
 #include "tms9914a.h"
 #include "memory.h"
@@ -267,6 +269,8 @@ int machine_init_grid(MACHINE_t* machine) {
         if (bubble_init()) {
                 return -1;
         }
+        uart_init();
+        modem_init();
         tms9914a_init();
 	//i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);
         
@@ -362,6 +366,7 @@ int machine_init(MACHINE_t* machine, char* id) {
 			memory_mapRegister(machine_mem[num][i].start, machine_mem[num][i].size, temp, temp);
 		} else if (machine_mem[num][i].memtype == MACHINE_MEM_ROM) {
 			int ret;
+                        debug_log(DEBUG_ERROR, "[MACHINE] Loading bootROM: %s\r\n", machine_mem[num][i].filename);
 			ret = utility_loadFile(temp, machine_mem[num][i].size, machine_mem[num][i].filename);
 			if ((machine_mem[num][i].required == MACHINE_ROM_REQUIRED) && ret) {
 				debug_log(DEBUG_ERROR, "[MACHINE] Could not open file, or size is less than expected: %s\r\n", machine_mem[num][i].filename);

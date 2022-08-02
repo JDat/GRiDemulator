@@ -41,7 +41,9 @@ void cpu_write(CPU_t* cpu, uint32_t addr32, uint8_t value) {
 	}
 	else if (memory_mapWriteCallback[addr32] != NULL) {
 		(*memory_mapWriteCallback[addr32])(memory_udata[addr32], addr32, value);
-	}
+	} else {
+                debug_log(DEBUG_ERROR, "[MEM] Shit while CPU write. Addr: 0x%05X\t Value: 0x%02X\r\n", addr32, value);
+        }
 }
 
 uint8_t cpu_read(CPU_t* cpu, uint32_t addr32) {
