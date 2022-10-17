@@ -30,7 +30,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 #include "config.h"
+#include "machine.h"
 #include "i7220.h"
 #include "i8259.h"
 //#include "ports.h"
@@ -39,8 +41,23 @@
 #include "utility.h"
 #include "timing.h"
 
+
+
 #define baseAddress 0xDFE80
-#define addressLen  0x3
+#define addressLen  0x4
+
+void delay(int millis)
+{
+    // Converting time into milli_seconds
+    int milli_seconds = millis;
+ 
+    // Storing start time
+    clock_t start_time = clock();
+ 
+    // looping till required time is not achieved
+    while (clock() < start_time + milli_seconds)
+        ;
+}
 
 // device type definition
 //DEFINE_DEVICE_TYPE(I7220, i7220_device, "i7220", "Intel 7220 BMC")
@@ -84,28 +101,31 @@ void device_start()
 //  device_reset - device-specific startup
 //-------------------------------------------------
 
-I8259_t* i8259;
+I8259_t* irq8259;
 
 int m_fifo_head, m_fifo_tail;
 
 FILE *bubbleFile;
 
-uint8_t bubble_init() {
+uint8_t bubble_init(I8259_t* i8259) {
 #ifdef DEBUG_BUBBLEMEM
-        debug_log(DEBUG_INFO, "[7220] Initializing bubble memory controller\r\n");
+        debug_log(DEBUG_INFO, "[i7220] Initializing bubble memory controller\r\n");
 #endif
         memory_mapCallbackRegister(baseAddress, addressLen, (void*)bubble_read, (void*)bubble_write, NULL);
         device_reset();
         
+        irq8259 = i8259;
         if (bubbleFile != NULL) {
                 fclose(bubbleFile);
         }
         bubbleFile = fopen("ROMS/bubble.img", "rwb");
         if (bubbleFile == NULL) {
-                debug_log(DEBUG_INFO, "[7220] Error openimg bubble image\r\n");
+#ifdef DEBUG_BUBBLEMEM
+                debug_log(DEBUG_INFO, "[i7220] Error openimg bubble image\r\n");
+#endif
                 return -1;
         }
-        timing_addTimer(bubble_timer, (void*)(NULL), 500000, TIMING_ENABLED); //79545.47
+        timing_addTimer(bubble_timer, (void*)(NULL), 50000, TIMING_ENABLED); //79545.47
         set_data_size(3);       // 3 bubble memory modules
         return 0;
 }
@@ -139,11 +159,21 @@ uint8_t call_load()
 
 void set_drq(bool state)
 {
+        //I8259_t* i8259;
+        //i8259 = i8253cb->i8259;
 	if (state != m_drq)
 	{
 		m_drq = state;
 		//drq_cb(m_drq);
-                debug_log(DEBUG_INFO, "[7220] DMA request %d\n", state);
+#ifdef DEBUG_BUBBLEMEM
+                debug_log(DEBUG_INFO, "[i7220] DMA request state:%d\n", state);
+#endif
+                //set_irq(m_drq);
+                //dmaBubbleRequest();
+                if (m_drq) {
+                        i8259_doirq(irq8259, 5);
+                        //set_irq(true);
+                }
 	}
 }
 
@@ -153,9 +183,11 @@ void set_irq(bool state)
 	{
 		m_irq = state;
 		//intrq_cb(m_irq);
+#ifdef DEBUG_BUBBLEMEM
                 debug_log(DEBUG_INFO, "[7220] IRQ request %d\n", state);
+#endif
                 if (m_irq) {
-                        i8259_doirq(i8259, 1);
+                        i8259_doirq(irq8259, 5);
                 }
 	}
 }
@@ -180,22 +212,28 @@ void update_drq()
 void fifo_clear()
 {
 	//m_fifo.clear();
-	//m_fifo_size = 0;
+#ifdef DEBUG_BUBBLEMEM
+        debug_log(DEBUG_INFO, "[i7220] fifo clear\n");
+#endif
+	m_fifo_size = 0;
 	set_drq(false);
         m_fifo_head = m_fifo_tail = 0;
 }
 
 uint8_t fifo_pop()
 {
-
         if (m_fifo_head == m_fifo_tail) return 0;
         
         uint8_t val;
         val = m_fifo[m_fifo_tail];
         m_fifo_tail = (m_fifo_tail + 1) % BUBBLEFIFOSIZE;
-		{
-			update_drq();
-		}
+        if (m_main_phase == PHASE_EXEC) {
+                update_drq();
+        }
+        m_fifo_size --;
+#ifdef DEBUG_BUBBLEMEM
+        debug_log(DEBUG_INFO, "[i7220] fifo pop: %02X\n", val);
+#endif
         return val;
 /*
 	uint8_t val;
@@ -220,12 +258,15 @@ uint8_t fifo_pop()
 
 void fifo_push(uint8_t val)
 {
-
-
-        uint8_t i = (m_fifo_head + 1) % BUBBLEFIFOSIZE;
+#ifdef DEBUG_BUBBLEMEM
+        debug_log(DEBUG_INFO, "[i7220] fifo push: %02X\n", val);
+#endif
+        uint8_t i;
+        i = (m_fifo_head + 1) % BUBBLEFIFOSIZE;
         if (i != m_fifo_tail) {
                 m_fifo[m_fifo_head] = val;
                 m_fifo_head = i;
+                m_fifo_size ++;
                 if (m_main_phase == PHASE_EXEC)
                 {
                         update_drq();
@@ -273,8 +314,8 @@ void start_command(int cmd)
 	// NFC bits in BLR MSB must be set to 0001 before issuing this command.
 	// MBM GROUP SELECT bits in the AR must select the last MBM in the system.
 	case C_INIT:
-		debug_log(DEBUG_INFO, "BMC INIT: BLR %04x (NFC %d pages %d) AR %04x (MBM %d addr %03x) ER %02d\n",
-			m_blr, m_blr_nfc, m_blr_count, m_ar, m_ar_mbm, m_ar_addr, m_regs[R_ER]);
+		//debug_log(DEBUG_INFO, "BMC INIT: BLR %04x (NFC %d pages %d) AR %04x (MBM %d addr %03x) ER %02d\n",
+		//	m_blr, m_blr_nfc, m_blr_count, m_ar, m_ar_mbm, m_ar_addr, m_regs[R_ER]);
 		if (m_blr_nfc != 2)
 		{
 			command_fail_start();
@@ -291,8 +332,8 @@ void start_command(int cmd)
 
 	// all parametric registers must be properly set up before issuing Read Bubble Data command
 	case C_READ:
-		debug_log(DEBUG_INFO, "BMC RBD: BLR %04x (NFC %d pages %d) AR %04x (MBM %d addr %03x) ER %02d\n",
-			m_blr, m_blr_nfc, m_blr_count, m_ar, m_ar_mbm, m_ar_addr, m_regs[R_ER]);
+		//debug_log(DEBUG_INFO, "BMC RBD: BLR %04x (NFC %d pages %d) AR %04x (MBM %d addr %03x) ER %02d\n",
+		//	m_blr, m_blr_nfc, m_blr_count, m_ar, m_ar_mbm, m_ar_addr, m_regs[R_ER]);
 		if (m_ar_mbm >= m_data_size || m_blr_nfc != 2)
 		{
 			command_fail_start();
@@ -304,8 +345,8 @@ void start_command(int cmd)
 		break;
 
 	case C_WRITE:
-		debug_log(DEBUG_INFO, "BMC WBD: BLR %04x (NFC %d pages %d) AR %04x (MBM %d addr %03x) ER %02d\n",
-			m_blr, m_blr_nfc, m_blr_count, m_ar, m_ar_mbm, m_ar_addr, m_regs[R_ER]);
+		//debug_log(DEBUG_INFO, "BMC WBD: BLR %04x (NFC %d pages %d) AR %04x (MBM %d addr %03x) ER %02d\n",
+		//	m_blr, m_blr_nfc, m_blr_count, m_ar, m_ar_mbm, m_ar_addr, m_regs[R_ER]);
 		if (m_ar_mbm >= m_data_size || m_blr_nfc != 2)
 		{
 			command_fail_start();
@@ -362,6 +403,7 @@ void start_command(int cmd)
 
 void  bubble_timer()
 {
+        //debug_log(DEBUG_INFO, "[i7220] timer call\n");
 	switch (m_bi.main_state)
 	{
 	case IDLE:
@@ -388,7 +430,7 @@ void  bubble_timer()
 		break;
 
 	default:
-		debug_log(DEBUG_INFO, "BMC general_continue on unknown main-state %d\n", m_bi.main_state);
+		//debug_log(DEBUG_INFO, "BMC general_continue on unknown main-state %d\n", m_bi.main_state);
 		break;
 	}
 }
@@ -401,12 +443,13 @@ void  bubble_timer()
 void delay_cycles(int cycles)
 {
 	//tm->adjust(attotime::from_double(double(cycles) / clock()));
+        delay(1);
 }
 
 
 void command_end(bool success)
 {
-	debug_log(DEBUG_INFO, "command done (%s) - %02x\n", success ? "success" : "fail", m_str);
+	//debug_log(DEBUG_INFO, "command done (%s) - %02x\n", success ? "success" : "fail", m_str);
 	m_main_phase = PHASE_RESULT;
 	m_bi.main_state = m_bi.sub_state = IDLE;
 	if (success)
@@ -443,7 +486,7 @@ void command_fail_continue()
 		return;
 
 	default:
-		debug_log(DEBUG_INFO, "BMC fail unknown sub-state %d\n", m_bi.sub_state);
+		//debug_log(DEBUG_INFO, "BMC fail unknown sub-state %d\n", m_bi.sub_state);
 		return;
 	}
 }
@@ -477,7 +520,7 @@ void init_continue()
 			return;
 
 		default:
-			debug_log(DEBUG_INFO, "BMC init unknown sub-state %d\n", m_bi.sub_state);
+			//debug_log(DEBUG_INFO, "BMC init unknown sub-state %d\n", m_bi.sub_state);
 			return;
 		}
 	}
@@ -544,10 +587,11 @@ void read_data_continue()
 			m_bi.counter = 0; // 256-bit pages
 			m_bi.limit = m_blr_count * m_blr_nfc;
 			fseek(bubbleFile, (m_ar_addr * 32 * m_blr_nfc) + (m_ar_mbm * I7110_MBM_SIZE) + (m_bi.counter * 32), SEEK_SET);
+                        //debug_log(DEBUG_INFO, "[i7220] [file seek] ftell: %d\n", ftell(bubbleFile) );
 			break;
 
 		case SECTOR_READ:
-			debug_log(DEBUG_INFO, "[7220] [file access] read data\n");
+			//debug_log(DEBUG_INFO, "[i7220] [file access] read data. ftell: %d\n", ftell(bubbleFile) );
                         ret = fread(m_buf, 32, 1, bubbleFile);
 			m_bi.sub_state = WAIT_FSA_REPLY;
 			//delay_cycles(m_bi.tm, 270 * 20); // p. 4-14 of BPK72UM
@@ -555,7 +599,7 @@ void read_data_continue()
 			break;
 
 		case WAIT_FSA_REPLY:
-			//debug_log(DEBUG_INFO, "[7220] [file access] read data: ct %02d limit %02d\n", m_bi.counter, m_bi.limit);
+			//debug_log(DEBUG_INFO, "[i7220] [file access] read data: ct %02d limit %02d\n", m_bi.counter, m_bi.limit);
 			if (m_bi.counter < m_bi.limit)
 			{
 				for (int a = 0; a < 32; a++)
@@ -564,6 +608,7 @@ void read_data_continue()
 				m_bi.counter++;
 				//delay_cycles(m_bi.tm, 270 * 20); // p. 4-14 of BPK72UM
                                 delay_cycles(270 * 20); // p. 4-14 of BPK72UM
+                                
 				return;
 			}
 			m_bi.sub_state = COMMAND_DONE;
@@ -571,10 +616,14 @@ void read_data_continue()
 
 		case COMMAND_DONE:
 			command_end(true);
+                        //debug_log(DEBUG_INFO, "[i7220] [file access] COMMAND_DONE\n");
+                        set_irq(true);
+                        delay_cycles(270 * 20); // p. 4-14 of BPK72UM
+                        set_irq(false);
 			return;
 
 		default:
-			debug_log(DEBUG_INFO, "BMC read data unknown sub-state %d\n", m_bi.sub_state);
+			//debug_log(DEBUG_INFO, "BMC read data unknown sub-state %d\n", m_bi.sub_state);
 			return;
 		}
 	}
@@ -603,7 +652,7 @@ void write_data_continue()
 			return;
 
 		case WAIT_FIFO:
-			debug_log(DEBUG_INFO, "[7220] [file access] write data: fifo %02d ct %02d limit %02d\n", m_fifo_size, m_bi.counter, m_bi.limit);
+			//debug_log(DEBUG_INFO, "[i7220] [file access] write data: fifo %02d ct %02d limit %02d\n", m_fifo_size, m_bi.counter, m_bi.limit);
 			if (m_fifo_size >= 32)
 			{
 				for (int a = 0; a < 32; a++)
@@ -626,7 +675,7 @@ void write_data_continue()
 			return;
 
 		default:
-			debug_log(DEBUG_INFO, "BMC write data unknown sub-state %d\n", m_bi.sub_state);
+			//debug_log(DEBUG_INFO, "BMC write data unknown sub-state %d\n", m_bi.sub_state);
 			return;
 		}
 	}
@@ -641,25 +690,28 @@ uint8_t bubble_read(void* dummy, uint32_t offset)
 {
 	uint8_t data = 0;
         
-        bubble_timer();
+        //bubble_timer();
 
         offset = offset - baseAddress;
         offset = offset >> 1;
 
-	switch (offset & 1)
+        //debug_log(DEBUG_INFO, "[i7220] Read addr: %05X\n", offset);
+
+	//switch (offset & 1)
+        switch (offset)
 	{
 	case 0:
 		if (m_rac)
 		{
 			data = m_regs[m_rac];
-			debug_log(DEBUG_INFO, "BMC R reg @ %02x == %02x\n", m_rac, data);
+			//debug_log(DEBUG_INFO, "BMC R reg @ %02x == %02x\n", m_rac, data);
 			m_rac++;
 			m_rac &= 15;
 		}
 		else
 		{
 			data = fifo_pop();
-			debug_log(DEBUG_INFO, "BMC R fifo == %02x\n", data);
+			//debug_log(DEBUG_INFO, "BMC R fifo == %02x\n", data);
 		}
 		break;
 
@@ -695,8 +747,8 @@ uint8_t bubble_read(void* dummy, uint32_t offset)
 				data |= SR_FIFO;
 			}
 		}
-		debug_log(DEBUG_INFO, "BMC R status == %02x (phase %d state %d:%d fifo %d drq %d)\n",
-			data, m_main_phase, m_bi.main_state, m_bi.sub_state, m_fifo_size, m_drq);
+		//debug_log(DEBUG_INFO, "BMC R status == %02x (phase %d state %d:%d fifo %d drq %d)\n",
+		//	data, m_main_phase, m_bi.main_state, m_bi.sub_state, m_fifo_size, m_drq);
 		if (m_main_phase == PHASE_RESULT)
 		{
 			m_main_phase = PHASE_IDLE;
@@ -704,7 +756,7 @@ uint8_t bubble_read(void* dummy, uint32_t offset)
 		break;
 	}
 
-	debug_log(DEBUG_INFO, "BMC R @ %d == %02x\n", offset, data);
+	//debug_log(DEBUG_INFO, "BMC R @ %d == %02x\n", offset, data);
 
 	return data;
 }
@@ -734,19 +786,22 @@ void bubble_write(void* dummy, uint32_t offset, uint8_t data)
 		"Software Reset"
 	};
 
-        bubble_timer();
+        //bubble_timer();
 
         offset = offset - baseAddress;
         offset = offset >> 1;
 
-	debug_log(DEBUG_INFO, "BMC W @ %d <- %02x\n", offset, data);
+        //debug_log(DEBUG_INFO, "[i7220] Write addr: %05X\tdata: %02X\n", offset, data);
+        
+	//debug_log(DEBUG_INFO, "BMC W @ %d <- %02x\n", offset, data);
 
-	switch (offset & 1)
+	//switch (offset & 1)
+        switch (offset)
 	{
 	case 0:
 		if (m_rac)
 		{
-			debug_log(DEBUG_INFO, "BMC W reg @ %02x <- %02x\n", m_rac, data);
+			//debug_log(DEBUG_INFO, "BMC W reg @ %02x <- %02x\n", m_rac, data);
 			m_regs[m_rac] = data;
 			update_regs();
 			m_rac++;
@@ -754,7 +809,7 @@ void bubble_write(void* dummy, uint32_t offset, uint8_t data)
 		}
 		else
 		{
-			debug_log(DEBUG_INFO, "BMC W fifo <- %02x\n", data);
+			//debug_log(DEBUG_INFO, "BMC W fifo <- %02x\n", data);
 			fifo_push(data);
 		}
 		break;
@@ -769,7 +824,7 @@ void bubble_write(void* dummy, uint32_t offset, uint8_t data)
 			m_cmdr = data & 15;
 			if (m_main_phase == PHASE_IDLE)
 			{
-				debug_log(DEBUG_INFO, "BMC command %02x '%s'\n", data, commands[m_cmdr]);
+				//debug_log(DEBUG_INFO, "BMC command %02x '%s'\n", data, commands[m_cmdr]);
 				m_main_phase = PHASE_CMD;
 				start_command(m_cmdr);
 			}

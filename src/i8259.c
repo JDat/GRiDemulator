@@ -2,6 +2,8 @@
   XTulator: A portable, open-source 80186 PC emulator.
   Copyright (C)2020 Mike Chambers
 
+  Parts of code changed, fixed, updated, clened by JDat
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
   as published by the Free Software Foundation; either version 2
@@ -59,7 +61,7 @@ void i8259_write(I8259_t* i8259, uint16_t portnum, uint8_t value) {
 	case 0:
 		if (value & 0x10) { //ICW1
 #ifdef DEBUG_PIC
-			debug_log(DEBUG_DETAIL, "[I8259] ICW1 = %02X\r\n", value);
+			debug_log(DEBUG_DETAIL, "[I8259] ICW1 = 0x%02X\r\n", value);
 #endif
 			i8259->imr = 0x00;
 			i8259->icw[1] = value;
@@ -68,7 +70,7 @@ void i8259_write(I8259_t* i8259, uint16_t portnum, uint8_t value) {
 		}
 		else if ((value & 0x08) == 0) { //OCW2
 #ifdef DEBUG_PIC
-			debug_log(DEBUG_DETAIL, "[I8259] OCW2 = %02X\r\n", value);
+			debug_log(DEBUG_DETAIL, "[I8259] OCW2 = 0x%02X\r\n", value);
 #endif
 			i8259->ocw[2] = value;
 			switch (value & 0xE0) {
@@ -91,7 +93,7 @@ void i8259_write(I8259_t* i8259, uint16_t portnum, uint8_t value) {
 		}
 		else { //OCW3
 #ifdef DEBUG_PIC
-			debug_log(DEBUG_DETAIL, "[I8259] OCW3 = %02X\r\n", value);
+			debug_log(DEBUG_DETAIL, "[I8259] OCW3 = 0x%02X\r\n", value);
 #endif
 			i8259->ocw[3] = value;
 			if (value & 0x02) {
@@ -102,12 +104,16 @@ void i8259_write(I8259_t* i8259, uint16_t portnum, uint8_t value) {
 	//case 1:
         case 2:
 #ifdef DEBUG_PIC
-		debug_log(DEBUG_DETAIL, "[I8259] ICW%u = %02X\r\n", i8259->icwstep, value);
+                if (i8259->icwstep == 5) {
+                        debug_log(DEBUG_DETAIL, "[I8259] OCW1 = 0x%02X\r\n", value);
+                } else {
+                        debug_log(DEBUG_DETAIL, "[I8259] ICW%u = 0x%02X\r\n", i8259->icwstep, value);
+                }
 #endif
 		switch (i8259->icwstep) {
 		case 2: //ICW2
 			i8259->icw[2] = value;
-			i8259->intoffset = value & 0xF8;
+			//i8259->intoffset = value & 0xF8;
 			if (i8259->icw[1] & 0x02) {
 				i8259->icwstep = 4;
 			}
@@ -150,12 +156,12 @@ uint8_t i8259_nextintr(I8259_t* i8259) {
 
 void i8259_doirq(I8259_t* i8259, uint8_t irqnum) {
 #ifdef DEBUG_PIC 
-        if ( irqnum != 3) {
+        //if ( irqnum != 3) {
                 debug_log(DEBUG_DETAIL, "[I8259] IRQ %u raised\r\n", irqnum);
-        }
+        //}
 #endif
-
-	i8259->irr |= (1 << irqnum) & (~i8259->imr);
+	//i8259->irr |= (1 << irqnum) & (~i8259->imr);
+        i8259->irr |= (1 << irqnum);
 }
 
 void i8259_init(I8259_t* i8259) {

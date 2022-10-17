@@ -19,12 +19,19 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include "config.h"
 #include "cpu.h"
 #include "utility.h"
 #include "memory.h"
 #include "debuglog.h"
+#include "i7220.h"
+
+
+
+#define DMABASE 0xE0000
+#define DMALEN 0x0FFFF
 
 uint8_t* memory_mapRead[MEMORY_RANGE];
 uint8_t* memory_mapWrite[MEMORY_RANGE];
@@ -49,7 +56,9 @@ void cpu_write(CPU_t* cpu, uint32_t addr32, uint8_t value) {
 uint8_t cpu_read(CPU_t* cpu, uint32_t addr32) {
 	addr32 &= MEMORY_MASK;
 
-        //debug_log(DEBUG_INFO, "[MEM] cpu read. Addr: 0x%05X\r\n", addr32);
+        //if (addr32 > 0xFF300) {
+        //        debug_log(DEBUG_INFO, "[MEM] cpu read. Addr: 0x%05X\r\n", addr32);
+        //}
 	if (memory_mapRead[addr32] != NULL) {
 		return *(memory_mapRead[addr32]);
 	}
@@ -57,9 +66,9 @@ uint8_t cpu_read(CPU_t* cpu, uint32_t addr32) {
 	if (memory_mapReadCallback[addr32] != NULL) {
 		return (*memory_mapReadCallback[addr32])(memory_udata[addr32], addr32);
 	}
-#ifdef DEBUG_MEMORY
+//#ifdef DEBUG_MEMORY
         debug_log(DEBUG_ERROR, "[MEM] Shit while CPU read. Addr: 0x%05X\r\n", addr32);
-#endif
+//#endif
 	return 0xFF;
 }
 
@@ -110,4 +119,40 @@ int memory_init() {
 	}
 
 	return 0;
+}
+
+bool dmaActive;
+uint16_t  dmaCount;
+
+void doDMA() {
+        //debug_log(DEBUG_ERROR, "[DMA] doDMA\n");
+        while (dmaActive) {
+                dmaCount++;
+                if (dmaCount > 256) {
+                        dmaActive = false;
+                }
+                dmaRead(DMABASE);
+        }
+}
+
+void dmaBubbleRequest() {
+        dmaActive  = true;
+        dmaRead(DMABASE);
+}
+
+void dmaInit() {
+        memory_mapCallbackRegister(DMABASE, DMALEN, (void*)dmaRead, (void*)dmaWrite, NULL);
+}
+
+
+uint8_t dmaRead(uint32_t addr) {
+        uint8_t val;
+        val = bubble_read(NULL, 0xDFE80);
+        debug_log(DEBUG_ERROR, "[DMA] Read. Addr: %05X, Value: %02X\r\n", addr, val);
+        
+}
+
+void dmaWrite(uint32_t addr, uint8_t value) {
+        debug_log(DEBUG_ERROR, "[DMA] Write. Addr: %05X\tValue: %02X\r\n", addr, value);
+        bubble_write(NULL, 0xDFE80, value);
 }

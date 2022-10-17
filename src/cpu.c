@@ -1140,9 +1140,11 @@ void op_grp5(CPU_t* cpu) {
 }
 
 void cpu_intcall(CPU_t* cpu, uint8_t intnum) {
-#ifdef DEBUG_CPU
-        debug_log(DEBUG_DETAIL, "[cpu] interrupt: %02X\r\n", intnum);
-#endif
+//#ifdef DEBUG_CPU
+        //if ( intnum != 0x23) {
+                debug_log(DEBUG_DETAIL, "[cpu] interrupt: 0x%02X\r\n", intnum);
+        //}
+//#endif
 	if (cpu->int_callback[intnum] != NULL) {
 		(*cpu->int_callback[intnum])(cpu, intnum);
 		return;
@@ -1201,16 +1203,28 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			cpu->opcode = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
                         if (cpu->segregs[regcs] != prevSeg) {
 #ifdef DEBUG_CPU
-                                debug_log(DEBUG_DETAIL, "[cpu] New CS! exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                //debug_log(DEBUG_DETAIL, "[cpu] New CS! exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
                                 prevSeg = cpu->segregs[regcs];
                         }
 #ifdef DEBUG_CPU
-			debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-                        debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
-                        debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", cpu->regs.wordregs[regsi], cpu->regs.wordregs[regdi], cpu->regs.wordregs[regbp], cpu->regs.wordregs[regsp]);
-                        debug_log(DEBUG_DETAIL, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", cpu->segregs[regcs], cpu->segregs[regds], cpu->segregs[reges], cpu->segregs[regss]);
+			//debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                        //debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
+                        //debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", cpu->regs.wordregs[regsi], cpu->regs.wordregs[regdi], cpu->regs.wordregs[regbp], cpu->regs.wordregs[regsp]);
+                        //debug_log(DEBUG_DETAIL, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", cpu->segregs[regcs], cpu->segregs[regds], cpu->segregs[reges], cpu->segregs[regss]);
 #endif
+
+                        //if (cpu->segregs[regcs] == 0xFE3C || (cpu->segregs[regcs] == 0xFC01 && cpu->ip >=0x15C0 && cpu->ip <=0x1760)) {
+                        //if (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >=0x86 && cpu->ip <=0xBB)) {
+                        //if (cpu->segregs[regcs] == 0xFC01 && (cpu->ip == 0x8D || cpu->ip == 0xAA)) {
+                        //if (cpu->segregs[regcs] == 0xFED3) {
+                        //if (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >=0x1F1C && cpu->ip <=0x2322)) {
+                        if ( (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >= 0x86 && cpu->ip <= 0xAA)) || (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >=0x15C0 && cpu->ip <=0x1760)) ){
+                                debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
+                                debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", cpu->regs.wordregs[regsi], cpu->regs.wordregs[regdi], cpu->regs.wordregs[regbp], cpu->regs.wordregs[regsp]);
+                                debug_log(DEBUG_DETAIL, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", cpu->segregs[regcs], cpu->segregs[regds], cpu->segregs[reges], cpu->segregs[regss]);
+                        } 
                         StepIP(cpu, 1);
 
 			switch (cpu->opcode) {
@@ -1326,13 +1340,13 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 		case 0x6:	/* 06 PUSH cpu->segregs[reges] */
 			push(cpu, cpu->segregs[reges]);
 #ifdef DEBUG_DIASASM
-                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 0E\tpush es\r\n", cpu->segregs[regcs], cpu->ip);
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 06\tpush es\r\n", cpu->segregs[regcs], cpu->ip);
 #endif
 			break;
 
 		case 0x7:	/* 07 POP cpu->segregs[reges] */
 #ifdef DEBUG_DIASASM
-                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 0E\tpop es\r\n", cpu->segregs[regcs], cpu->ip);
+                                debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 07\tpop es\r\n", cpu->segregs[regcs], cpu->ip);
 #endif
 
 			cpu->segregs[reges] = pop(cpu);
@@ -1347,11 +1361,14 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 			break;
 
 		case 0x9:	/* 09 OR Ev Gv */
+                        //debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: 09\tor", cpu->segregs[regcs], cpu->ip);
 			modregrm(cpu);
 			cpu->oper1 = readrm16(cpu, cpu->rm);
 			cpu->oper2 = getreg16(cpu, cpu->reg);
+                        //debug_log(DEBUG_DETAIL, " %02X,%02X\tmode:%02X\t", cpu->oper1, cpu->oper2,cpu->mode);
 			op_or16(cpu);
 			writerm16(cpu, cpu->rm, cpu->res16);
+                        //debug_log(DEBUG_DETAIL, "rm:%02X\tres16:%02X\r\n", cpu->rm, cpu->res16);
 			break;
 
 		case 0xA:	/* 0A OR Gb Eb */

@@ -266,11 +266,13 @@ int machine_init_grid(MACHINE_t* machine) {
         i8253_init(&machine->i8253, &machine->i8259);
         
         gridKeyboard8741_init();
-        if (bubble_init()) {
+        dmaInit();
+        if (bubble_init(&machine->i8259)) {
                 return -1;
         }
         uart_init();
         modem_init();
+        
         tms9914a_init();
 	//i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);
         

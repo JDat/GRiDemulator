@@ -190,13 +190,13 @@ void update_int() {
 
 	if (new_int_line != irqLine) {
 #ifdef DEBUG_GPIB
-    debug_log(DEBUG_DETAIL, "[GPIB] call Interrupt 2\n");
+    debug_log(DEBUG_DETAIL, "[GPIB] call Interrupt 5\n");
 #endif
 		//LOG_INT("INT=%d\n" , new_int_line);
 		irqLine = new_int_line;
     //rise IRQ!
 		//m_int_write_func(m_int_line);
-    i8259_doirq(i8259, 1);
+    i8259_doirq(i8259, 5);
 	}
 
 }

@@ -2,6 +2,9 @@
   XTulator: A portable, open-source 80186 PC emulator.
   Copyright (C)2020 Mike Chambers
 
+  Parts of code changed, fixed, updated, clened and adapted
+  for GRiD Compass series computers by JDat
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
   as published by the Free Software Foundation; either version 2
@@ -20,7 +23,7 @@
 #ifndef _I8259_H_
 #define _I8259_H_
 
-#include <stdint.h>
+//#include <stdint.h>
 
 typedef struct {
 	uint8_t imr; //mask register
@@ -29,13 +32,13 @@ typedef struct {
 	uint8_t icwstep; //used during initialization to keep track of which ICW we're at
 	uint8_t icw[5];
 	uint8_t ocw[5];
-	uint8_t intoffset; //interrupt vector offset
-	uint8_t priority; //which IRQ has highest priority
-	uint8_t autoeoi; //automatic EOI mode
+	//uint8_t intoffset; //interrupt vector offset
+	//uint8_t priority; //which IRQ has highest priority
+	//uint8_t autoeoi; //automatic EOI mode
 	uint8_t readmode; //remember what to return on read register from OCW3
-	uint8_t vector;
-	uint8_t lastintr;
-	uint8_t enabled;
+	//uint8_t vector;
+	//uint8_t lastintr;
+	//uint8_t enabled;
 } I8259_t;
 
 void i8259_init(I8259_t* i8259);

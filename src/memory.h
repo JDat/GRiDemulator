@@ -10,4 +10,10 @@ void memory_mapRegister(uint32_t start, uint32_t len, uint8_t* readb, uint8_t* w
 void memory_mapCallbackRegister(uint32_t start, uint32_t count, uint8_t(*readb)(void*, uint32_t), void (*writeb)(void*, uint32_t, uint8_t), void* udata);
 int memory_init();
 
+void doDMA();
+void dmaBubbleRequest();
+
+void dmaInit();
+uint8_t dmaRead(uint32_t addr);
+void dmaWrite(uint32_t addr, uint8_t value);
 #endif

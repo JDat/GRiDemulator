@@ -35,6 +35,7 @@
 //#pragma once
 
 #include <stdbool.h>
+//#include "i8259.h"
 
 #define I7110_MBM_SIZE (128 * 1024) // 1 megabit
 #define I7115_MBM_SIZE (512 * 1024) // 4 megabit
@@ -66,7 +67,7 @@
 
 	uint8_t bubble_read(void* dummy, uint32_t offset);
 	void bubble_write(void* dummy, uint32_t offset, uint8_t data);
-        uint8_t bubble_init();
+        uint8_t bubble_init(I8259_t* i8259);
         void  bubble_timer();
 
 //protected:

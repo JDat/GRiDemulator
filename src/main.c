@@ -133,6 +133,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (goCPU) {
 			cpu_interruptCheck(&machine.CPU, &machine.i8259);
+                        //doDMA();
 			cpu_exec(&machine.CPU, instructionsperloop);
 			ops += instructionsperloop;
 			goCPU = 0;
