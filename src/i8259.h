@@ -39,10 +39,12 @@ typedef struct {
 	//uint8_t vector;
 	//uint8_t lastintr;
 	//uint8_t enabled;
+  uint8_t lock;       //semaphore. locked while CPU processing IRQ
 } I8259_t;
 
 void i8259_init(I8259_t* i8259);
 void i8259_doirq(I8259_t* i8259, uint8_t irqnum);
+void i8259_setirq(I8259_t* i8259, uint8_t irqnum, uint8_t state);
 uint8_t i8259_nextintr(I8259_t* i8259);
 void i8259_write(I8259_t* i8259, uint16_t portnum, uint8_t value);
 uint8_t i8259_read(I8259_t* i8259, uint16_t portnum);

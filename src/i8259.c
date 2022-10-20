@@ -25,6 +25,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdbool.h>
 #include "config.h"
 #include "debuglog.h"
 #include "i8259.h"
@@ -144,28 +145,51 @@ void i8259_write(I8259_t* i8259, uint16_t portnum, uint8_t value) {
 
 uint8_t i8259_nextintr(I8259_t* i8259) {
 	uint8_t i, tmpirr;
-	tmpirr = i8259->irr & (~i8259->imr); //AND request register with inverted mask register
+        i8259->lock = true;
+        tmpirr = i8259->irr & (~i8259->imr); //AND request register with inverted mask register
 	for (i = 0; i < 8; i++)
 		if ((tmpirr >> i) & 1) {
 			i8259->irr &= ~(1 << i);
 			i8259->isr |= (1 << i);
+                        i8259->lock = false;
 			return(i8259->icw[2] + i);
 		}
+        i8259->lock = false;
 	return 0;
 }
 
 void i8259_doirq(I8259_t* i8259, uint8_t irqnum) {
 #ifdef DEBUG_PIC 
         //if ( irqnum != 3) {
-                debug_log(DEBUG_DETAIL, "[I8259] IRQ %u raised\r\n", irqnum);
+                debug_log(DEBUG_DETAIL, "[I8259] doIRQ %u raised\r\n", irqnum);
         //}
 #endif
 	//i8259->irr |= (1 << irqnum) & (~i8259->imr);
         i8259->irr |= (1 << irqnum);
+
 }
 
+void i8259_setirq(I8259_t* i8259, uint8_t irqnum, uint8_t irqstate) {
+        
+#ifdef DEBUG_PIC 
+        //if ( irqnum != 3) {
+                debug_log(DEBUG_DETAIL, "[I8259] setIRQ %u\tstate: %u\t lock: %u\r\n", irqnum, irqstate, i8259->lock);
+        //}
+#endif
+        //while (i8259->lock == true);
+        if (i8259->lock == false) {
+	//i8259->irr |= (1 << irqnum) & (~i8259->imr);
+        i8259->irr |= ( (irqstate & 1) << irqnum);
+#ifdef DEBUG_PIC 
+        //if ( irqnum != 3) {
+                debug_log(DEBUG_DETAIL, "[I8259] setIRQ %u complete\r\n", irqnum);
+        //}
+#endif
+        }
+}
 void i8259_init(I8259_t* i8259) {
 	memset(i8259, 0, sizeof(I8259_t));
 	//i8259->intoffset = 8;
+        i8259->lock = false;
         ports_cbRegister(baseAddress, addressLen, (void*)i8259_read, NULL, (void*)i8259_write, NULL, i8259);
 }
