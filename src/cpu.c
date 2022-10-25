@@ -1219,7 +1219,8 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
                         //if (cpu->segregs[regcs] == 0xFC01 && (cpu->ip == 0x8D || cpu->ip == 0xAA)) {
                         //if (cpu->segregs[regcs] == 0xFED3) {
                         //if (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >=0x1F1C && cpu->ip <=0x2322)) {
-                        if ( (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >= 0x86 && cpu->ip <= 0xAA)) || (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >=0x15C0 && cpu->ip <=0x1760)) ){
+                        //if ( (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >= 0x86 && cpu->ip <= 0xBB)) || (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >=0x15C0 && cpu->ip <=0x1760)) ){
+                        if ( cpu->segregs[regcs] == 0xFE7E ){
                                 debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
                                 debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
                                 debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", cpu->regs.wordregs[regsi], cpu->regs.wordregs[regdi], cpu->regs.wordregs[regbp], cpu->regs.wordregs[regsp]);

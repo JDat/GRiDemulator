@@ -16,7 +16,7 @@
 
 //#define DEBUG_KEYBOARD
 //#define DEBUG_GRIDVIDEO
-#define DEBUG_PIC
+//#define DEBUG_PIC
 //#define DEBUG_PIT
 //#define DEBUG_RTC
 //#define DEBUG_GPIB
