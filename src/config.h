@@ -8,7 +8,7 @@
 
 //#define DEBUG_TIMING
 
-#define DEBUG_CPU
+//#define DEBUG_CPU
 //#define DEBUG_FPU
 //#define DEBUG_DIASASM
 //#define DEBUG_MEMORY

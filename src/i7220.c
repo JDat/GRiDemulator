@@ -152,7 +152,7 @@ volatile uint8_t regArray[6];
 volatile uint8_t regStatus;
 
 #define BUBBLEFIFOSIZE 40
-int fifo_size, fifo_head, fifo_tail;
+volatile int8_t fifo_size, fifo_head, fifo_tail;
 uint8_t fifoArray[BUBBLEFIFOSIZE];
 
 volatile uint8_t bubbleCommand;
@@ -166,7 +166,8 @@ int regAddress_addr;
 int regAddress_mbm;
 int regBubbleCounter; // 256-bit pages
 int regBubbleLimit;
-uint8_t bubbleBuffer[BUBBLEFIFOSIZE];
+
+uint8_t bubbleBuffer[32];
   
 enum cmdStates{
     PHASE_IDLE, PHASE_CMD, PHASE_EXEC, PHASE_RESULT
@@ -300,6 +301,9 @@ void fifo_clear() {
 #endif
     fifo_size = 0;
     fifo_head = fifo_tail = 0;
+    bitClear(regStatus,BIT_FIFO_READY);
+    update_drq();
+    
 }
 
 uint8_t fifo_pop() {
@@ -325,6 +329,9 @@ uint8_t fifo_pop() {
 }
 
 void fifo_push(uint8_t val) {
+    while ( fifo_size >= (BUBBLEFIFOSIZE -1) ) {
+        ;
+    }
 #ifdef DEBUG_BUBBLEMEM
     debug_log(DEBUG_INFO, "[i7220] fifo push: 0x%02x, FIFO size: %d\n", val, fifo_size);
 #endif
@@ -449,13 +456,16 @@ void commandReadBubbleData() {
     fseek(bubbleFile, (regAddress_addr * 32 * regBlockLen_nfc) + (regAddress_mbm * I7110_MBM_SIZE) + (regBubbleCounter * 32), SEEK_SET);
     sectorRead();
     
-    for (int a = 0; a < 32; a++) {
-        fifo_push(bubbleBuffer[a]);
+    while (regBubbleCounter < regBubbleLimit ) {
+        for (int a = 0; a < 32; a++) {
+            fifo_push(bubbleBuffer[a]);
+        }
+        //m_bi.sub_state = SECTOR_READ;
+        regBubbleCounter++;
+        //delay_cycles(m_bi.tm, 270 * 20); // p. 4-14 of BPK72UM
+        delay(4); // p. 4-14 of BPK72UM
+        sectorRead();
     }
-    //m_bi.sub_state = SECTOR_READ;
-    regBubbleCounter++;
-    //delay_cycles(m_bi.tm, 270 * 20); // p. 4-14 of BPK72UM
-    delay(4); // p. 4-14 of BPK72UM
 }
 
 void sectorRead() {
