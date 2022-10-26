@@ -38,7 +38,7 @@
 //#include "modules/io/pcap-win32.h"
 //#endif
 
-char* usemachine = "grid1101"; //default
+char* usemachine = "1101"; //default
 
 char title[64]; //assuming 64 isn't safe if somebody starts messing with STR_TITLE and STR_VERSION
 

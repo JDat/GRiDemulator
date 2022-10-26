@@ -144,20 +144,20 @@ const MACHINEMEM_t machine_mem[][11] = {
         // GRid Compass 1101
 	{
                 { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },      // Interrupt table
-                //{ MACHINE_MEM_RAM, 0x02980, 0x3D680, MACHINE_ROM_ISNOTROM, NULL },    // RAM after videobuffer
-                { MACHINE_MEM_RAM, 0x02980, 0x7D680, MACHINE_ROM_ISNOTROM, NULL },      // RAM after videobuffer
-                { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },
+                //{ MACHINE_MEM_RAM, 0x02980, 0x3D680, MACHINE_ROM_ISNOTROM, NULL },    // RAM after videobuffer 256 kb
+                { MACHINE_MEM_RAM, 0x02980, 0x7D680, MACHINE_ROM_ISNOTROM, NULL },      // RAM after videobuffer 512 kb
+                { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },      // Factory test ROM
                 { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1101.bin" },
 		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
 	},
         // GRid Compass 1139
-	{
-                { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },      // Interrupt table
-                { MACHINE_MEM_RAM, 0x04400, 0x7BC00, MACHINE_ROM_ISNOTROM, NULL },      // RAM after videobuffer
-                { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },
-                { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1139.bin" },
-		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
-	},
+	//{
+        //        { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },      // Interrupt table
+        //        { MACHINE_MEM_RAM, 0x04400, 0x7BC00, MACHINE_ROM_ISNOTROM, NULL },      // RAM after videobuffer
+        //        { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },
+        //        { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1139.bin" },
+	//	{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
+	//},
 };
 
 //uint8_t mac[6] = { 0xac, 0xde, 0x48, 0x88, 0xbb, 0xab };

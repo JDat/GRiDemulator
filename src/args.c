@@ -246,6 +246,7 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
                         
 		}
                 */
+                /*
 		else if (args_isMatch(argv[i], "-mem")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -mem. Use -h for help.\r\n");
@@ -257,6 +258,7 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 				return -1;
 			}
 		}
+                */
 		else if (args_isMatch(argv[i], "-debug")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -debug. Use -h for help.\r\n");
