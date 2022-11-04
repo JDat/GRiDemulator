@@ -6,16 +6,6 @@
 #include "cpu.h"
 #include "i8259.h"
 #include "i8253.h"
-//#include "chipset/i8237.h"
-//#include "chipset/i8255.h"
-//#include "chipset/uart.h"
-//#include "modules/io/ne2000.h"
-//#include "modules/io/tcpmodem.h"
-//#include "modules/audio/opl2.h"
-//#include "modules/audio/nukedopl.h"
-//#include "modules/audio/blaster.h"
-//#include "modules/audio/pcspeaker.h"
-//#include "modules/disk/fdc.h"
 #include "input.h"
 
 #define MACHINE_MEM_RAM			0
@@ -26,20 +16,9 @@
 #define MACHINE_ROM_REQUIRED	1
 #define MACHINE_ROM_ISNOTROM	2
 
-#define MACHINE_HW_UART0_NONE			0x0000000000000004ULL
-#define MACHINE_HW_UART0_MOUSE			0x0000000000000008ULL
-#define MACHINE_HW_UART0_TCPMODEM		0x0000000000000010ULL
-#define MACHINE_HW_UART1_NONE			0x0000000000000020ULL
-#define MACHINE_HW_UART1_MOUSE			0x0000000000000040ULL
-#define MACHINE_HW_UART1_TCPMODEM		0x0000000000000080ULL
 #define MACHINE_HW_RTC					0x0000000000000100ULL
-#define MACHINE_HW_DISK_HLE				0x0000000000000200ULL
-#define MACHINE_HW_NE2000				0x0000000000000400ULL
 
 //the "skip" HW flags are set in args.c to make sure machine init functions don't override explicit settings from the command line
-#define MACHINE_HW_SKIP_UART0			0x2000000000000000ULL
-#define MACHINE_HW_SKIP_UART1			0x1000000000000000ULL
-#define MACHINE_HW_SKIP_DISK			0x0800000000000000ULL
 #define MACHINE_HW_SKIP_RTC				0x0400000000000000ULL
 
 typedef struct {
@@ -47,19 +26,8 @@ typedef struct {
 	I8259_t i8259;
 	I8253_t i8253;
 
-	//I8255_t i8255;
-	//UART_t UART[2];
-#ifdef ENABLE_TCP_MODEM
-	//TCPMODEM_t tcpmodem[2];
-#endif
-
-#ifdef USE_NE2000
-	//NE2000_t ne2000;
-#endif
 	KEYSTATE_t KeyState;
-	//FDC_t fdc;
 	uint64_t hwflags;
-	//int pcap_if;
 } MACHINE_t;
 
 typedef struct {

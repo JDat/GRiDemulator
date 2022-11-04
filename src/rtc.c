@@ -30,15 +30,36 @@
 #include "memory.h"
 #include "debuglog.h"
 #include <time.h>
+#include <sys/time.h>
 
 #define baseAddress 0xDFF40
-#define addressLen  0x10
+#define addressLen  0x20
+
+uint8_t machineIDdata[] = {
+        0x01,
+        0x01,
+        0x01,
+        0x01,
+
+        0x01,
+        0x01,
+        0x01,
+        0x01,
+
+        0x01,
+        0x01,
+        0x01,
+        0x01,
+
+        0x01,
+        0x01,
+        0x01,
+        0x01,
+};
 
 uint8_t rtc_read(void* dummy, uint32_t addr) {
         addr = addr - baseAddress;
-#ifdef DEBUG_RTC
-	debug_log(DEBUG_DETAIL, "[RTC] Read port 0x%02X\n", addr);
-#endif
+        addr = addr >> 1;
         uint8_t ret = 0xFF;
 	
         struct tm *tdata;
@@ -59,44 +80,55 @@ uint8_t rtc_read(void* dummy, uint32_t addr) {
 	case 2:                 // ones of seconds
                 ret = (uint8_t)tdata->tm_sec;
                 ret = ret % 10;
-		break;
+		ret = 1;
+                break;
 	case 3:                 // tenths of seconds
                 ret = (uint8_t)tdata->tm_sec;
                 ret = ret / 10;
+                ret = 0;
 		break;
 	case 4:                 // ones of minutes
-                ret = (uint8_t)tdata->tm_min;
+                ret = (uint8_t)(tdata->tm_min - 6);
                 ret = ret  % 10;
+                //ret = 8;
 		break;
 	case 5:                 // tenths of minutes
-                ret = (uint8_t)tdata->tm_min;
+                ret = (uint8_t)(tdata->tm_min - 6);
                 ret = ret / 10;
+                //ret = 1;
 		break;
 	case 6:                 // ones of hours
                 ret = (uint8_t)tdata->tm_hour;
 		ret = ret  % 10;
+                //ret = 1;
                 break;
 	case 7:                 // tenths of hour
                 ret = (uint8_t)tdata->tm_hour;
                 ret = ret / 10;
+                //ret = 0;
 		break;
         case 8:                 // ones of days
                 ret = (uint8_t)tdata->tm_mday;
                 ret = ret  % 10;
+                ret = 1;
 	case 9:                 // tenths of days
                 ret = (uint8_t)tdata->tm_mday;
                 ret = ret / 10;
+                ret = 0;
 		break;
         case 10:                // weekday
-                ret = (uint8_t)tdata->tm_wday;
+                ret = (uint8_t)(tdata->tm_wday + 1);
+                //ret = 1;
                 break;
         case 11:                // ones of months
-                ret = (uint8_t)tdata->tm_mon;
+                ret = (uint8_t)(tdata->tm_mon);
                 ret = ret  % 10;
+                //ret = 1;
                 break;
         case 12:                // tenths of months
-                ret = (uint8_t)tdata->tm_mon;
+                ret = (uint8_t)(tdata->tm_mon);
                 ret = ret / 10;
+                //ret = 0;
                 break;
         case 13:                // Year, write only
                 ret = 0;
@@ -107,17 +139,26 @@ uint8_t rtc_read(void* dummy, uint32_t addr) {
         case 15:                // Interrupt setup, not implemented
                 ret = 0;
                 break;
+        default:
+                ret = 0;
+                break;
 	}
+        ret = machineIDdata[addr] << 4 | ret;
+#ifdef DEBUG_RTC
+	debug_log(DEBUG_DETAIL, "[RTC] Read port 0x%02X\tdata: 0x%02X\n", addr, ret);
+#endif
+
 	return ret;
 }
 
 //void rtc_write(void* dummy, uint16_t addr, uint8_t value) {
 void rtc_write(void* dummy, uint32_t addr, uint8_t value) {
         addr = addr - baseAddress;
+        addr = addr >> 1;
 #ifdef DEBUG_RTC
-        debug_log(DEBUG_DETAIL, "[RTC] Write port 0x%02X: %02X\n", addr, value);
+        debug_log(DEBUG_DETAIL, "[RTC] %lu\tWrite port 0x%02X: %02X\n", (unsigned long)time(NULL), addr, value);
 #endif
-        // time set from GRiD sofware not implemented yet
+        // time set not implemented yet
 }
 
 void rtc_init() {

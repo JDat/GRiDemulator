@@ -31,14 +31,20 @@
 #include "ports.h"
 #include "debuglog.h"
 
-#define baseAddress 0x008
-#define addressLen  0x4
+#define baseAddressPIT 0x008
+#define addressLenPIT  0x8
 
 uint32_t i8253_timers[3];
 
 void i8253_write(I8253_t* i8253, uint16_t portnum, uint8_t value) {
 	uint8_t sel, rl, loaded;
+        portnum = portnum - baseAddressPIT;
+        portnum = portnum >> 1;
 	portnum &= 3;
+
+#ifdef DEBUG_PIT
+        debug_log(DEBUG_DETAIL, "I8253: Write. Port: 0x%02X value = 0x%02X\n", portnum, value);
+#endif
 
 	loaded = 0;
 	switch (portnum) {
@@ -111,7 +117,14 @@ void i8253_write(I8253_t* i8253, uint16_t portnum, uint8_t value) {
 
 uint8_t i8253_read(I8253_t* i8253, uint16_t portnum) {
 	uint8_t ret;
+        portnum = portnum - baseAddressPIT;
+        portnum = portnum >> 1;
+
 	portnum &= 3;
+
+#ifdef DEBUG_PIT
+        debug_log(DEBUG_DETAIL, "I8253: Read. Port: 0x%02X\n", portnum);
+#endif
 
 	if (portnum == 3) {
 		return 0xFF; //no read of control word possible
@@ -136,7 +149,7 @@ uint8_t i8253_read(I8253_t* i8253, uint16_t portnum) {
 void i8253_timerCallback0(I8259_t* i8259) {
 	//i8259_doirq(i8259, 0);
         //debug_log(DEBUG_DETAIL, "[8253] tick\r\n");
-        i8259_doirq(i8259, 3);
+        //i8259_doirq(i8259, 3);
 }
 
 void i8253_timerCallback1(I8259_t* i8259) {
@@ -149,17 +162,22 @@ void i8253_tickCallback(I8253CB_t* i8253cb) {
         //debug_log(DEBUG_DETAIL, "[8253] master callback\r\n");
 	I8253_t* i8253;
 	I8259_t* i8259;
-	uint8_t i;
+	//uint8_t i;
 
-        static uint16_t ticks;
+        static uint8_t irq_state;
+        //static uint16_t ticks;
 	i8253 = i8253cb->i8253;
 	i8259 = i8253cb->i8259;
         
-        ticks++;
-        if (ticks > 800 ) {
-                i8253_timerCallback0(i8259);
-                ticks = 0;
-        }
+        //ticks++;
+        //if (ticks > 800 ) {
+                //i8253_timerCallback0(i8259);
+                //ticks = 0;
+        //}
+        
+        i8259_doirq(i8259, 3);
+        //i8259_setirq(i8259, 3, irq_state);
+        //irq_state = !irq_state;
         
         /*
 	for (i = 0; i < 3; i++) {
@@ -214,7 +232,8 @@ void i8253_init(I8253_t* i8253, I8259_t* i8259) {
 	i8253->cbdata.i8253 = i8253;
 	i8253->cbdata.i8259 = i8259;
 
-	timing_addTimer(i8253_tickCallback, (void*)(&i8253->cbdata), 48000, TIMING_ENABLED); //79545.47
+	//timing_addTimer(i8253_tickCallback, (void*)(&i8253->cbdata), 48000, TIMING_ENABLED); //79545.47
+        timing_addTimer(i8253_tickCallback, (void*)(&i8253->cbdata), 62, TIMING_ENABLED); //79545.47
 
-        ports_cbRegister(baseAddress, addressLen, (void*)i8253_read, NULL, (void*)i8253_write, NULL, i8253);
+        //ports_cbRegister(baseAddressPIT, addressLenPIT, (void*)i8253_read, NULL, (void*)i8253_write, NULL, i8253);
 }

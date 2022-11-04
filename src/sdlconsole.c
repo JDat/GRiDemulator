@@ -202,33 +202,6 @@ int sdlconsole_loop() {
 				timing_timerDisable(sdlconsole_keyTimer);
 			}
 			return (sdlconsole_curkey == 0x80) ? SDLCONSOLE_EVENT_NONE : SDLCONSOLE_EVENT_KEY;
-		/*
-                case SDL_MOUSEMOTION:
-			xrel = (event.motion.xrel < -128) ? -128 : (int8_t)event.motion.xrel;
-			xrel = (event.motion.xrel > 127) ? 127 : (int8_t)event.motion.xrel;
-			yrel = (event.motion.yrel < -128) ? -128 : (int8_t)event.motion.yrel;
-			yrel = (event.motion.yrel > 127) ? 127 : (int8_t)event.motion.yrel;
-			if (sdlconsole_grabbed) {
-				mouse_action(MOUSE_ACTION_MOVE, MOUSE_NEITHER, xrel, yrel);
-			}
-			return SDLCONSOLE_EVENT_NONE;
-		case SDL_MOUSEBUTTONDOWN:
-		case SDL_MOUSEBUTTONUP:
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				action = MOUSE_ACTION_LEFT;
-				if (!sdlconsole_grabbed) {
-					sdlconsole_mousegrab();
-					break;
-				}
-			}
-			else if (event.button.button == SDL_BUTTON_RIGHT) {
-				action = MOUSE_ACTION_RIGHT;
-			}
-			if (sdlconsole_grabbed) {
-				mouse_action(action, (event.button.state == SDL_PRESSED) ? MOUSE_PRESSED : MOUSE_UNPRESSED, 0, 0);
-			}
-			return SDLCONSOLE_EVENT_NONE;
-                */
 		case SDL_QUIT:
 			return SDLCONSOLE_EVENT_QUIT;
 	}

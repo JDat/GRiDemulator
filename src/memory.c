@@ -85,7 +85,12 @@ void memory_mapRegister(uint32_t start, uint32_t len, uint8_t* readb, uint8_t* w
 			break;
 		}
 		memory_mapRead[start + i] = (readb == NULL) ? NULL : readb + i;
+                //memory_mapRead[start + i] = 0;
 		memory_mapWrite[start + i] = (writeb == NULL) ? NULL : writeb + i;
+                //memory_mapWrite[start + i] = 0;
+                if (start< 0xA0000) {
+                        cpu_write(NULL,start+i,0xff);
+                }
 	}
 }
 
@@ -120,7 +125,7 @@ int memory_init() {
 
 	return 0;
 }
-
+/*
 bool dmaActive;
 uint16_t  dmaCount;
 
@@ -156,3 +161,4 @@ void dmaWrite(uint32_t addr, uint8_t value) {
         debug_log(DEBUG_ERROR, "[DMA] Write. Addr: %05X\tValue: %02X\r\n", addr, value);
         bubble_write(NULL, 0xDFE80, value);
 }
+*/

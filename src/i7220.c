@@ -492,7 +492,7 @@ void commandReadBubbleData() {
         regBubbleLimit = regBlockLenCount * regBlockLen_nfc;
     }
 //#ifdef DEBUG_BUBBLEMEM
-    debug_log(DEBUG_INFO, "[i7220] readbubble seek pos: %d\n", (regAddress_addr * 32 * regBlockLen_nfc) + (regAddress_mbm * I7110_MBM_SIZE) + (regBubbleCounter * 32)) ;
+    debug_log(DEBUG_INFO, "[i7220] readbubble: seek file pos: %d\n", (regAddress_addr * 32 * regBlockLen_nfc) + (regAddress_mbm * I7110_MBM_SIZE) + (regBubbleCounter * 32)) ;
 //#endif
     fseek(bubbleFile, (regAddress_addr * 32 * regBlockLen_nfc) + (regAddress_mbm * I7110_MBM_SIZE) + (regBubbleCounter * 32), SEEK_SET);
     sectorRead();
@@ -504,7 +504,7 @@ void commandReadBubbleData() {
         //m_bi.sub_state = SECTOR_READ;
         regBubbleCounter++;
         //delay_cycles(m_bi.tm, 270 * 20); // p. 4-14 of BPK72UM
-        //delay(4); // p. 4-14 of BPK72UM
+        delay(4); // p. 4-14 of BPK72UM
         sectorRead();
     }
 }
