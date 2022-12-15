@@ -26,9 +26,10 @@
 #include <stdint.h>
 #include "sdlconsole.h"
 //#include "sdlkeys.h"
-#include "keymap.h"
+//#include "keymap.h"
 #include "timing.h"
-
+#include "debuglog.h"
+#include "utility.h"
 
 SDL_Window *sdlconsole_window = NULL;
 SDL_Renderer *sdlconsole_renderer = NULL;
@@ -36,7 +37,12 @@ SDL_Texture *sdlconsole_texture = NULL;
 
 uint64_t sdlconsole_frameTime[30];
 uint32_t sdlconsole_keyTimer;
-uint8_t sdlconsole_curkey, sdlconsole_lastKey, sdlconsole_frameIdx = 0, sdlconsole_grabbed = 0, sdlconsole_ctrl = 0, sdlconsole_alt = 0, sdlconsole_doRepeat = 0;
+uint32_t sdlconsole_curkey;
+uint8_t sdlconsole_modKeys;
+uint32_t sdlconsole_lastKey;
+uint8_t sdlconsole_frameIdx = 0, sdlconsole_grabbed = 0, sdlconsole_doRepeat = 0;
+
+uint8_t sdlconsole_ctrl = 0, sdlconsole_alt = 0, sdlconsole_shift = 0;
 int sdlconsole_curw, sdlconsole_curh;
 
 char* sdlconsole_title;
@@ -64,7 +70,7 @@ int sdlconsole_init(char *title) {
 		return -1;
 	}
 
-	sdlconsole_keyTimer = timing_addTimer(sdlconsole_keyRepeat, NULL, 2, TIMING_DISABLED);
+	//sdlconsole_keyTimer = timing_addTimer(sdlconsole_keyRepeat, NULL, 2, TIMING_DISABLED);
 
 	return 0;
 }
@@ -157,11 +163,11 @@ int sdlconsole_loop() {
 	int8_t xrel, yrel;
 	uint8_t action = 0;
 
-	if (sdlconsole_doRepeat) {
-		sdlconsole_doRepeat = 0;
-		sdlconsole_curkey = sdlconsole_lastKey;
-		return SDLCONSOLE_EVENT_KEY;
-	}
+	//if (sdlconsole_doRepeat) {
+	//	sdlconsole_doRepeat = 0;
+	//	sdlconsole_curkey = sdlconsole_lastKey;
+	//	return SDLCONSOLE_EVENT_KEY;
+	//}
 
 	if (!SDL_PollEvent(&event)) return SDLCONSOLE_EVENT_NONE;
 	switch (event.type) {
@@ -178,29 +184,56 @@ int sdlconsole_loop() {
                                 case SDLK_F12:
                                         return SDLCONSOLE_EVENT_DEBUG_2;
                                 default:
-                                        if (event.key.keysym.sym == SDLK_LCTRL) sdlconsole_ctrl = 1;
-                                        if (event.key.keysym.sym == SDLK_LALT) sdlconsole_alt = 1;
+                                        if (event.key.keysym.sym == SDLK_LCTRL) {
+                                                sdlconsole_ctrl = 1;
+                                                bitSet(sdlconsole_modKeys, 6);
+                                        }
+                                        if (event.key.keysym.sym == SDLK_LALT) {
+                                                sdlconsole_alt = 1;
+                                                bitSet(sdlconsole_modKeys, 5);
+                                        }
+                                        if (event.key.keysym.sym == SDLK_LSHIFT || event.key.keysym.sym == SDLK_RSHIFT) {
+                                                sdlconsole_shift = 1;
+                                                bitSet(sdlconsole_modKeys, 4);
+                                        }
                                         //if (sdlconsole_ctrl & sdlconsole_alt) {
                                         //	sdlconsole_mousegrab();
                                         //}
-                                        sdlconsole_curkey = sdlconsole_translateScancode(event.key.keysym.sym);
+                                        //sdlconsole_curkey = sdlconsole_translateScancode(event.key.keysym.sym);
+                                        bitSet(sdlconsole_modKeys, 7);
+                                        
+                                        sdlconsole_curkey = event.key.keysym.sym;
+                                        //debug_log(DEBUG_DETAIL, "[SDL] key down: 0x%08X\n", sdlconsole_curkey);
                                         if (sdlconsole_curkey == 0x00) {
                                                 return SDLCONSOLE_EVENT_NONE;
                                         } else {
                                                 sdlconsole_lastKey = sdlconsole_curkey;
-                                                timing_updateIntervalFreq(sdlconsole_keyTimer, 2);
-                                                timing_timerEnable(sdlconsole_keyTimer);
+                                                //timing_updateIntervalFreq(sdlconsole_keyTimer, 2);
+                                                //timing_timerEnable(sdlconsole_keyTimer);
                                                 return SDLCONSOLE_EVENT_KEY;
                                         }
 			}
 		case SDL_KEYUP:
 			if (event.key.repeat) return SDLCONSOLE_EVENT_NONE;
-			if (event.key.keysym.sym == SDLK_LCTRL) sdlconsole_ctrl = 0;
-			if (event.key.keysym.sym == SDLK_LALT) sdlconsole_alt = 0;
-			sdlconsole_curkey = sdlconsole_translateScancode(event.key.keysym.sym) | 0x80;
-			if ((sdlconsole_curkey & 0x7F) == sdlconsole_lastKey) {
-				timing_timerDisable(sdlconsole_keyTimer);
-			}
+			if (event.key.keysym.sym == SDLK_LCTRL) {
+                                sdlconsole_ctrl = 0;
+                                bitClear(sdlconsole_modKeys, 6);
+                        }
+			if (event.key.keysym.sym == SDLK_LALT) {
+                                sdlconsole_alt = 0;
+                                bitClear(sdlconsole_modKeys, 5);
+                        }
+                        if (event.key.keysym.sym == SDLK_LSHIFT || event.key.keysym.sym == SDLK_RSHIFT) {
+                                sdlconsole_shift = 0;
+                                bitClear(sdlconsole_modKeys, 4);
+                        }
+			//sdlconsole_curkey = sdlconsole_translateScancode(event.key.keysym.sym) | 0x80;
+                        bitClear(sdlconsole_modKeys, 7);
+                        sdlconsole_curkey = event.key.keysym.sym;
+			//if ((sdlconsole_curkey & 0x7F) == sdlconsole_lastKey) {
+				//timing_timerDisable(sdlconsole_keyTimer);
+			//}
+                        //debug_log(DEBUG_DETAIL, "[SDL] key up: 0x%08X\n", sdlconsole_curkey);
 			return (sdlconsole_curkey == 0x80) ? SDLCONSOLE_EVENT_NONE : SDLCONSOLE_EVENT_KEY;
 		case SDL_QUIT:
 			return SDLCONSOLE_EVENT_QUIT;
@@ -208,10 +241,15 @@ int sdlconsole_loop() {
 	return SDLCONSOLE_EVENT_NONE;
 }
 
-uint8_t sdlconsole_getScancode() {
+uint32_t sdlconsole_getScanCode() {
 	//debug_log(DEBUG_DETAIL, "curkey: %02X\r\n", sdlconsole_curkey);
 	return sdlconsole_curkey;
 }
+uint8_t sdlconsole_getModKeys() {
+	//debug_log(DEBUG_DETAIL, "curkey: %02X\r\n", sdlconsole_curkey);
+	return sdlconsole_modKeys;
+}
+
 /*
 uint8_t sdlconsole_translateScancode(SDL_Keycode keyval) {
 	uint8_t i;
@@ -225,14 +263,3 @@ uint8_t sdlconsole_translateScancode(SDL_Keycode keyval) {
 }
 */
 
-uint8_t sdlconsole_translateScancode(SDL_Keycode keyval) {
-	uint8_t i;
-	for (i = 0; i < sizeof(keyTranslateMatrix)/sizeof(keyTranslateMatrix[0]); i++) {
-		//if (keyval == (SDL_Keycode)keyTranslateMatrix[i][0]) {
-                if (keyval == (SDL_Keycode)keyTranslateMatrix[i].sdlKeyName) {
-			//return keyTranslateMatrix[i][1];
-                        return keyTranslateMatrix[i].unshifted;
-		}
-	}
-	return 0x00;
-}

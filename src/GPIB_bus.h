@@ -7,14 +7,14 @@
 #define DEVICE_COUNT 16
 
 enum {
-    pinSRQ  = 0,
-    pinATN  = 1,
-    pinEOI  = 2,
-    pinDAV  = 3,
-    pinNRFD = 4,
-    pinNDAC = 5,
-    pinIFC  = 6,
-    pinREN  = 7
+    pinSRQ  = 0,        // slave
+    pinATN  = 1,        // controller
+    pinEOI  = 2,        // controller/slave
+    pinDAV  = 3,        // controller
+    pinNRFD = 4,        // slave
+    pinNDAC = 5,        // slave
+    pinIFC  = 6,        // controller
+    pinREN  = 7         // controller
 };
 
 void GPIBbusIFCset(bool pin);

@@ -57,89 +57,19 @@
 	ID string, full description, init function, default video, speed in MHz (-1 = unlimited), default hardware flags
 */
 const MACHINEDEF_t machine_defs[] = {
-	{ "1101", "GRiD Compass 1101", machine_init_grid, VIDEO_CARD_GRID1101, 1, MACHINE_HW_RTC },
+	{ "1101", "GRiD Compass 1101", machine_init_grid, VIDEO_CARD_GRID1101, 5, MACHINE_HW_RTC },
         //{ "1139", "GRiD Compass 1139", machine_init_grid, VIDEO_CARD_GRID1139, 5, MACHINE_HW_RTC },
         { NULL }
 };
 
 const MACHINEMEM_t machine_mem[][11] = {
-        /*
-	//Generic XT clone
-	{
-		{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
-#ifndef USE_DISK_HLE
-		{ MACHINE_MEM_ROM, 0xD0000, 0x02000, MACHINE_ROM_REQUIRED, "roms/disk/ide_xt.bin" },
-#endif
-		{ MACHINE_MEM_ROM, 0xFE000, 0x02000, MACHINE_ROM_REQUIRED, "roms/machine/generic_xt/pcxtbios.bin" },
-		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
-	},
-
-	//IBM XT
-	{
-		{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
-#ifndef USE_DISK_HLE
-		{ MACHINE_MEM_ROM, 0xD0000, 0x02000, MACHINE_ROM_REQUIRED, "roms/disk/ide_xt.bin" },
-#endif
-		{ MACHINE_MEM_ROM, 0xF0000, 0x08000, MACHINE_ROM_REQUIRED, "roms/machine/ibm_xt/5000027.u19" },
-		{ MACHINE_MEM_ROM, 0xF8000, 0x08000, MACHINE_ROM_REQUIRED, "roms/machine/ibm_xt/1501512.u18" },
-		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
-	},
-
-	//AMI XT clone
-	{
-		{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
-#ifndef USE_DISK_HLE
-		{ MACHINE_MEM_ROM, 0xD0000, 0x02000, MACHINE_ROM_REQUIRED, "roms/disk/ide_xt.bin" },
-#endif
-		{ MACHINE_MEM_ROM, 0xFE000, 0x02000, MACHINE_ROM_REQUIRED, "roms/machine/ami_xt/ami_8088_bios_31jan89.bin" },
-		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
-	},
-
-	//Phoenix XT clone
-	{
-		{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
-#ifndef USE_DISK_HLE
-		{ MACHINE_MEM_ROM, 0xD0000, 0x02000, MACHINE_ROM_REQUIRED, "roms/disk/ide_xt.bin" },
-#endif
-		{ MACHINE_MEM_ROM, 0xFE000, 0x02000, MACHINE_ROM_REQUIRED, "roms/machine/phoenix_xt/000p001.bin" },
-		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
-	},
-
-	//Xi 8088
-	{
-		{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
-#ifndef USE_DISK_HLE
-		{ MACHINE_MEM_ROM, 0xD0000, 0x02000, MACHINE_ROM_REQUIRED, "roms/disk/ide_xt.bin" },
-#endif
-		{ MACHINE_MEM_ROM, 0xF0000, 0x10000, MACHINE_ROM_REQUIRED, "roms/machine/xi8088/bios128k-2.0.bin" }, //last half of this ROM is just filler for the 128k chip...
-		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
-	},
-
-	//Zenith SuperSport 8088
-	{
-		{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
-#ifndef USE_DISK_HLE
-		{ MACHINE_MEM_ROM, 0xD0000, 0x02000, MACHINE_ROM_REQUIRED, "roms/disk/ide_xt.bin" },
-#endif
-		{ MACHINE_MEM_RAM, 0xF0000, 0x04000, MACHINE_ROM_ISNOTROM, NULL }, //scratchpad RAM
-		{ MACHINE_MEM_ROM, 0xF8000, 0x08000, MACHINE_ROM_REQUIRED, "roms/machine/zenithss/z184m v3.1d.10d" },
-		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
-	},
-
-	//Supersoft/Landmark diagnostic
-	{
-		{ MACHINE_MEM_RAM, 0x00000, 0xA0000, MACHINE_ROM_ISNOTROM, NULL },
-		{ MACHINE_MEM_ROM, 0xF8000, 0x08000, MACHINE_ROM_REQUIRED, "roms/machine/landmark/landmark.bin" },
-		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
-	},
-*/
-	// GRiD compass
         // GRid Compass 1101
 	{
                 { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },      // Interrupt table
-                //{ MACHINE_MEM_RAM, 0x02980, 0x3D680, MACHINE_ROM_ISNOTROM, NULL },    // RAM after videobuffer 256 kb
-                { MACHINE_MEM_RAM, 0x02980, 0x7D680, MACHINE_ROM_ISNOTROM, NULL },      // RAM after videobuffer 512 kb
+                { MACHINE_MEM_RAM, 0x02980, 0x40000 - 0x02980, MACHINE_ROM_ISNOTROM, NULL },    // RAM after videobuffer 256 kb
+                //{ MACHINE_MEM_RAM, 0x02980, 0x80000 - 0x02980, MACHINE_ROM_ISNOTROM, NULL },      // RAM after videobuffer 512 kb
                 { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },      // Factory test ROM
+                //{ MACHINE_MEM_ROM, 0xC0000, 194, MACHINE_ROM_REQUIRED, "ROMS/dma_demo.bin" },      // Factory test ROM
                 { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1101.bin" },
 		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
 	},
@@ -162,8 +92,11 @@ int machine_init_grid(MACHINE_t* machine) {
 	i8259_init(&machine->i8259);
         i8253_init(&machine->i8253, &machine->i8259);
         
-        gridKeyboard8741_init();
-        //dmaInit();
+        gridKeyboard8741_init(&machine->i8259);
+        if (dmaInit()) {
+                debug_log(DEBUG_INFO, "[MACHINE] dmaInit FAIL\r\n");
+                return -1;
+        }
         if (bubble_init(&machine->i8259)) {
                 return -1;
         }

@@ -22,9 +22,12 @@
 
 #include <stdint.h>
 #include "input.h"
+#include "cpu.h"
 
-void gridKeyboard8741_getScanCode(uint8_t lScanCode);
-void gridKeyboard8741_init();
+uint8_t translateScancode(uint32_t keyval, uint8_t modKeys);
+void gridKeyboard8741_getScanCode(uint32_t lScanCode, uint8_t lModKeys);
+
+void gridKeyboard8741_init(I8259_t* i8259);
 void gridKeyboard8741_doirq(uint8_t irqnum);
 
 void gridKeyboard8741_write(void* dummy, uint32_t addr, uint8_t value);

@@ -13,7 +13,7 @@ int memory_init();
 //void doDMA();
 //void dmaBubbleRequest();
 
-//void dmaInit();
-//uint8_t dmaRead(uint32_t addr);
-//void dmaWrite(uint32_t addr, uint8_t value);
+int dmaInit();
+uint8_t dmaRead(uint32_t addr);
+void dmaWrite(uint32_t addr, uint8_t value);
 #endif

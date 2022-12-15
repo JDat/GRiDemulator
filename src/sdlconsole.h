@@ -12,8 +12,10 @@
 int sdlconsole_init(char *title);
 void sdlconsole_blit(uint32_t* pixels, int w, int h, int stride);
 int sdlconsole_loop();
-uint8_t sdlconsole_getScancode();
-uint8_t sdlconsole_translateScancode(SDL_Keycode keyval);
+
+uint32_t sdlconsole_getScanCode();
+uint8_t sdlconsole_getModKeys();
+//uint8_t sdlconsole_translateScancode(SDL_Keycode keyval);
 //uint8_t sdlconsole_translateScancode(SDLKey keyval);
 
 int sdlconsole_setWindow(int w, int h);

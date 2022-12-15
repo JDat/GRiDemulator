@@ -175,6 +175,16 @@ enum cmdStates{
 };
 volatile uint8_t mainExecPhase;
 
+void delay(int millis) {
+    // Storing start time
+    clock_t start_time = clock();
+ 
+    // looping till required time is not achieved
+    while (clock() < start_time + millis) {
+        ;
+    }
+}
+
 uint8_t bubble_read(void* dummy, uint32_t addr) {
     addr = addr - baseAddress;
     addr = addr >> 1;
@@ -304,6 +314,7 @@ void *bubble_thread(void* dummy) {
                 commandStart(bubbleCommand);
                 lastCommand = bubbleCommand;
             }
+            //delay(1);
     }
 
     pthread_exit(NULL);
@@ -390,15 +401,6 @@ void fifo_push(uint8_t val) {
     fifoLock = false;
 }
 
-void delay(int millis) {
-    // Storing start time
-    clock_t start_time = clock();
- 
-    // looping till required time is not achieved
-    while (clock() < start_time + millis) {
-        ;
-    }
-}
 
 void regUpdate() {
     regBlockLen = (regArray[regBlockLenMSB - 10] << 8) + regArray[regBlockLenLSB - 10];
@@ -491,9 +493,9 @@ void commandReadBubbleData() {
         regBubbleCounter = 0; // 256-bit pages
         regBubbleLimit = regBlockLenCount * regBlockLen_nfc;
     }
-//#ifdef DEBUG_BUBBLEMEM
+#ifdef DEBUG_BUBBLEMEM
     debug_log(DEBUG_INFO, "[i7220] readbubble: seek file pos: %d\n", (regAddress_addr * 32 * regBlockLen_nfc) + (regAddress_mbm * I7110_MBM_SIZE) + (regBubbleCounter * 32)) ;
-//#endif
+#endif
     fseek(bubbleFile, (regAddress_addr * 32 * regBlockLen_nfc) + (regAddress_mbm * I7110_MBM_SIZE) + (regBubbleCounter * 32), SEEK_SET);
     sectorRead();
     
@@ -504,7 +506,7 @@ void commandReadBubbleData() {
         //m_bi.sub_state = SECTOR_READ;
         regBubbleCounter++;
         //delay_cycles(m_bi.tm, 270 * 20); // p. 4-14 of BPK72UM
-        delay(4); // p. 4-14 of BPK72UM
+        //delay(4); // p. 4-14 of BPK72UM
         sectorRead();
     }
 }

@@ -56,9 +56,11 @@ void cpu_write(CPU_t* cpu, uint32_t addr32, uint8_t value) {
 uint8_t cpu_read(CPU_t* cpu, uint32_t addr32) {
 	addr32 &= MEMORY_MASK;
 
-        //if (addr32 > 0xFF300) {
-        //        debug_log(DEBUG_INFO, "[MEM] cpu read. Addr: 0x%05X\r\n", addr32);
+        //if ( (addr32 >= 0xC0000) && (addr32 <= 0xCFFFF) ) {
+                //debug_log(DEBUG_INFO, "[MEM] cpu read. Addr: 0x%05X\tval: 0x%02X\r\n", addr32, (uint8_t) *memory_mapRead[addr32] );
+                //debug_log(DEBUG_INFO, "[MEM] cpu read. Addr: 0x%05X\r\n", addr32);
         //}
+        
 	if (memory_mapRead[addr32] != NULL) {
 		return *(memory_mapRead[addr32]);
 	}
@@ -125,7 +127,7 @@ int memory_init() {
 
 	return 0;
 }
-/*
+
 bool dmaActive;
 uint16_t  dmaCount;
 
@@ -140,25 +142,43 @@ void doDMA() {
         }
 }
 
-void dmaBubbleRequest() {
-        dmaActive  = true;
-        dmaRead(DMABASE);
-}
+//void dmaBubbleRequest() {
+//        dmaActive  = true;
+//        dmaRead(DMABASE);
+//}
 
-void dmaInit() {
+FILE *dmaFile;
+
+int dmaInit() {
+        if (dmaFile != NULL) {
+                fclose(dmaFile);
+        }
+        dmaFile = fopen("ROMS/merged.raw", "rb");
+        if (dmaFile == NULL) {
+
+                debug_log(DEBUG_INFO, "[DMA] Error openimg DMA image\r\n");
+
+        return -1;
+        }
+    
         memory_mapCallbackRegister(DMABASE, DMALEN, (void*)dmaRead, (void*)dmaWrite, NULL);
+        return 0;
 }
 
 
 uint8_t dmaRead(uint32_t addr) {
+        size_t ret;
         uint8_t val;
-        val = bubble_read(NULL, 0xDFE80);
-        debug_log(DEBUG_ERROR, "[DMA] Read. Addr: %05X, Value: %02X\r\n", addr, val);
+        
+        //val = bubble_read(NULL, 0xDFE80);
+        //debug_log(DEBUG_ERROR, "[DMA] Read. Addr: %05X, Value: %02X\r\n", addr, val);
+        ret = fread(&val, 1, 1, dmaFile);
+        return val;
         
 }
 
 void dmaWrite(uint32_t addr, uint8_t value) {
-        debug_log(DEBUG_ERROR, "[DMA] Write. Addr: %05X\tValue: %02X\r\n", addr, value);
-        bubble_write(NULL, 0xDFE80, value);
+        //debug_log(DEBUG_ERROR, "[DMA] Write. Addr: %05X\tValue: %02X\r\n", addr, value);
+        //bubble_write(NULL, 0xDFE80, value);
 }
-*/
+

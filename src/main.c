@@ -31,8 +31,8 @@
 #include "cpu.h"
 #include "i8259.h"
 #include "gridKeyboard8741.h"
-//#include "modules/disk/biosdisk.h"
 #include "sdlconsole.h"
+//#include "modules/disk/biosdisk.h"
 //#include "modules/audio/sdlaudio.h"
 //#ifdef USE_NE2000
 //#include "modules/io/pcap-win32.h"
@@ -82,6 +82,9 @@ void setspeed(double mhz) {
 
 int main(int argc, char *argv[]) {
 
+        uint32_t keyScanCode;
+        uint8_t modKeys;
+
 	sprintf(title, "%s v%s pre alpha", STR_TITLE, STR_VERSION);
 
 	//printf("%s (c)2020 Mike Chambers\r\n", title);
@@ -128,6 +131,7 @@ int main(int argc, char *argv[]) {
 	}
 	while (running) {
 		static uint32_t curloop = 0;
+                limitCPU = 0;
 		if (limitCPU == 0) {
 			goCPU = 1;
 		}
@@ -141,13 +145,15 @@ int main(int argc, char *argv[]) {
 		timing_loop();
 		//sdlaudio_updateSampleTiming();
 		if (++curloop == 100) {
+
 			switch (sdlconsole_loop()) {
                                 case SDLCONSOLE_EVENT_KEY:
                                         //machine.KeyState.scancode = sdlconsole_getScancode();
                                         //machine.KeyState.isNew = 1;
-                                        gridKeyboard8741_getScanCode(sdlconsole_getScancode());
+                                        keyScanCode = sdlconsole_getScanCode();
+                                        modKeys = sdlconsole_getModKeys();
+                                        gridKeyboard8741_getScanCode(keyScanCode, modKeys);
                                         //i8259_doirq(&machine.i8259, 1);
-                                        i8259_doirq(&machine.i8259, 4);
                                         break;
                                 case SDLCONSOLE_EVENT_QUIT:
                                         running = 0;
@@ -157,8 +163,6 @@ int main(int argc, char *argv[]) {
                                 case SDLCONSOLE_EVENT_DEBUG_2:
                                         break;
 			}
-
-
 			curloop = 0;
 		}
 	}
