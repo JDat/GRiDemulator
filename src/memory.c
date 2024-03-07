@@ -1,6 +1,11 @@
 /*
-  XTulator: A portable, open-source 80186 PC emulator.
+  GRiD Compass emulator
+  Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
+
+  Based on XTulator: A portable, open-source 80186 PC emulator.
   Copyright (C)2020 Mike Chambers
+  https://github.com/mikechambers84/XTulator
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -17,6 +22,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -28,6 +34,7 @@
 #include "debuglog.h"
 #include "i7220.h"
 
+#include "machine.h"
 
 
 #define DMABASE 0xE0000
@@ -50,6 +57,12 @@ void cpu_write(CPU_t* cpu, uint32_t addr32, uint8_t value) {
 		(*memory_mapWriteCallback[addr32])(memory_udata[addr32], addr32, value);
 	} else {
                 debug_log(DEBUG_ERROR, "[MEM] Shit while CPU write. Addr: 0x%05X\t Value: 0x%02X\r\n", addr32, value);
+
+                //debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", machine.CPU.segregs[regcs], machine.CPU.ip, machine.CPU.opcode);
+                //debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", machine.CPU.regs.wordregs[regax], machine.CPU.regs.wordregs[regbx], machine.CPU.regs.wordregs[regcx], machine.CPU.regs.wordregs[regdx]);
+                //debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", machine.CPU.regs.wordregs[regsi], machine.CPU.regs.wordregs[regdi], machine.CPU.regs.wordregs[regbp], machine.CPU.regs.wordregs[regsp]);
+                //debug_log(DEBUG_DETAIL, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", machine.CPU.segregs[regcs], machine.CPU.segregs[regds], machine.CPU.segregs[reges], machine.CPU.segregs[regss]);
+
         }
 }
 
@@ -70,6 +83,12 @@ uint8_t cpu_read(CPU_t* cpu, uint32_t addr32) {
 	}
 //#ifdef DEBUG_MEMORY
         debug_log(DEBUG_ERROR, "[MEM] Shit while CPU read. Addr: 0x%05X\r\n", addr32);
+
+        //debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", machine.CPU.segregs[regcs], machine.CPU.ip, machine.CPU.opcode);
+        //debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", machine.CPU.regs.wordregs[regax], machine.CPU.regs.wordregs[regbx], machine.CPU.regs.wordregs[regcx], machine.CPU.regs.wordregs[regdx]);
+        //debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", machine.CPU.regs.wordregs[regsi], machine.CPU.regs.wordregs[regdi], machine.CPU.regs.wordregs[regbp], machine.CPU.regs.wordregs[regsp]);
+        //debug_log(DEBUG_DETAIL, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", machine.CPU.segregs[regcs], machine.CPU.segregs[regds], machine.CPU.segregs[reges], machine.CPU.segregs[regss]);
+
 //#endif
 	return 0xFF;
 }

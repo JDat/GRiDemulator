@@ -1,6 +1,11 @@
 /*
-  XTulator: A portable, open-source 80186 PC emulator.
+  GRiD Compass emulator
+  Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
+
+  Based on XTulator: A portable, open-source 80186 PC emulator.
   Copyright (C)2020 Mike Chambers
+  https://github.com/mikechambers84/XTulator
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -17,8 +22,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 /*
-	Generic RTC interface for XT systems, works with TIMER.COM version 1.2
+  RTC EAPROM interface
 */
 
 #include <stdio.h>

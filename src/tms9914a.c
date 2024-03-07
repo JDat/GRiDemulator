@@ -1,6 +1,12 @@
 /*
-  XTulator: A portable, open-source 80186 PC emulator.
-  Copyright (C)2020 Mike Chambers
+  GRiD Compass emulator
+  Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
+
+  Based on MAMEdev project
+  license:BSD-3-Clause
+  copyright-holders:Sergey Svishchev
+  https://github.com/mamedev/mame/blob/master/src/devices/machine/tms9914.cpp
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -17,6 +23,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 /*
 	TMS914A GPIB controller
 */
@@ -32,7 +39,9 @@
 #include "memory.h"
 #include "debuglog.h"
 #include "utility.h"
-#include "GPIB_bus.h"
+#include "GPiB_bus.h"
+
+#include "cpu.h"
 //#include <time.h>
 
 #define baseAddress 0xDFF80
@@ -47,6 +56,7 @@ uint8_t controllerState;
 bool externalStateChange;
 bool reflection;
 
+int8_t busMemberId;
 I8259_t* i8259;
 
 void do_aux_cmd(unsigned cmd , bool set_bit) {
@@ -61,7 +71,7 @@ void do_aux_cmd(unsigned cmd , bool set_bit) {
           bitWrite(auxBits, flagSIC, set_bit);
           //update ifc
           //set_signal(IEEE_488_IFC , m_sic);
-          GPIBbusIFCset(bitRead(auxBits, flagSIC));
+          GPiBbusIFCwrite(bitRead(auxBits, flagSIC), busMemberId);
           
           if ( !controller_reset() && bitRead(auxBits, flagSIC) && (controllerState  == FSM_C_CIDS) ) {
             controllerState = FSM_C_CADS;
@@ -90,16 +100,21 @@ uint8_t tms9914a_read(void* dummy, uint32_t addr) {
 #ifdef DEBUG_GPIB
         debug_log(DEBUG_DETAIL, "[GPIB] Read port 0x%02X\n", addr);
 #endif
+
+      return 0xFF;
+      
         switch(addr) {
           case regIntStatus0:
-            //ret = registers[regIntStatus0];
-            ret = 0xff;
-            registers[regIntStatus0] = 0;
+            ret = registers[regIntStatus0];
+            //ret = 0xff;
+            //registers[regIntStatus0] = 0;
+            bitSet(registers[regIntStatus0], flagEND);
+            //debug_log(DEBUG_DETAIL, "[GPIB] status reg: 0x%02X\n", registers[regIntStatus0]);
             update_int();
             break;
           case regIntStatus1:
-            //ret = registers[regIntStatus1];
-            ret = 0xff;
+            ret = registers[regIntStatus1];
+            //ret = 0xff;
             registers[regIntStatus1] = 0;
             update_int();
             break;
@@ -120,7 +135,7 @@ uint8_t tms9914a_read(void* dummy, uint32_t addr) {
         }
 
         //return registers[addr];
-        return ret;
+        //return ret;
 
 }
 
@@ -128,7 +143,12 @@ uint8_t tms9914a_read(void* dummy, uint32_t addr) {
 void tms9914a_write(void* dummy, uint32_t addr, uint8_t value) {
         addr = addr - baseAddress;
         addr = addr >> 1;
+#ifdef DEBUG_GPIB
+            debug_log(DEBUG_DETAIL, "[GPIB] Write addr: 0x%02X\t0x%02X\n", addr, value);
+#endif
+
         addr += 8;
+        
         switch(addr) {
           case regIntMask0:
 #ifdef DEBUG_GPIB
@@ -158,6 +178,10 @@ void tms9914a_write(void* dummy, uint32_t addr, uint8_t value) {
 }
 
 
+void busUpdate() {
+  
+}
+
 void tms9914a_init() {
 #ifdef DEBUG_GPIB
         debug_log(DEBUG_INFO, "[GPIB] Initializing GPiB controller\r\n");
@@ -167,7 +191,14 @@ void tms9914a_init() {
         auxBits = 0;
         bitSet(auxBits, flagSWRST);
         do_aux_cmd(AUXCMD_SWRST, 1);
+#ifdef DEBUG_GPIB
+        debug_log(DEBUG_INFO, "[GPIB] Hardware reset during init\n");
+        debug_log(DEBUG_INFO, "[GPIB] Map callback:\tbase\t0x%05X\tlen:\t0x%02X\r\n", baseAddress, addressLen);
+#endif
+
         memory_mapCallbackRegister(baseAddress, addressLen, (void*)tms9914a_read, (void*)tms9914a_write, NULL);
+        busMemberId = GPiBregisterClient(busUpdate, "GRiD");
+        //if (busMemberId < 0) return -1;
 }
 
 void update_int() {
@@ -207,7 +238,7 @@ bool controller_reset() {
 }
 
 bool get_ifcin() {
-	return GPIBbusIFCget && !bitRead(auxBits, flagSIC);
+	return GPiBbusIFCget() && !bitRead(auxBits, flagSIC);
   //return get_signal(IEEE_488_IFC) && !m_sic;
 }
 

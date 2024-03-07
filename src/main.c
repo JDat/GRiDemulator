@@ -1,6 +1,11 @@
 /*
-  XTulator: A portable, open-source 80186 PC emulator.
+  GRiD Compass emulator
+  Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
+
+  Based on XTulator: A portable, open-source 80186 PC emulator.
   Copyright (C)2020 Mike Chambers
+  https://github.com/mikechambers84/XTulator
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -17,6 +22,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -32,11 +38,6 @@
 #include "i8259.h"
 #include "gridKeyboard8741.h"
 #include "sdlconsole.h"
-//#include "modules/disk/biosdisk.h"
-//#include "modules/audio/sdlaudio.h"
-//#ifdef USE_NE2000
-//#include "modules/io/pcap-win32.h"
-//#endif
 
 char* usemachine = "1101"; //default
 
@@ -50,7 +51,7 @@ volatile double speed = 0;
 
 volatile uint8_t running = 1;
 
-MACHINE_t machine;
+//MACHINE_t machine;
 
 void optimer(void* dummy) {
 	ops /= 10000;
@@ -95,7 +96,6 @@ int main(int argc, char *argv[]) {
 	timing_init();
 	memory_init();
 
-	//machine.pcap_if = -1;
 	if (args_parse(&machine, argc, argv)) {
 		return -1;
 	}
@@ -104,25 +104,11 @@ int main(int argc, char *argv[]) {
 		debug_log(DEBUG_ERROR, "[ERROR] SDL initialization failure\r\n");
 		return -1;
 	}
-/*
-	if (sdlaudio_init(&machine)) {
-		debug_log(DEBUG_INFO, "[WARNING] SDL audio initialization failure\r\n");
-	}
-*/
+
 	if (machine_init(&machine, usemachine) < 0) {
 		debug_log(DEBUG_ERROR, "[ERROR] Machine initialization failure\r\n");
 		return -1;
 	}
-/*
-	if (bootdrive == 0xFF) {
-		if (biosdisk[2].inserted) {
-			bootdrive = 0x80;
-		}
-		else {
-			bootdrive = 0x00;
-		}
-	}
-*/
 
 	timing_addTimer(optimer, NULL, 10, TIMING_ENABLED);
 	cpuLimitTimer = timing_addTimer(cputimer, NULL, 10000, TIMING_DISABLED);
@@ -131,7 +117,7 @@ int main(int argc, char *argv[]) {
 	}
 	while (running) {
 		static uint32_t curloop = 0;
-                limitCPU = 0;
+                //limitCPU = 0;
 		if (limitCPU == 0) {
 			goCPU = 1;
 		}
@@ -143,17 +129,13 @@ int main(int argc, char *argv[]) {
 			goCPU = 0;
 		}
 		timing_loop();
-		//sdlaudio_updateSampleTiming();
 		if (++curloop == 100) {
 
 			switch (sdlconsole_loop()) {
                                 case SDLCONSOLE_EVENT_KEY:
-                                        //machine.KeyState.scancode = sdlconsole_getScancode();
-                                        //machine.KeyState.isNew = 1;
                                         keyScanCode = sdlconsole_getScanCode();
                                         modKeys = sdlconsole_getModKeys();
                                         gridKeyboard8741_getScanCode(keyScanCode, modKeys);
-                                        //i8259_doirq(&machine.i8259, 1);
                                         break;
                                 case SDLCONSOLE_EVENT_QUIT:
                                         running = 0;

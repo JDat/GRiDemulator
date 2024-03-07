@@ -1,6 +1,11 @@
 /*
-  XTulator: A portable, open-source 80186 PC emulator.
+  GRiD Compass emulator
+  Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
+
+  Based on XTulator: A portable, open-source 80186 PC emulator.
   Copyright (C)2020 Mike Chambers
+  https://github.com/mikechambers84/XTulator
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -17,11 +22,13 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 #include "config.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdarg.h>
 #include "debuglog.h"
+#include <time.h>
 
 uint8_t debug_level = DEBUG_INFO;
 

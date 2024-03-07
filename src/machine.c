@@ -1,6 +1,11 @@
 /*
-  XTulator: A portable, open-source 80186 PC emulator.
+  GRiD Compass emulator
+  Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
+
+  Based on XTulator: A portable, open-source 80186 PC emulator.
   Copyright (C)2020 Mike Chambers
+  https://github.com/mikechambers84/XTulator
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -17,6 +22,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 /*
 	Machine definitions.
 */
@@ -32,9 +38,6 @@
 #include "i8253.h"
 //#include "chipset/i8255.h"
 //#include "chipset/uart.h"
-//#include "modules/disk/biosdisk.h"
-//#include "modules/disk/fdc.h"
-//#include "modules/input/mouse.h"
 #include "input.h"
 #include "gridKeyboard8741.h"
 #ifdef USE_NE2000
@@ -68,18 +71,20 @@ const MACHINEMEM_t machine_mem[][11] = {
                 { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },      // Interrupt table
                 { MACHINE_MEM_RAM, 0x02980, 0x40000 - 0x02980, MACHINE_ROM_ISNOTROM, NULL },    // RAM after videobuffer 256 kb
                 //{ MACHINE_MEM_RAM, 0x02980, 0x80000 - 0x02980, MACHINE_ROM_ISNOTROM, NULL },      // RAM after videobuffer 512 kb
-                { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },      // Factory test ROM
+                { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },      // Factory test ROM absent
                 //{ MACHINE_MEM_ROM, 0xC0000, 194, MACHINE_ROM_REQUIRED, "ROMS/dma_demo.bin" },      // Factory test ROM
                 { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1101.bin" },
 		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
 	},
         // GRid Compass 1139
 	//{
-        //        { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },      // Interrupt table
-        //        { MACHINE_MEM_RAM, 0x04400, 0x7BC00, MACHINE_ROM_ISNOTROM, NULL },      // RAM after videobuffer
-        //        { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },
-        //        { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1139.bin" },
-	//	{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
+                //{ MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },      // Interrupt table
+                ////{ MACHINE_MEM_RAM, 0x04400, 0x40000 - 0x04400, MACHINE_ROM_ISNOTROM, NULL },    // RAM after videobuffer 256 kb
+                //{ MACHINE_MEM_RAM, 0x04400, 0x80000 - 0x04400, MACHINE_ROM_ISNOTROM, NULL },    // RAM after videobuffer 256 kb
+                //{ MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },      // Factory test ROM absent
+                ////{ MACHINE_MEM_ROM, 0xC0000, 194, MACHINE_ROM_REQUIRED, "ROMS/dma_demo.bin" },      // Factory test ROM
+                //{ MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1101.bin" },
+		//{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
 	//},
 };
 
@@ -104,14 +109,10 @@ int machine_init_grid(MACHINE_t* machine) {
         modem_init();
         
         tms9914a_init();
-	//i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);
-        
+	//i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);        
         rtc_init(&machine->CPU);
-
 	cpu_reset(&machine->CPU);
-
 	if (gridvideo_init()) return -1;
-
 	//debug_log(DEBUG_INFO, "[MACHINE] Init Grid function end\r\n");
 	return 0;
 }

@@ -1,9 +1,11 @@
 /*
-  XTulator: A portable, open-source 80186 PC emulator.
-  Copyright (C)2020 Mike Chambers
+  GRiD Compass emulator
+  Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
 
-  Parts of code changed, fixed, updated, clened and adapted
-  for GRiD Compass series computers by JDat
+  Based on XTulator: A portable, open-source 80186 PC emulator.
+  Copyright (C)2020 Mike Chambers
+  https://github.com/mikechambers84/XTulator
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License

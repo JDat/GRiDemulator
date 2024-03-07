@@ -1,6 +1,12 @@
 /*
-  GRiD emulator.
+  GRiD Compass emulator
   Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
+
+  Based on MAMEdev project
+  license:BSD-3-Clause
+  copyright-holders:Sergey Svishchev
+  https://github.com/mamedev/mame/blob/master/src/devices/machine/i7220.cpp
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -506,7 +512,7 @@ void commandReadBubbleData() {
         //m_bi.sub_state = SECTOR_READ;
         regBubbleCounter++;
         //delay_cycles(m_bi.tm, 270 * 20); // p. 4-14 of BPK72UM
-        //delay(4); // p. 4-14 of BPK72UM
+        delay(4); // p. 4-14 of BPK72UM
         sectorRead();
     }
 }

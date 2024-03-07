@@ -1,6 +1,11 @@
 /*
-  XTulator: A portable, open-source 80186 PC emulator.
+  GRiD Compass emulator
+  Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
+
+  Based on XTulator: A portable, open-source 80186 PC emulator.
   Copyright (C)2020 Mike Chambers
+  https://github.com/mikechambers84/XTulator
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -16,6 +21,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
+
 
 #include "config.h"
 
@@ -47,11 +53,6 @@ int sdlconsole_curw, sdlconsole_curh;
 
 char* sdlconsole_title;
 
-void sdlconsole_keyRepeat(void* dummy) {
-	sdlconsole_doRepeat = 1;
-	timing_updateIntervalFreq(sdlconsole_keyTimer, 15);
-}
-
 int sdlconsole_init(char *title) {
 
 	if (SDL_Init(SDL_INIT_VIDEO)) return -1;
@@ -69,8 +70,6 @@ int sdlconsole_init(char *title) {
         if (sdlconsole_setWindow(320, 240)) {
 		return -1;
 	}
-
-	//sdlconsole_keyTimer = timing_addTimer(sdlconsole_keyRepeat, NULL, 2, TIMING_DISABLED);
 
 	return 0;
 }
@@ -145,29 +144,10 @@ void sdlconsole_blit(uint32_t *pixels, int w, int h, int stride) {
 	lasttime = curtime;
 }
 
-/*
-void sdlconsole_mousegrab() {
-	sdlconsole_ctrl = sdlconsole_alt = 0;
-	if (sdlconsole_grabbed) {
-		SDL_SetRelativeMouseMode(SDL_FALSE);
-		sdlconsole_grabbed = 0;
-	} else {
-		SDL_SetRelativeMouseMode(SDL_TRUE);
-		sdlconsole_grabbed = 1;
-	}
-}
-*/
-
 int sdlconsole_loop() {
 	SDL_Event event;
 	int8_t xrel, yrel;
 	uint8_t action = 0;
-
-	//if (sdlconsole_doRepeat) {
-	//	sdlconsole_doRepeat = 0;
-	//	sdlconsole_curkey = sdlconsole_lastKey;
-	//	return SDLCONSOLE_EVENT_KEY;
-	//}
 
 	if (!SDL_PollEvent(&event)) return SDLCONSOLE_EVENT_NONE;
 	switch (event.type) {
@@ -196,22 +176,13 @@ int sdlconsole_loop() {
                                                 sdlconsole_shift = 1;
                                                 bitSet(sdlconsole_modKeys, 4);
                                         }
-                                        //if (sdlconsole_ctrl & sdlconsole_alt) {
-                                        //	sdlconsole_mousegrab();
-                                        //}
                                         //sdlconsole_curkey = sdlconsole_translateScancode(event.key.keysym.sym);
                                         bitSet(sdlconsole_modKeys, 7);
                                         
                                         sdlconsole_curkey = event.key.keysym.sym;
                                         //debug_log(DEBUG_DETAIL, "[SDL] key down: 0x%08X\n", sdlconsole_curkey);
-                                        if (sdlconsole_curkey == 0x00) {
-                                                return SDLCONSOLE_EVENT_NONE;
-                                        } else {
-                                                sdlconsole_lastKey = sdlconsole_curkey;
-                                                //timing_updateIntervalFreq(sdlconsole_keyTimer, 2);
-                                                //timing_timerEnable(sdlconsole_keyTimer);
-                                                return SDLCONSOLE_EVENT_KEY;
-                                        }
+                                        return SDLCONSOLE_EVENT_KEY;
+
 			}
 		case SDL_KEYUP:
 			if (event.key.repeat) return SDLCONSOLE_EVENT_NONE;
@@ -227,14 +198,14 @@ int sdlconsole_loop() {
                                 sdlconsole_shift = 0;
                                 bitClear(sdlconsole_modKeys, 4);
                         }
-			//sdlconsole_curkey = sdlconsole_translateScancode(event.key.keysym.sym) | 0x80;
                         bitClear(sdlconsole_modKeys, 7);
                         sdlconsole_curkey = event.key.keysym.sym;
 			//if ((sdlconsole_curkey & 0x7F) == sdlconsole_lastKey) {
 				//timing_timerDisable(sdlconsole_keyTimer);
 			//}
                         //debug_log(DEBUG_DETAIL, "[SDL] key up: 0x%08X\n", sdlconsole_curkey);
-			return (sdlconsole_curkey == 0x80) ? SDLCONSOLE_EVENT_NONE : SDLCONSOLE_EVENT_KEY;
+			//return (sdlconsole_curkey == 0x80) ? SDLCONSOLE_EVENT_NONE : SDLCONSOLE_EVENT_KEY;
+                        return SDLCONSOLE_EVENT_KEY;
 		case SDL_QUIT:
 			return SDLCONSOLE_EVENT_QUIT;
 	}
@@ -249,17 +220,3 @@ uint8_t sdlconsole_getModKeys() {
 	//debug_log(DEBUG_DETAIL, "curkey: %02X\r\n", sdlconsole_curkey);
 	return sdlconsole_modKeys;
 }
-
-/*
-uint8_t sdlconsole_translateScancode(SDL_Keycode keyval) {
-	uint8_t i;
-	for (i = 0; i < 95; i++) {
-		if (keyval == (SDL_Keycode)sdlconsole_translateMatrix[i][0]) {
-                //if (keyval == (SDLKey)sdlconsole_translateMatrix[i][0]) {
-			return (uint8_t)sdlconsole_translateMatrix[i][1];
-		}
-	}
-	return 0x00;
-}
-*/
-

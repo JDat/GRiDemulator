@@ -16,3 +16,8 @@ add_executable(gridemu ${src})
 
 #target_link_libraries(gridemu m pthread SDL2 pcap)
 target_link_libraries(gridemu m pthread SDL2)
+
+add_custom_command(
+  TARGET gridemu POST_BUILD
+  COMMAND cp gridemu ../gridemu
+  VERBATIM)

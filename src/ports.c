@@ -1,6 +1,11 @@
 /*
-  XTulator: A portable, open-source 80186 PC emulator.
+  GRiD Compass emulator
+  Copyright (C)2022 JDat
+  https://github.com/JDat/GRiDemulator
+
+  Based on XTulator: A portable, open-source 80186 PC emulator.
   Copyright (C)2020 Mike Chambers
+  https://github.com/mikechambers84/XTulator
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -17,22 +22,15 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 #include <stdio.h>
 #include <stdint.h>
-//#include <stdlib.h> //for rand()
 #include <string.h>
 #include "config.h"
 #include "debuglog.h"
 #include "cpu.h"
 #include "machine.h"
-//#include "i8259.h"
-//#include "i8253.h"
-//#include "chipset/i8237.h"
-//#include "chipset/i8255.h"
 #include "ports.h"
-//#include "sdlconsole.h"
-//#include "modules/video/cga.h"
-//#include "modules/video/vga.h"
 
 uint8_t (*ports_cbReadB[PORTS_COUNT])(void* udata, uint32_t portnum);
 uint16_t (*ports_cbReadW[PORTS_COUNT])(void* udata, uint32_t portnum);
@@ -47,9 +45,6 @@ void port_write(CPU_t* cpu, uint16_t portnum, uint8_t value) {
 	debug_log(DEBUG_DETAIL, "[PORT] port_write @ %03X <- %02X\r\n", portnum, value);
 #endif
 	portnum &= 0x0FFF;
-	//if (portnum == 0x80) {
-	//	debug_log(DEBUG_DETAIL, "Diagnostic port out: %02X\r\n", value);
-	//}
 	if (ports_cbWriteB[portnum] != NULL) {
 		(*ports_cbWriteB[portnum])(ports_udata[portnum], portnum, value);
 		return;
@@ -61,9 +56,6 @@ void port_write(CPU_t* cpu, uint16_t portnum, uint8_t value) {
 
 void port_writew(CPU_t* cpu, uint16_t portnum, uint16_t value) {
 	portnum &= 0x0FFF;
-	//if (portnum == 0x80) {
-	//	debug_log(DEBUG_DETAIL, "[PORT] Diagnostic port out: %04X\r\n", value);
-	//}
 	if (ports_cbWriteW[portnum] != NULL) {
 		(*ports_cbWriteW[portnum])(ports_udata[portnum], portnum, value);
 		return;
