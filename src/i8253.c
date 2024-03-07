@@ -163,15 +163,16 @@ void i8253_timerCallback1(I8259_t* i8259) {
 void i8253_timerCallback2(I8259_t* i8259) {
 }
 
+//FIXME: need 3 timers
 void i8253_tickCallback(I8253CB_t* i8253cb) {
         //debug_log(DEBUG_DETAIL, "[8253] master callback\r\n");
-	I8253_t* i8253;
+	//I8253_t* i8253;
 	I8259_t* i8259;
 	//uint8_t i;
 
-        static uint8_t irq_state;
+        //static uint8_t irq_state;
         //static uint16_t ticks;
-	i8253 = i8253cb->i8253;
+	//i8253 = i8253cb->i8253;
 	i8259 = i8253cb->i8259;
         
         //ticks++;
@@ -227,7 +228,6 @@ void i8253_tickCallback(I8253CB_t* i8253cb) {
         */
 }
 
-//void i8253_init(I8253_t* i8253, I8259_t* i8259, PCSPEAKER_t* pcspeaker) {
 void i8253_init(I8253_t* i8253, I8259_t* i8259) {
 #ifdef DEBUG_PIT
         debug_log(DEBUG_DETAIL, "[8253] init\r\n");
@@ -238,7 +238,8 @@ void i8253_init(I8253_t* i8253, I8259_t* i8259) {
 	i8253->cbdata.i8259 = i8259;
 
 	//timing_addTimer(i8253_tickCallback, (void*)(&i8253->cbdata), 48000, TIMING_ENABLED); //79545.47
-        timing_addTimer(i8253_tickCallback, (void*)(&i8253->cbdata), 62, TIMING_ENABLED); //79545.47
+        // FIXME: need 3 timers not one
+        timing_addTimer(i8253_tickCallback, (void*)(&i8253->cbdata), 62, TIMING_ENABLED);
 
         //ports_cbRegister(baseAddressPIT, addressLenPIT, (void*)i8253_read, NULL, (void*)i8253_write, NULL, i8253);
 }

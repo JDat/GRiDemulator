@@ -24,7 +24,7 @@
 #include <string.h>
 #include "config.h"
 #include "debuglog.h"
-#include "gridKeyboard8741.h"
+#include "i8741a.h"
 #include "keymap.h"
 #include "memory.h"
 #include "machine.h"
@@ -44,7 +44,7 @@ I8259_t* irq8259;
 uint8_t busData, busStatus;
 
 uint8_t configRegister[4];
-uint8_t configRegisterPounter = 0;
+uint8_t configRegisterPointer = 0;
 uint8_t wdt1;
 uint8_t globalState = 0;
 bool timer_overflow = false;
@@ -54,109 +54,89 @@ void sendData(uint8_t data, uint8_t flags) {
   busStatus = flags;
   i8259_doirq(irq8259, 4);
 }
+
 uint8_t translateScancode(uint32_t keyval, uint8_t modKeys) {
   uint8_t ret;
   modKeys = 0x7F & modKeys;
-  //keyval = keyval & 0xff;
   
-	for (uint8_t i = 0; i < sizeof(keyTranslateMatrix)/sizeof(keyTranslateMatrix[0]); i++) {
-		//if (keyval == (SDL_Keycode)keyTranslateMatrix[i][0]) {
-                if (keyval == (SDL_Keycode)keyTranslateMatrix[i].sdlKeyName) {
-			//return keyTranslateMatrix[i][1];
-                    
-                    switch (modKeys) {
-                      case 0x0:
-                        ret = keyTranslateMatrix[i].unshifted;
-                        break;
-                      case 0x10:
-                        ret = keyTranslateMatrix[i].shift;
-                        break;
-                      case 0x20:
-                        ret = keyTranslateMatrix[i].code;
-                        break;
-                      case 0x30:
-                        ret = keyTranslateMatrix[i].codeShift;
-                        break;
-                      case 0x40:
-                        ret = keyTranslateMatrix[i].ctrl;
-                        break;
-                      case 0x50:
-                        ret = keyTranslateMatrix[i].shiftCtrl;
-                        break;
-                      case 0x60:
-                        ret = keyTranslateMatrix[i].codeCtrl;
-                        break;
-                      case 0x70:
-                        ret = keyTranslateMatrix[i].codeShiftCtr;
-                        break;
+  for (uint8_t i = 0; i < sizeof(keyTranslateMatrix)/sizeof(keyTranslateMatrix[0]); i++) {
+    if (keyval == (SDL_Keycode)keyTranslateMatrix[i].sdlKeyName) {
+      switch (modKeys) {
+        case 0x0:
+          ret = keyTranslateMatrix[i].unshifted;
+          break;
+        case 0x10:
+          ret = keyTranslateMatrix[i].shift;
+          break;
+        case 0x20:
+          ret = keyTranslateMatrix[i].code;
+          break;
+        case 0x30:
+          ret = keyTranslateMatrix[i].codeShift;
+          break;
+        case 0x40:
+          ret = keyTranslateMatrix[i].ctrl;
+          break;
+        case 0x50:
+          ret = keyTranslateMatrix[i].shiftCtrl;
+          break;
+        case 0x60:
+          ret = keyTranslateMatrix[i].codeCtrl;
+          break;
+        case 0x70:
+          ret = keyTranslateMatrix[i].codeShiftCtr;
+          break;
 
-                      default:
-                        ret = keyTranslateMatrix[i].unshifted;
-                        break;
-                    }
-                return ret;
-                }
+        default:
+          ret = keyTranslateMatrix[i].unshifted;
+          break;
+      }
+    return ret;
+    }
 	}
   debug_log(DEBUG_DETAIL, "keyval: 0x%08X not found\n", keyval);
 	return 0x00;
 }
 
 void gridKeyboard8741_getScanCode(uint32_t lScanCode, uint8_t lModKeys) {
-  //scanCode = lScanCode;
   if ( bitRead(lModKeys,7)) {
     scanCode = translateScancode(lScanCode, lModKeys);
   } else {
     scanCode = 0xff;
   }
   gotSDLcode = true;
-  //i8259_doirq(irq8259, 4);
   debug_log(DEBUG_DETAIL, "[KEY] getScanCode: 0x%02X\tSDL code: 0x%08X\tmodkeys: 0x%02X\n", scanCode, lScanCode, lModKeys);
 } 
+
 uint8_t gridKeyboard8741_read(void* dummy, uint32_t addr) {
   addr = addr - baseAddress;
   addr = addr >> 1;
-  uint8_t ret;
+
 #ifdef DEBUG_KEYBOARD
   debug_log(DEBUG_DETAIL, "[KEY] Read %s port\n", addr ? "Status" : "Data");
 #endif
   
-  switch (addr) {
-    case 0:
-      //scanCode = 0x00;
-      //if (gotSDLcode) {
-        //ret = scanCode;
-        //scanCode = 0xff;
-        //gotSDLcode = false;
-        //keybReady = false;
-      //} //else {
-        ////keybReady = true;
-      ////}
+  if (addr == 0) {    // CPU reads data port
 #ifdef DEBUG_KEYBOARD
       debug_log(DEBUG_DETAIL, "[KEY] read busData: 0x%02X\n", busData);
 #endif
-
       return busData;
-      break;
-    case 1:
-      //if (keybReady) {
-        //return 0;
-      //} else {
-        //keybReady = true;
-        //return 2;
-      //}
+  } else if (addr == 1) {
 #ifdef DEBUG_KEYBOARD
       debug_log(DEBUG_DETAIL, "[KEY] read busStatus: 0x%02X\n", busStatus);
 #endif
       return busStatus;
-      //return keybReady ? 2 : 0;
+  } else {
+    debug_log(DEBUG_DETAIL, "[KEY] address error: 0x%04X\n", addr);
+    return 0x00;
   }
+
 }
 
 void gridKeyboard8741_write(void* dummy, uint32_t addr, uint8_t value) {
   addr = addr - baseAddress;
   addr = addr >> 1;
 #ifdef DEBUG_KEYBOARD
-  //debug_log(DEBUG_DETAIL, "[KEY] Write port 0x%02X: %02X\n", addr, value);
   debug_log(DEBUG_DETAIL, "[KEY] Write %s port: 0x%02X\n", addr ? "Command" : "Data", value);
 
   //debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", machine.CPU.segregs[regcs], machine.CPU.ip, machine.CPU.opcode);
@@ -168,7 +148,7 @@ void gridKeyboard8741_write(void* dummy, uint32_t addr, uint8_t value) {
 
   // data mode
   if (addr == 0) {
-    configRegister[configRegisterPounter] = value;
+    configRegister[configRegisterPointer] = value;
     return;
   }
   
@@ -187,15 +167,14 @@ void gridKeyboard8741_write(void* dummy, uint32_t addr, uint8_t value) {
   }
   
   if (bitRead(value, 6) == 0) {
-    configRegisterPounter = value & 0x3;
-    debug_log(DEBUG_DETAIL, "[KEY] config reg selected 0x%02X\n", configRegisterPounter);
+    configRegisterPointer = value & 0x3;
+    debug_log(DEBUG_DETAIL, "[KEY] config reg selected 0x%02X\n", configRegisterPointer);
     return;
   }
   
   wdt1 = configRegister[3];
   debug_log(DEBUG_DETAIL, "[KEY] kicking WDT1\n");
 
-  //keybReady = false;
 }
 
 void gridKeyboard8741_tickCallback(void* dummy) {
@@ -223,6 +202,7 @@ void gridKeyboard8741_tickCallback(void* dummy) {
   }
 
 }
+
 void gridKeyboard8741_init(I8259_t* i8259) {
 #ifdef DEBUG_KEYBOARD
         debug_log(DEBUG_INFO, "[KEY] Attaching to memory\r\n");

@@ -39,8 +39,6 @@ int sdlconsole_loop();
 
 uint32_t sdlconsole_getScanCode();
 uint8_t sdlconsole_getModKeys();
-//uint8_t sdlconsole_translateScancode(SDL_Keycode keyval);
-//uint8_t sdlconsole_translateScancode(SDLKey keyval);
 
 int sdlconsole_setWindow(int w, int h);
 void sdlconsole_setTitle(char* title);

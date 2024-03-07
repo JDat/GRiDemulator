@@ -36,7 +36,7 @@
 #include "debuglog.h"
 #include "cpu.h"
 #include "i8259.h"
-#include "gridKeyboard8741.h"
+#include "i8741a.h"
 #include "sdlconsole.h"
 
 char* usemachine = "1101"; //default

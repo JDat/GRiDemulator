@@ -27,6 +27,8 @@
 #include "cpu.h"
 #include "config.h"
 #include "debuglog.h"
+#include "memory.h"
+
 
 //not used in 8086. Will call int 0x6
 //define CPU_ALLOW_ILLEGAL_OP_EXCEPTION
@@ -1228,12 +1230,19 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
                         //if (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >=0x1F1C && cpu->ip <=0x2322)) {
                         //if ( (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >= 0x86 && cpu->ip <= 0xBB)) || (cpu->segregs[regcs] == 0xFC01 && (cpu->ip >=0x15C0 && cpu->ip <=0x1760)) ){
                         //if ( cpu->segregs[regcs] == 0xFE7E ){
-                        //if ( cpu->segregs[regcs] < 0xF000 ){
-                        //        debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-                        //        debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
-                        //        debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", cpu->regs.wordregs[regsi], cpu->regs.wordregs[regdi], cpu->regs.wordregs[regbp], cpu->regs.wordregs[regsp]);
-                        //        debug_log(DEBUG_DETAIL, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", cpu->segregs[regcs], cpu->segregs[regds], cpu->segregs[reges], cpu->segregs[regss]);
-                        //} 
+                        if ( cpu->segregs[regcs] < 0xF000 ){
+                                debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
+                                debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", cpu->regs.wordregs[regsi], cpu->regs.wordregs[regdi], cpu->regs.wordregs[regbp], cpu->regs.wordregs[regsp]);
+                                debug_log(DEBUG_DETAIL, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", cpu->segregs[regcs], cpu->segregs[regds], cpu->segregs[reges], cpu->segregs[regss]);
+                                ramDump(cpu->segregs[regds] << 4);
+                        } 
+                        //if ( cpu->segregs[regcs] == 0xFE7E && cpu->ip == 0x525 ){
+                                //debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+                                //debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", cpu->regs.wordregs[regax], cpu->regs.wordregs[regbx], cpu->regs.wordregs[regcx], cpu->regs.wordregs[regdx]);
+                                //debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", cpu->regs.wordregs[regsi], cpu->regs.wordregs[regdi], cpu->regs.wordregs[regbp], cpu->regs.wordregs[regsp]);
+                                //debug_log(DEBUG_DETAIL, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", cpu->segregs[regcs], cpu->segregs[regds], cpu->segregs[reges], cpu->segregs[regss]);
+                        //}
                         StepIP(cpu, 1);
 
 			switch (cpu->opcode) {
@@ -3603,9 +3612,9 @@ void cpu_exec(CPU_t* cpu, uint32_t execloops) {
 
 void do8087(CPU_t* cpu) {
         //modregrm(cpu);
+#ifdef DEBUG_FPU
         uint8_t fAddrTmp;
         fAddrTmp = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-#ifdef DEBUG_FPU
         debug_log(DEBUG_INFO, "[8087] exec: Addr: %04X:%04X, opcode: %02X\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
         debug_log(DEBUG_INFO, "[8087] operand 2nd byte: 0x%02X\r\n", fAddrTmp);
 #endif

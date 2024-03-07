@@ -186,12 +186,13 @@ int dmaInit() {
 
 
 uint8_t dmaRead(uint32_t addr) {
-        size_t ret;
+        //size_t ret;
         uint8_t val;
         
         //val = bubble_read(NULL, 0xDFE80);
         //debug_log(DEBUG_ERROR, "[DMA] Read. Addr: %05X, Value: %02X\r\n", addr, val);
-        ret = fread(&val, 1, 1, dmaFile);
+        //ret = fread(&val, 1, 1, dmaFile);
+        (void)fread(&val, 1, 1, dmaFile);
         return val;
         
 }
@@ -201,3 +202,13 @@ void dmaWrite(uint32_t addr, uint8_t value) {
         //bubble_write(NULL, 0xDFE80, value);
 }
 
+void ramDump(uint32_t addr32) {
+    for (uint32_t y = 0; y < 8; y++) {
+        debug_log(DEBUG_DETAIL, "%05X: ", addr32 + y * 16);
+        for (uint32_t x = 0; x < 16; x++) {
+            debug_log(DEBUG_DETAIL, "%02X ", (uint8_t) *memory_mapRead[addr32 + y * 16 + x]);
+        }
+        debug_log(DEBUG_DETAIL, "\n");
+    }
+    debug_log(DEBUG_DETAIL, "\n");
+}

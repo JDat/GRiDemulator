@@ -36,15 +36,8 @@
 #include "cpu.h"
 #include "i8259.h"
 #include "i8253.h"
-//#include "chipset/i8255.h"
-//#include "chipset/uart.h"
 #include "input.h"
-#include "gridKeyboard8741.h"
-#ifdef USE_NE2000
-//#include "modules/io/ne2000.h"
-//#include "modules/io/pcap-win32.h"
-#endif
-//#include "modules/io/tcpmodem.h"
+#include "i8741a.h"
 #include "gridvideo.h"
 #include "rtc.h"
 #include "i8274.h"

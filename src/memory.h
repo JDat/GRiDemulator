@@ -40,4 +40,7 @@ int memory_init();
 int dmaInit();
 uint8_t dmaRead(uint32_t addr);
 void dmaWrite(uint32_t addr, uint8_t value);
+
+void ramDump(uint32_t addr32);
+
 #endif
