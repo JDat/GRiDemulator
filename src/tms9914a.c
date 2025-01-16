@@ -57,7 +57,7 @@ bool externalStateChange;
 bool reflection;
 
 int8_t busMemberId;
-I8259_t* i8259;
+//I8259_t* i8259;
 
 void do_aux_cmd(unsigned cmd , bool set_bit) {
 
@@ -201,7 +201,7 @@ void tms9914a_init() {
         //if (busMemberId < 0) return -1;
 }
 
-void update_int() {
+void update_int(I8259_t* i8259) {
 	bool new_int_line = false;
 	registers[regIntStatus0] &= 0b11111100;
 	if (registers[regIntStatus0] & registers[regIntMask0]) {

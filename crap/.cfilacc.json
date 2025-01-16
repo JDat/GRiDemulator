@@ -1,0 +1,16 @@
+{
+    "dirnam_rus" : "Эмулятор GRiD Compass от YL3AKC",
+    "dirnam_eng" : "GRiD Compass emulator by YL3AKC",
+    "ignore" : {
+
+    },
+    "descr_eng" : {
+
+    },
+    "descr_rus" : {
+
+    },
+    "recur_access" : true,
+    "show_sysfiles" : false,
+    "show_forbiddirs" : false
+}

@@ -38,13 +38,13 @@
 //#define DEBUG_MEMORY
 //#define DEBUG_PORTS
 
-#define DEBUG_KEYBOARD
+//#define DEBUG_KEYBOARD
 //#define DEBUG_GRIDVIDEO
 //#define DEBUG_PIC
 //#define DEBUG_PIT
 //#define DEBUG_RTC
 //#define DEBUG_GPIB
-//#define DEBUG_BUBBLEMEM
+#define DEBUG_BUBBLEMEM
 //#define DEBUG_UART
 //#define DEBUG_MODEM
 

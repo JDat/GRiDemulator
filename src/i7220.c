@@ -30,28 +30,33 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
 #include <time.h>
 #include "config.h"
 #include "i7220.h"
+#include "i7220_debug.h"
+#include "i7220_private.h"
+#include "i8259.h"
 #include "memory.h"
 #include "utility.h"
 #include "debuglog.h"
 
-#define baseAddress 0xDFE80
-#define addressLen  0x3
+#define delayTime 4
 
-#define bubbleModuleCount 3
+#define baseAddress 0xDFE80
+#define addressLen  0x4
+
+#define BUBBLEMODULECOUNT 3
+
+#define bubbleBufferSize 32
+#define BUBBLEFIFOSIZE 32
+
 
 #define I7110_MBM_SIZE (128 * 1024) // 1 megabit
 #define I7115_MBM_SIZE (512 * 1024) // 4 megabit
 
-void *bubble_thread(void* cpu);
-
-void fifo_clear();
-void fifo_push(uint8_t val);
-uint8_t fifo_pop();
 void commandStart (uint8_t cmd);
 void commandEnd(uint8_t sucess);
 void regUpdate();
@@ -62,100 +67,13 @@ void update_drq();
 
 pthread_t bubble_ThreadID;
 FILE *bubbleFile;
+I8259_t *irq8259;
 
-enum regNames{
-    regFIFO         = 0x00,
-    regUtility      = 0x0a,
-    regBlockLenLSB  = 0x0b,
-    regBlockLenMSB  = 0x0c,
-    regEnable       = 0x0d,
-    regAddressLSB   = 0x0e,
-    regAddressMSB   = 0x0f,
-} ;
-
-#ifdef DEBUG_BUBBLEMEM
-    static const char *regNames[] = {
-        "Utility register",
-        "Block length register LSB",
-        "Block length register MSB",
-        "Enable register",
-        "Address register LSB",
-        "Address register MSB",
-    };
-#endif
-
-enum cmdNames{
-    cmdWrBootLoopRegMasked = 0,
-    cmdInitialize = 1,
-    cmdReadBubbleData = 2,
-    cmdWriteBubbleData = 3,
-    cmdReadSeek = 4,
-    cmdRdBootLoopReg = 5,
-    cmdWrBootLoopReg = 6,
-    cmdWrBootLoop = 7,
-    cmdRdFsaStatus= 8,
-    cmdAbort = 9,
-    cmdWriteSeek = 10,
-    cmdRdBootLoop = 11,
-    cmdRdCorrectedData = 12,
-    cmdResetFifo = 13,
-    cmdMbmPurge = 14,
-    cmdSoftReset = 15,
-};
-
-#ifdef DEBUG_BUBBLEMEM
-    static const char *bubbleCommands[] = {
-        "Write Bootloop Register Masked",
-        "Initialize",
-        "Read Bubble Data",
-        "Write Bubble Data",
-        "Read Seek",
-        "Read BootLoop Register",
-        "Write BootLoop Register",
-        "Write BootLoop",
-        "Read FSA Status",
-        "Abort",
-        "Write Seek",
-        "Read BootLoop",
-        "Read Corrected Data",
-        "Reset FIFO",
-        "MBM Purge",
-        "Software Reset",
-    };
-#endif
-
-enum statusBits {
-    BIT_FIFO_READY          = 0,
-    BIT_PARITY_ERROR        = 1,
-    BIT_UNCORRECTABLE_ERROR = 2,
-    BIT_CORRECTABLE_ERROR   = 3,
-    BIT_TIMING_ERROR        = 4,
-    BIT_OP_FAIL             = 5,
-    BIT_OP_COMPLETE         = 6,
-    BIT_BUSY                = 7,
-};
-
-enum enableBits {
-    BIT_IRQ_NORMAL          = 0,
-    BIT_IRQ_ERROR           = 1,
-    BIT_DMA_ENABLED         = 2,
-    BIT_MAX_FSA_XFER_RATE   = 3,
-    BIT_WRITE_BOOTLOOP_ENA  = 4,
-    BIT_RCD_ENA             = 5,
-    BIT_ICD_ENA             = 6,
-    BIT_PARITY_INTERRUPT    = 7,
-};
-
-I8259_t* irq8259;
+//I8259_t* irq8259;
 
 volatile uint8_t regRAC;
-volatile uint8_t regArray[6];
+volatile uint8_t regArray[16];
 volatile uint8_t regStatus;
-
-#define BUBBLEFIFOSIZE 40
-volatile int8_t fifo_size, fifo_head, fifo_tail;
-volatile uint8_t fifoArray[BUBBLEFIFOSIZE];
-volatile uint8_t fifoLock = false;
 
 volatile uint8_t bubbleCommand;
 volatile uint8_t lastCommand;
@@ -166,16 +84,11 @@ int regBlockLenCount;
 int regBlockLen_nfc;
 int regAddress_addr;
 int regAddress_mbm;
-int regBubbleCounter; // 256-bit pages
 int regBubbleLimit;
+int pageCounter = 0; // 256-bit pages
 
-#define bubbleBufferSize 32
-uint8_t bubbleBuffer[32];
+uint8_t bubbleBuffer[bubbleBufferSize];
   
-enum cmdStates{
-    PHASE_IDLE, PHASE_CMD, PHASE_EXEC, PHASE_RESULT
-};
-
 volatile uint8_t mainExecPhase;
 
 void delay(int millis) {
@@ -189,12 +102,10 @@ void delay(int millis) {
 }
 
 uint8_t bubble_read(void* dummy, uint32_t addr) {
+    uint8_t value = 0;
+
     addr = addr - baseAddress;
     addr = addr >> 1;
-#ifdef DEBUG_BUBBLEMEM
-    debug_log(DEBUG_DETAIL, "[i7220] Read port 0x%02X\n", addr);
-#endif
-    uint8_t value = 0;
     
     switch (addr) {
         case 0:
@@ -202,14 +113,15 @@ uint8_t bubble_read(void* dummy, uint32_t addr) {
                 case regUtility:
                 case regAddressLSB:
                 case regAddressMSB:
-                    value = regArray[regRAC - 10];
+                    value = regArray[regRAC];
                     regRAC++;
                     regRAC &= 0xF;
                     break;
                 case regFIFO:
-                    value = fifo_pop();
+                    //value = fifo_pop();
                     break;
                 default:
+                    debug_log(DEBUG_DETAIL, "[i7220] Read unknown register 0x%01X\n", regRAC);
                     break;
             }
             break;
@@ -226,20 +138,21 @@ void bubble_write(void* dummy, uint32_t addr, uint8_t value) {
     switch (addr) {
         case 0:
             if (regRAC) {
-                    regArray[regRAC - 10] = value;
+                    regArray[regRAC] = value;
                     regUpdate();
                     regRAC++;
                     regRAC &= 0xF;
                     break;
             } else {
-                    fifo_push(value);
+                    //fifo_push(value);
+                    ;
             }
             break;
         case 1:
             if (bitRead(value, 4)) {
-                bubbleCommand = value & 15;
+                bubbleCommand = value & 0b00001111;
                 bitSet(regStatus,BIT_BUSY);
-                bitClear(regStatus,BIT_OP_COMPLETE);
+                bitClear(regStatus, BIT_OP_COMPLETE);
                 mainExecPhase = PHASE_CMD;
             } else {
                 regRAC = value & 0b00001111;
@@ -255,100 +168,21 @@ uint8_t bubble_init(I8259_t* i8259) {
     bubbleFile = fopen("ROMS/bubble.img", "rwb");
     if (bubbleFile == NULL) {
         debug_log(DEBUG_INFO, "[i7220] Error openimg bubble image\r\n");
-    return -1;
+        return -1;
     }
 
     irq8259 = i8259;
     
-#ifdef DEBUG_BUBBLEMEM
-    debug_log(DEBUG_INFO, "[i7220] Initializing bubble memory controller\r\n");
-#endif
     memory_mapCallbackRegister(baseAddress, addressLen, (void*)bubble_read, (void*)bubble_write, NULL);
-    int ret;
-    ret = pthread_create(&bubble_ThreadID, NULL, bubble_thread, NULL);
-    return ret;
-}
-
-void *bubble_thread(void* dummy) {
-    while (true) {
-            if (mainExecPhase == PHASE_CMD ) {
-                commandStart(bubbleCommand);
-                lastCommand = bubbleCommand;
-            }
-    }
-
-    pthread_exit(NULL);
-}
-
-void fifo_clear() {
-    fifo_size = 0;
-    fifo_head = fifo_tail = 0;
-    bitClear(regStatus,BIT_FIFO_READY);
-    update_drq();
-    
-}
-
-uint8_t fifo_pop() {
-    while (fifo_head == fifo_tail) {
-        ;
-    }
-
-    while ( fifoLock == true) {
-        ;
-    }
-    
-    fifoLock = true;
-
-    if (fifo_head == fifo_tail) {
-        bitClear(regStatus,BIT_FIFO_READY);
-        debug_log(DEBUG_INFO, "[i7220] fifo pop: this is bad\n");
-        fifoLock = false;
-        return 0;
-    }
-    
-    uint8_t val;
-    val = fifoArray[fifo_tail];
-    fifo_tail = (fifo_tail + 1) % BUBBLEFIFOSIZE;
-    if (mainExecPhase == PHASE_EXEC) {
-            update_drq();
-    }
-    fifo_size --;
-    if (fifo_head == fifo_tail) {
-        bitClear(regStatus,BIT_FIFO_READY);
-    }
-    fifoLock = false;
-    return val;
-}
-
-void fifo_push(uint8_t val) {    
-    while ( fifo_size >= (BUBBLEFIFOSIZE - 1)  ) {
-        ;
-    }
-
-    while ( fifoLock == true) {
-        ;
-    }
-    
-    fifoLock = true;
-
-    uint8_t i;
-    i = (fifo_head + 1) % BUBBLEFIFOSIZE;
-    if (i != fifo_tail) {
-            fifoArray[fifo_head] = val;
-            fifo_head = i;
-            fifo_size ++;
-            bitSet(regStatus,BIT_FIFO_READY);
-            if (mainExecPhase == PHASE_EXEC) {
-                    update_drq();
-            }
-    }
-    
-    fifoLock = false;
+    //int ret = 0;
+    //ret = pthread_create(&bubble_ThreadID, NULL, bubble_thread, NULL);
+    //return ret;
+    return 0;
 }
 
 void regUpdate() {
-    regBlockLen = (regArray[regBlockLenMSB - 10] << 8) + regArray[regBlockLenLSB - 10];
-    regAddress = (regArray[regAddressMSB - 10] << 8) + regArray[regAddressLSB - 10];
+    regBlockLen = (regArray[regBlockLenMSB] << 8) + regArray[regBlockLenLSB];
+    regAddress = (regArray[regAddressMSB] << 8) + regArray[regAddressLSB];
     regBlockLenCount = regBlockLen & 0x7ff;
     regBlockLen_nfc = (regBlockLen >> 12) ? ((regBlockLen >> 12) << 1) : 1;
     regAddress_addr = regAddress & 0x7ff;
@@ -357,7 +191,11 @@ void regUpdate() {
 
 void commandStart (uint8_t cmd) {
     mainExecPhase = PHASE_EXEC;
-    
+
+#ifdef DEBUG_BUBBLEMEM
+    debug_log(DEBUG_INFO, "[i7220] Command: %s\n", bubbleCommands[cmd]);
+#endif
+
     switch ( cmd ) {
         case cmdInitialize:
             // determines how many FSAs are present, reads and decodes
@@ -372,7 +210,7 @@ void commandStart (uint8_t cmd) {
             if (regBlockLen_nfc != 2) { // maybe constant must be 2
                 commandEnd(false);
             } else {
-                delay(4);
+                //delay(delayTime);
                 commandEnd(true);
             }
             break;
@@ -380,21 +218,22 @@ void commandStart (uint8_t cmd) {
             // controlled termination of currently executing command.
             // command accepted in BUSY state.
             // if not BUSY, clears FIFO.
-            fifo_clear();
+            //fifo_clear();
             commandEnd(true);
             break;
         case cmdResetFifo:
-            fifo_clear();
+            //fifo_clear();
             commandEnd(true);
+            fifoCount = 0;
             break;
         case cmdSoftReset:
             // clears BMC FIFO and all registers except those containing init parameters.  sends Reset to every FSA.
             regArray[regUtility] = 0;
-            fifo_clear();
+            //fifo_clear();
             commandEnd(true);
             break;
         case cmdReadBubbleData:
-            if (regAddress_mbm >= bubbleModuleCount || regBlockLen_nfc != 2) {
+            if (regAddress_mbm >= BUBBLEMODULECOUNT || regBlockLen_nfc != 2) {
                 commandEnd(false);
             }
             else {
@@ -419,27 +258,28 @@ void commandEnd(uint8_t sucess) {
 }
 
 void commandReadBubbleData() {
-    
     long filePosition;
     if ( lastCommand != cmdReadBubbleData ) {
-        regBubbleCounter = 0; // 256-bit pages
+        pageCounter = 0; // 256-bit pages
         regBubbleLimit = regBlockLenCount * regBlockLen_nfc;
     }
     
-    filePosition = (regAddress_addr * 32 * regBlockLen_nfc) + (regAddress_mbm * I7110_MBM_SIZE) + (regBubbleCounter * 32);
-//#ifdef DEBUG_BUBBLEMEM
-        debug_log(DEBUG_DETAIL, "[i7220] Seek to %08X\n", filePosition);
-//#endif
+    filePosition = (regAddress_addr * 32 * regBlockLen_nfc) + (regAddress_mbm * I7110_MBM_SIZE) + (pageCounter * 32);
+#ifdef DEBUG_BUBBLEMEM
+        debug_log(DEBUG_DETAIL, "[i7220] Seek to %08X, len: 0x%03X\n", filePosition, regBubbleLimit * 32);
+#endif
     fseek(bubbleFile, filePosition, SEEK_SET);
-    sectorRead();
+    //sectorRead();
     
-    while (regBubbleCounter < regBubbleLimit ) {
-        for (int a = 0; a < 32; a++) {
-            fifo_push(bubbleBuffer[a]);
-        }
-        regBubbleCounter++;
-        delay(4); // p. 4-14 of BPK72UM
+    while (pageCounter < regBubbleLimit ) {
+        //fseek(bubbleFile, filePosition, SEEK_SET);
         sectorRead();
+        for (int a = 0; a < 32; a++) {
+            //fifo_push(bubbleBuffer[a]);
+        }
+        pageCounter++;
+        //delay(delayTime); // p. 4-14 of BPK72UM
+        //sectorRead();
     }
 }
 
@@ -447,13 +287,15 @@ void sectorRead() {
         (void)fread(bubbleBuffer, 32, 1, bubbleFile);
 }
 
-void update_drq() {
+void update_drq(I8259_t* i8259) {
         switch (bubbleCommand) {
             case cmdReadBubbleData:
                 i8259_setirq(irq8259, 1, fifo_size < 22 ? false : true);
+                //i8259_setirq(i8259, 1, fifo_size < 22 ? false : true);
                 break;
             case cmdWriteBubbleData:
                 i8259_setirq(irq8259, 1, fifo_size < (40 - 22) ? true : false);
+                //i8259_setirq(i8259, 1, fifo_size < (40 - 22) ? true : false);
             break;
         }
 }

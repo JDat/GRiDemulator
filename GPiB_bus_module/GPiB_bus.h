@@ -46,7 +46,8 @@ void GPiBinit();
  * return -1 if error
  * return clientId of OK
  */
-int8_t GPiBregisterClient(void (*userFunc)(void), char desc[32]);
+//int8_t GPiBregisterClient(void (*userFunc)(void), char desc[32]);
+int8_t GPiBregisterClient(void (*userFunc)(void), char desc[]);
 
 /*
  * For testing

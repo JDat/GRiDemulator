@@ -71,7 +71,7 @@ typedef struct {
 	uint64_t hwflags;
 } MACHINEDEF_t;
 
-MACHINE_t machine;
+//MACHINE_t machine;
 
 int machine_init_generic_xt(MACHINE_t* machine);
 int machine_init_grid(MACHINE_t* machine);

@@ -39,7 +39,7 @@ uint8_t gotSDLcode = false;
 #define baseAddress 0xDFFC0
 #define addressLen  0x3
 
-I8259_t* irq8259;
+I8259_t* keyIrq8259;
 
 uint8_t busData, busStatus;
 
@@ -52,7 +52,7 @@ bool timer_overflow = false;
 void sendData(uint8_t data, uint8_t flags) {
   busData = data;
   busStatus = flags;
-  i8259_doirq(irq8259, 4);
+  i8259_doirq(keyIrq8259, 4);
 }
 
 uint8_t translateScancode(uint32_t keyval, uint8_t modKeys) {
@@ -208,7 +208,7 @@ void gridKeyboard8741_init(I8259_t* i8259) {
         debug_log(DEBUG_INFO, "[KEY] Attaching to memory\r\n");
 #endif
         memory_mapCallbackRegister(0xDFFC0, 0x4, (void*)gridKeyboard8741_read, (void*)gridKeyboard8741_write, NULL);
-        irq8259 = i8259;
+        keyIrq8259 = i8259;
         
         configRegister[0] = 0x01;
         configRegister[1] = 0x0F;

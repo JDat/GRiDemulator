@@ -37,6 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "debuglog.h"
 #include "utility.h"
 
+#include <stdbool.h>
+
 SDL_Window *sdlconsole_window = NULL;
 SDL_Renderer *sdlconsole_renderer = NULL;
 SDL_Texture *sdlconsole_texture = NULL;
@@ -74,13 +76,14 @@ return 0;
 }
 
 int sdlconsole_setWindow(int w, int h) {
+  
   if (sdlconsole_renderer != NULL) SDL_DestroyRenderer(sdlconsole_renderer);
   if (sdlconsole_texture != NULL) SDL_DestroyTexture(sdlconsole_texture);
   sdlconsole_renderer = NULL;
   sdlconsole_texture = NULL;
 
   SDL_SetWindowSize(sdlconsole_window, w, h);
-
+   
   sdlconsole_renderer = SDL_CreateRenderer(sdlconsole_window, -1, 0);
   if (sdlconsole_renderer == NULL) return -1;
 
@@ -109,6 +112,7 @@ void sdlconsole_blit(uint32_t *pixels, int w, int h, int stride) {
   if ((w != sdlconsole_curw) || (h != sdlconsole_curh)) {
     sdlconsole_setWindow(w, h);
   }
+
   SDL_UpdateTexture(sdlconsole_texture, NULL, pixels, stride);
   SDL_RenderClear(sdlconsole_renderer);
   SDL_RenderCopy(sdlconsole_renderer, sdlconsole_texture, NULL, NULL);

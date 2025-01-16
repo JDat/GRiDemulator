@@ -59,6 +59,7 @@ int gridvideo_init() {
                 case VIDEO_CARD_GRID1101:
                         screenX = 320;
                         screenY = 240;
+                        debug_log(DEBUG_INFO, "[GRiD Video] init 1101 0x%02X\r\n", videocard);
                         break;
                 case VIDEO_CARD_GRID1139:
                         screenX = 512;
@@ -77,7 +78,7 @@ int gridvideo_init() {
 
         memory_mapCallbackRegister(0x400, (screenX * screenY) / 8, (void*)gridvideo_readmemory, (void*)gridvideo_writememory, NULL);
 
-// fixme:  don know hot resolution is switched  in 1139
+// fixme:  dont know how resolution is switched  in 1139
         //screenX = 320;
         //screenY = 240;
 
@@ -99,7 +100,7 @@ int gridvideo_init() {
         timing_addTimer(gridvideo_drawCallback, NULL, 60, TIMING_ENABLED);
 
         //TODO: error checking below
-        pthread_create(&gridvideo_renderThreadID, NULL, gridvideo_renderThread, NULL);
+        //pthread_create(&gridvideo_renderThreadID, NULL, gridvideo_renderThread, NULL);
 
 
         return 0;
@@ -109,6 +110,7 @@ void gridvideo_update() {
         uint32_t scx, scy;
         int8_t order;
 
+        //debug_log(DEBUG_DETAIL, "[GRiD Video] Update!\n");
         for (uint32_t addr = 0; addr < ( (screenX * screenY) / 8); addr++) {
                 if (addr & 0x1) {
                         order = -8;
@@ -123,6 +125,8 @@ void gridvideo_update() {
                         switch(videocard) {
                                 case VIDEO_CARD_GRID1101:
                                         gridvideo_framebuffer1101[scy][scx * 8 + (7 - i) + order] = bitRead(gridvideo_RAM[addr], i) ? GRID_SCREEN_COLOR : 0;
+                                        //gridvideo_framebuffer1101[scy][scx * 8 + (7 - i) + order] = GRID_SCREEN_COLOR;
+                                        //debug_log(DEBUG_DETAIL, "[GRiD Video] HERE!\n");
                                         break;
                                 case VIDEO_CARD_GRID1139:
                                         gridvideo_framebuffer1139[scy][scx * 8 + (7 - i) + order] = bitRead(gridvideo_RAM[addr], i) ? GRID_SCREEN_COLOR : 0;
@@ -131,13 +135,27 @@ void gridvideo_update() {
                 }
         }
 
-
+       // uint32_t addr = 0;
+        
+    //for (uint32_t y = 0; y < 28; y++) {
+        //debug_log(DEBUG_DETAIL, "%05X: ", addr + y * 32);
+        //for (uint32_t x = 0; x < 32; x++) {
+            //debug_log(DEBUG_DETAIL, "%02X ", (uint8_t) gridvideo_RAM[addr + y * 32 + x]);
+            //debug_log(DEBUG_DETAIL, "%02X ", (uint8_t) gridvideo_framebuffer1101[addr + y * 32 + x]);
+        //}
+        //debug_log(DEBUG_DETAIL, "\n");
+    //}
+    //debug_log(DEBUG_DETAIL, "\n");
+       
         switch(videocard) {
                 case VIDEO_CARD_GRID1101:
+                        //debug_log(DEBUG_INFO, "[GRiD Video] SDL BLIT!!\r\n");
                         sdlconsole_blit((uint32_t *)gridvideo_framebuffer1101, screenX, screenY, screenX * sizeof(uint32_t));
+                        //sdlconsole_blit((uint32_t *)gridvideo_framebuffer1101, screenX, screenY, screenX * screenY);
                         break;
                 case VIDEO_CARD_GRID1139:
                         sdlconsole_blit((uint32_t *)gridvideo_framebuffer1139, screenX, screenY, screenX * sizeof(uint32_t));
+                        //sdlconsole_blit((uint32_t *)gridvideo_framebuffer1139, screenX, screenY, screenX * screenY);
                         break;
         }
 }
@@ -157,12 +175,14 @@ void *gridvideo_renderThread(void* dummy) {
 
 void gridvideo_writememory(void* dummy, uint32_t addr, uint8_t value) {
         addr -= 0x400;
+        //debug_log(DEBUG_INFO, "[GRiD Video] Write addr: 0x%05x\tVal: 0x%02x\r\n", addr, value);
         if (addr >= ( (screenX  * screenY) / 8) ) return;
         gridvideo_RAM[addr] = value;
 }
 
 uint8_t gridvideo_readmemory(void* dummy, uint32_t addr) {
         addr -= 0x400;
+        //debug_log(DEBUG_INFO, "[GRiD Video] Read From!\r\n");
         if (addr >= ( (screenX  * screenY) / 8) ) return 0xFF;
         return gridvideo_RAM[addr];
 }
@@ -185,4 +205,5 @@ void gridvideo_scanlineCallback(void* dummy) {
 
 void gridvideo_drawCallback(void* dummy) {
         gridvideo_doDraw = 1;
+        //debug_log(DEBUG_INFO, "[GRiD Video] DrawCallback!!\r\n");
 }

@@ -39,6 +39,8 @@
 #include "i8741a.h"
 #include "sdlconsole.h"
 
+#include "gridvideo.h"
+
 char* usemachine = "1101"; //default
 
 char title[64]; //assuming 64 isn't safe if somebody starts messing with STR_TITLE and STR_VERSION
@@ -51,7 +53,7 @@ volatile double speed = 0;
 
 volatile uint8_t running = 1;
 
-//MACHINE_t machine;
+MACHINE_t machine;
 
 void optimer(void* dummy) {
 	ops /= 10000;
@@ -130,6 +132,7 @@ int main(int argc, char *argv[]) {
 		}
 		timing_loop();
 		if (++curloop == 100) {
+                        gridvideo_update();
 
 			switch (sdlconsole_loop()) {
                                 case SDLCONSOLE_EVENT_KEY:
