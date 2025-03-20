@@ -29,8 +29,8 @@
 #include "config.h"
 #include "timing.h"
 #include "machine.h"
-#include "cpu.h"
-#include "i8259.h"
+//#include "cpu.h"
+//#include "i8259.h"
 #include "debuglog.h"
 
 double speedarg = 0;
@@ -72,7 +72,7 @@ void args_showHelp() {
         printf("                         There will be more accurate speed-throttling at some point in the future.\r\n\r\n");
         printf("Miscellaneous options:\r\n");
         printf("  -debug <level>         <level> can be: NONE, ERROR, INFO, DETAIL. (Default is INFO)\r\n");
-        printf("  -mips                  Display live MIPS being emulated.\r\n");
+        //printf("  -mips                  Display live MIPS being emulated.\r\n");
         printf("  -h                     Show this help screen.\r\n");
 }
 
@@ -123,9 +123,9 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
                         }
                         i++;
                 }
-                else if (args_isMatch(argv[i], "-mips")) {
-                        showMIPS = 1;
-                }
+                //else if (args_isMatch(argv[i], "-mips")) {
+                //        showMIPS = 1;
+                //}
                 else {
                         printf("%s is not a valid parameter. Use -h for help.\r\n", argv[i]);
                         return -1;

@@ -23,20 +23,20 @@
 */
 
 #ifndef _GRIDVIDEO_H_
-#define _GRIDVIDEO_H_
+  #define _GRIDVIDEO_H_
 
-#include <stdint.h>
-#include "cpu.h"
+  #include <stdint.h>
 
-#define GRID_SCREEN_COLOR    0xffeb00   // Amber color 0xffeb00 Sharp datasheet tells 585 nm wavelenght
-//#define GRID_SCREEN_COLOR    0xffC000   // Amber color 0xffC000 By wikipedia and online color pickers
-int gridvideo_init();
+  int gridvideo_init();
 
-void gridvideo_update();
-void gridvideo_scanlineCallback(void* dummy);
-void *gridvideo_renderThread(void* cpu);
-void gridvideo_writememory(void* dummy, uint32_t addr, uint8_t value);
-uint8_t gridvideo_readmemory(void* dummy, uint32_t addr);
-void gridvideo_drawCallback(void* dummy);
+  void gridvideo_update();    // called by SDL from main() to update GUI
 
-#endif
+  void gridvideo_scanlineCallback(void* dummy);   // rise IRQ on every scanline
+
+  // CPU videoRAM interface
+  void gridvideo_writememory(void* dummy, uint32_t addr, uint8_t value);
+  uint8_t gridvideo_readmemory(void* dummy, uint32_t addr);
+
+  //void gridvideo_drawCallback(void* dummy);   // do we need this?
+
+#endif  // _GRIDVIDEO_H_

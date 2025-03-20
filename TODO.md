@@ -1,17 +1,17 @@
 TODOs for GRiD Compass emulator:
 * Finish keyboard driver.
-* Add other GRiD Compass and Compass II models. Need ROM dumps.
+* Add other GRiD Compass and Compass II models.
 * Improve video driver for other resolutions.
 * Write 8087 Match coprocessor.
-* Write DMA system.
-* Write GPIB driver.
-* Write virtual GPIB floppy device.
-* Write Bubble memory driver.
-* Write serial driver.
+* Research and write DMA system.
+* Write GPIB peripheral.
+* Finish Bubble memory peripheral.
+* Write serial peripheral.
+* Research and write modem peripheral.
+* Write audio DAC (located on modem board) peripheral.
 * Write GPIB floppy emulator to get system booting.
-* Still lot of questions about hardware.
+* Still few questions about hardware.
 * Rewrite command line arguments.
-* Improve CMake
 * Fix code formating. There is mix of TABs and Spaces indentation. So  far this helpt to track where are my additions in code.
 
 Interesting TODOs from Xtulator author:

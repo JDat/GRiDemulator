@@ -43,6 +43,6 @@
 
 void debug_log(uint8_t level, char* format, ...);
 void debug_setLevel(uint8_t level);
-void debug_init();
+//void debug_init();
 
 #endif

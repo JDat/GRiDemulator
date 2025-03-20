@@ -183,7 +183,8 @@ void GPiBinit() {
     freeMutex();
 }
 
-int8_t GPiBregisterClient(void (*userFunc)(void), char desc[32]) {
+//int8_t GPiBregisterClient(void (*userFunc)(void), char desc[32]) {
+int8_t GPiBregisterClient(void (*userFunc)(void), char desc[]) {
     int8_t ret;
     lockMutex();
     
