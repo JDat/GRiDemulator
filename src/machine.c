@@ -48,6 +48,7 @@
 #include "utility.h"
 #include "timing.h"
 #include "machine.h"
+#include "dma.h"
 
 /*
 	ID string, full description, init function, default video, speed in MHz (-1 = unlimited), default hardware flags

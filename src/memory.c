@@ -127,68 +127,8 @@ int memory_init() {
         memory_mapWriteCallback[i] = NULL;
         memory_udata[i] = NULL;
     }
-    //ramIDT_init();
-    //ramMain_init();
     
     return 0;
-}
-
-bool dmaActive;
-uint16_t  dmaCount;
-
-void doDMA() {
-        //debug_log(DEBUG_ERROR, "[DMA] doDMA\n");
-        while (dmaActive) {
-                dmaCount++;
-                if (dmaCount > 256) {
-                        dmaActive = false;
-                }
-                dmaRead(DMABASE);
-        }
-}
-
-//void dmaBubbleRequest() {
-//        dmaActive  = true;
-//        dmaRead(DMABASE);
-//}
-
-FILE *dmaFile;
-
-int dmaInit() {
-/*
-        if (dmaFile != NULL) {
-                fclose(dmaFile);
-        }
-        dmaFile = fopen("ROMS/merged.raw", "rb");
-        if (dmaFile == NULL) {
-
-                debug_log(DEBUG_INFO, "[DMA] Error openimg DMA image\r\n");
-
-        return -1;
-        }
-    
-        memory_mapCallbackRegister(DMABASE, DMALEN, (void*)dmaRead, (void*)dmaWrite, NULL);
-*/
-        return 0;
-}
-
-
-uint8_t dmaRead(uint32_t addr) {
-        //size_t ret;
-        uint8_t val = 0;
-        
-        //val = bubble_read(NULL, 0xDFE80);
-        //debug_log(DEBUG_ERROR, "[DMA] Read. Addr: %05X, Value: %02X\r\n", addr, val);
-        //ret = fread(&val, 1, 1, dmaFile);
-
-        //(void)fread(&val, 1, 1, dmaFile);
-        return val;
-        
-}
-
-void dmaWrite(uint32_t addr, uint8_t value) {
-        //debug_log(DEBUG_ERROR, "[DMA] Write. Addr: %05X\tValue: %02X\r\n", addr, value);
-        //bubble_write(NULL, 0xDFE80, value);
 }
 
 void ramDump(uint32_t addr32, int32_t size) {
