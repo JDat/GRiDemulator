@@ -53,8 +53,6 @@ uint8_t controllerState;
 bool externalStateChange;
 bool reflection;
 
-I8259_t* i8259;
-
 void do_aux_cmd(unsigned cmd , bool set_bit) {
 
   switch(cmd) {
@@ -202,7 +200,8 @@ void update_int() {
 		irqLine = new_int_line;
     //rise IRQ!
 		//m_int_write_func(m_int_line);
-    i8259_doirq(i8259, 5);
+    //i8259_doirq(5);
+    i8259_setirq(5);
 	}
 
 }

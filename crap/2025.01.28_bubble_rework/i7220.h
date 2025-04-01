@@ -3,9 +3,10 @@
   Copyright (C)2022 JDat
   https://github.com/JDat/GRiDemulator
 
-  Based on XTulator: A portable, open-source 80186 PC emulator.
-  Copyright (C)2020 Mike Chambers
-  https://github.com/mikechambers84/XTulator
+  Based on MAMEdev project
+  license:BSD-3-Clause
+  copyright-holders:Sergey Svishchev
+  https://github.com/mamedev/mame/blob/master/src/devices/machine/i7220.cpp
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -22,27 +23,20 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef _DEBUGLOG_H_
-#define _DEBUGLOG_H_
-
-#include <stdint.h>
-
 /*
-	Debug levels:
-
-	0 - No logging
-	1 - Errors
-	2 - Errors, info
-	3 - Errors, info, detailed debugging
+	Bubble memory module emulator
 */
 
-#define DEBUG_NONE		0
-#define DEBUG_ERROR		1
-#define DEBUG_INFO		2
-#define DEBUG_DETAIL	3
+#ifndef _BUBBLE_H_
+#define _BUBBLE_H_
 
-void debug_log(uint8_t level, char* format, ...);
-void debug_setLevel(uint8_t level);
-//void debug_init();
+#include <stdint.h>
+#include "cpu.h"
+
+uint8_t bubble_read(void* dummy, uint32_t addr);
+void bubble_write(void* dummy, uint32_t addr, uint8_t value);
+
+//void bubble_init();
+uint8_t bubble_init(I8259_t* i8259);
 
 #endif

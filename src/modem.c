@@ -43,10 +43,6 @@
 #define baseAddress 0xDFEC0
 #define addressLen  0x7
 
-// Auxiliary commands
-
-//I8259_t* i8259;
-
 uint8_t modem_read(void* dummy, uint32_t addr) {
         addr = addr - baseAddress;
         addr = addr >> 1;

@@ -22,6 +22,9 @@
 #define _UTILITY_H_
 
 #include <stdint.h>
+#include <stddef.h>
+
+#include "binary.h"
 
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)
 #define bitSet(value, bit) ((value) |= (1UL << (bit)))

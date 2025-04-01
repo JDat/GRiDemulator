@@ -51,7 +51,8 @@ void timing_loop() {
     if (timing_cur >= (timers[i].previous + timers[i].interval)) {
       if (timers[i].enabled != TIMING_DISABLED) {
         if (timers[i].callback != NULL) {
-          (*timers[i].callback)(timers[i].data);
+          //(*timers[i].callback)(timers[i].data);
+          (*timers[i].callback)();
         }
         timers[i].previous += timers[i].interval;
         if ((timing_cur - timers[i].previous) >= (timers[i].interval * 100)) {
@@ -62,7 +63,8 @@ void timing_loop() {
   }
 }
 
-uint32_t timing_addTimerUsingInterval(void* callback, void* data, uint64_t interval, uint8_t enabled) {
+//uint32_t timing_addTimerUsingInterval(void* callback, void* data, uint64_t interval, uint8_t enabled) {
+uint32_t timing_addTimerUsingInterval(void* callback, uint64_t interval, uint8_t enabled) {
   TIMER* temp;
   uint32_t ret;
 
@@ -80,7 +82,7 @@ uint32_t timing_addTimerUsingInterval(void* callback, void* data, uint64_t inter
   timers[timers_count].previous = timing_cur;
   timers[timers_count].interval = interval;
   timers[timers_count].callback = callback;
-  timers[timers_count].data = data;
+  //timers[timers_count].data = data;
   timers[timers_count].enabled = enabled;
 
   ret = timers_count;
@@ -89,8 +91,10 @@ uint32_t timing_addTimerUsingInterval(void* callback, void* data, uint64_t inter
   return ret;
 }
 
-uint32_t timing_addTimer(void* callback, void* data, double frequency, uint8_t enabled) {
-  return timing_addTimerUsingInterval(callback, data, (uint64_t)((double)timing_freq / frequency), enabled);
+//uint32_t timing_addTimer(void* callback, void* data, double frequency, uint8_t enabled) {
+uint32_t timing_addTimer(void* callback, double frequency, uint8_t enabled) {
+  //return timing_addTimerUsingInterval(callback, data, (uint64_t)((double)timing_freq / frequency), enabled);
+  return timing_addTimerUsingInterval(callback, (uint64_t)((double)timing_freq / frequency), enabled);
 }
 
 void timing_updateInterval(uint32_t tnum, uint64_t interval) {

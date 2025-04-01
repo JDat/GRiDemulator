@@ -42,10 +42,6 @@
 #define baseAddress 0xDFF00
 #define addressLen  0x8
 
-// Auxiliary commands
-
-I8259_t* i8259;
-
 uint8_t uart_read(void* dummy, uint32_t addr) {
         addr = addr - baseAddress;
         addr = addr >> 1;

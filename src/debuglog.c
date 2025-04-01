@@ -28,30 +28,31 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include "debuglog.h"
-#include <time.h>
+//#include <time.h>
 
 uint8_t debug_level = DEBUG_INFO;
 
 void debug_log(uint8_t level, char* format, ...) {
-	va_list argptr;
-	va_start(argptr, format);
-	if (level > debug_level) {
-		va_end(argptr);
-		return;
-	}
-	vfprintf(stderr, format, argptr);
-  //vfprintf(stdout, format, argptr);
-	fflush(stderr);
-	va_end(argptr);
+    if (level > debug_level) {
+        return;
+    }
+  
+    va_list argptr;
+    va_start(argptr, format);
+
+    vfprintf(stderr, format, argptr);
+    //vfprintf(stdout, format, argptr);
+    fflush(stderr);
+    va_end(argptr);
 }
 
 void debug_setLevel(uint8_t level) {
-	if (level > DEBUG_DETAIL) {
-		return;
-	}
-	debug_level = level;
+    if (level > DEBUG_DETAIL) {
+        return;
+    }
+    debug_level = level;
 }
 
-void debug_init() {
-	//TODO: Maybe allow initializing this with file output rather than always using stderr. Or maybe remove this, I don't know...
-}
+//void debug_init() {
+    //TODO: Maybe allow initializing this with file output rather than always using stderr. Or maybe remove this, I don't know...
+//}

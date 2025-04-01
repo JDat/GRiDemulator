@@ -25,14 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "config.h"
 
-//#include <SDL.h>
 #include <SDL2/SDL.h>
 
 #include <stdio.h>
 #include <stdint.h>
 #include "sdlconsole.h"
-//#include "sdlkeys.h"
-//#include "keymap.h"
 #include "timing.h"
 #include "debuglog.h"
 #include "utility.h"
@@ -62,13 +59,12 @@ int sdlconsole_init(char *title) {
 
   sdlconsole_window = SDL_CreateWindow(sdlconsole_title,
   SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-  //640, 400,
-  320, 240,
+  screenWidth, screenHeight,    // window size = GRiD screen size
   SDL_WINDOW_OPENGL);
   if (sdlconsole_window == NULL) return -1;
 
   //if (sdlconsole_setWindow(640, 400)) {
-  if (sdlconsole_setWindow(320, 240)) {
+  if (sdlconsole_setWindow(screenWidth, screenHeight)) {
     return -1;
   }
 
@@ -143,17 +139,15 @@ void sdlconsole_blit(uint32_t *pixels, int w, int h, int stride) {
 
 int sdlconsole_loop() {
   SDL_Event event;
-  //int8_t xrel, yrel;
-  //uint8_t action = 0;
 
   if (!SDL_PollEvent(&event)) return SDLCONSOLE_EVENT_NONE;
   switch (event.type) {
     case SDL_KEYDOWN:
       if (event.key.repeat) return SDLCONSOLE_EVENT_NONE;
       switch (event.key.keysym.sym) {
-        case SDLK_F11:
+        case SDLK_F1:
           return SDLCONSOLE_EVENT_DEBUG_1;
-        case SDLK_F12:
+        case SDLK_F2:
           return SDLCONSOLE_EVENT_DEBUG_2;
         default:
         if (event.key.keysym.sym == SDLK_LCTRL || event.key.keysym.sym == SDLK_RCTRL) {

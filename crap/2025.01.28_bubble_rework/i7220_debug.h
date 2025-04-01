@@ -34,12 +34,22 @@
 
   #ifdef DEBUG_BUBBLEMEM
       static const char *regNamesChar[] = {
-          "Utility register",
-          "Block length register LSB",
-          "Block length register MSB",
-          "Enable register",
-          "Address register LSB",
-          "Address register MSB",
+          "FIFO register",              // 0x00
+          "",                           // 0x01
+          "",                           // 0x02
+          "",                           // 0x03
+          "",                           // 0x04
+          "",                           // 0x05
+          "",                           // 0x06
+          "",                           // 0x07
+          "",                           // 0x08
+          "",                           // 0x09
+          "Utility register",           // 0x0A
+          "Block length register LSB",  // 0x0B
+          "Block length register MSB",  // 0x0C
+          "Enable register",            // 0x0D
+          "Address register LSB",       // 0x0E
+          "Address register MSB",       // 0x0F
       };
 
       static const char *bubbleCommands[] = {

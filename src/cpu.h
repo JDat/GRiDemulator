@@ -28,6 +28,7 @@
 #include <stdint.h>
 //#include "cpuconf.h"
 #include "i8259.h"
+#include <stdbool.h>
 
 union _bytewordregs_ {
 	uint16_t wordregs[8];
@@ -44,8 +45,8 @@ typedef struct {
 	uint32_t temp1, temp2, temp3, temp4, temp5, temp32, tempaddr32, ea;
 	int32_t	result;
 	uint16_t trap_toggle;
-	uint64_t totalexec;
-	void (*int_callback[256])(void*, uint8_t); //Want to pass a CPU object in first param, but it's not defined at this point so use a void*
+	//uint64_t totalexec;
+	//void (*int_callback[256])(void*, uint8_t); //Want to pass a CPU object in first param, but it's not defined at this point so use a void*
 } CPU_t;
 
 #define regax 0
@@ -173,12 +174,12 @@ void cpu_write(CPU_t* cpu, uint32_t addr32, uint8_t value);
 void cpu_writew(CPU_t* cpu, uint32_t addr32, uint16_t value);
 void cpu_intcall(CPU_t* cpu, uint8_t intnum);
 void cpu_reset(CPU_t* cpu);
-void cpu_interruptCheck(CPU_t* cpu, I8259_t* i8259);
+void cpu_interruptCheck(CPU_t* cpu);
 void cpu_exec(CPU_t* cpu, uint32_t execloops);
 void port_write(CPU_t* cpu, uint16_t portnum, uint8_t value);
 void port_writew(CPU_t* cpu, uint16_t portnum, uint16_t value);
 uint8_t port_read(CPU_t* cpu, uint16_t portnum);
 uint16_t port_readw(CPU_t* cpu, uint16_t portnum);
-void cpu_registerIntCallback(CPU_t* cpu, uint8_t interrupt, void (*cb)(CPU_t*, uint8_t));
+//void cpu_registerIntCallback(CPU_t* cpu, uint8_t interrupt, void (*cb)(CPU_t*, uint8_t));
 
 #endif

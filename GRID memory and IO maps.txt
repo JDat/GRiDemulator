@@ -1,38 +1,107 @@
-GRid Memory map:
+All addresses are absolute.
+
+GRiD Memory map:
 00000 - 0003FF: Interrupt table
 00400 - xxxxxx: Video buffer
 0297F - For screen 320 x 240 - 9600 bytes long
-043FF - For screen 512 x 256 - 16384 bytes   long
+043FF - For screen 512 x 256 - 16384 bytes long
+02980 - 06980 - CCPROM RAM data area (variables and tables) for 1101
+04400 - 08400 - CCPROM RAM data area (variables and tables) for 1139
+
+40000 - RAM end for 256kb option
+80000 - RAM end for 512kb option
 
 xxxxx - 9FFFF: APP PROM
 80000 - for 128 kBytes according to documentation
-60000 - could be in later models because there is found 256 kBytes PROM on GRiDcase 1530 for NASA?
+90000 - for  64 kBytes according to documentation
 
-C0000 - CFFFF: Optional boot ROM?
+C0000 - CFFFF: Optional diagnostic boot ROM. No info how to connect.
 
-D0000 - DFFFF: memory mapped I/O devices?
-DFE80 - DFE81: Bubble memory controller D7220
-DFEA0 - DFEAF: NVRAM X2210D (need to check address range, could be up to DFEDF)
-DFEC0 - DFECF: Modem
-DFF00 - DFF1F: Uart 8274
-DFF40 - DFF5F: MM58174 RTC
-DFF80 - DFF8F: GPIB TMS9914A
-DFFC0 - DFFC2: Keyboard controller
 
-E0000 - EFFFF: DMA controller?
+Hardware mapping:
+Only even addresses are available
+Compass I, model 1101:
+DFE00 - DFFFF: memory mapped I/O devices (approx. estimate)
+DFE00 - DFE06: Unknown PAL device (4 addresses accordin to 1101 CCPROM disassembled code)
+DFE40 - DFE5F: Something DAC related. Writing into DFE4:2 does audio out
+DFE80 - DFE82: Bubble memory controller D7220 (1 address line, 2 addresses)
+DFEC0 - DFECF: Modem (approx values)
+DFF00 - DFF08: Uart 8274 (2 address lines, 4 addresses)
+DFF40 - DFF5F: MM58174А RTC (16 bytes used)/ NVRAM X2210D
+               (8 bytes (16nibbles) used according to BIOS and sources)
+               (4 address lines, 16 addresses)
+DFF80 - DFF8F: GPIB TMS9914A (3 address lines, 8 addresses)
+DFFC0 - DFFC2: Keyboard controller (1 address lines, 2 addresses)
 
-F0000 - FFFFF: ROM BIOS?
-FC000 - FFFFF: Actuall ROM BIOS 16 Kbytes
+Compass II, models 112x and 113x:
+DFE00 - DFFFF: memory mapped I/O devices (approx. estimate)
+These three must be researched more carefully:
+*DFE00 - DFE1F: GPIB TMS9914A (3 address lines, 8 addresses)
+DFE00 - DFE0F: Unknown PAL device related to PROM slots (4 addresses according to 1121 CCPROM cpurce code)
+DFE10 - DFE16: Unknown PAL device serial related (4 addresses accordin to 1121 CCPROM cpurce code)
+
+*DFE40 - DFE5F: Something DAC related. Writing into DFE4:2 does audio out
+DFE80 - DFE82: Bubble memory controller D7220 (1 address line, 2 addresses)
+DFEC0 - DFECF: Modem (approx values)
+DFF00 - DFF08: Uart 8274 (2 address lines, 4 addresses)
+DFF40 - DFF5F: MM58174А RTC (16 bytes used)/ NVRAM X2210D
+               (8 bytes (16nibbles) used according to BIOS and sources)
+               (4 address lines, 16 addresses)
+DFFC0 - DFFC2: Keyboard controller (1 address lines, 2 addresses)
+
+
+Possible address decoder logic in hardware for 1101:
+3NAND  8NAND     3to8 DEC  DIRECT  Not used  Address  Device
+  110  11111111  000       00000   0        - DFE00   - unknown PAL/Uart/GPIB
+  110  11111111  001       00000   0        - DFE40   - not used
+  110  11111111  010       00000   0        - DFE80   - bubble
+  110  11111111  011       00000   0        - DFEC0   - modem
+  110  11111111  100       00000   0        - DFF00   - uart
+  110  11111111  101       00000   0        - DFF40   - RTC/NVRAM
+  110  11111111  110       00000   0        - DFF80   - GPIB
+  110  11111111  111       00000   0        - DFFC0   - Keyboard
+
+
+E0000:0 - movsb DMA data buffer for 1101
+*DFA00:0 - movsb DMA data buffer for 112x
+
+FC000 - FFFFF: ROM BIOS 16 Kbytes for all models(1101 - 1139)
+
 
 GRiD I/O map:
-000 - 01F: Intel 80130 controller (interrupts and timer)
+000 - 01F: Intel 80130 controller
+000 - 00F: 8259 interrupt controller
+010 - 01F: 8253 programmable timer (not used in Compass???)
 
-Interrupts:
+
+Interrupts physical (usernameak/mamedev):
 IRQ0: serial
 IRQ1: bubble
 IRQ2: modem
-IRQ3: system tick || vert sync
+IRQ3: system tick || horizontal sync
 IRQ4: keyboard
 IRQ5: gpib
 IRQ6: 8087
-IRQ7: ring
+IRQ7: ring?
+
+Interrupts form Source code:
+int8087       EQU 0
+intGpib       EQU 1
+intKeyboard   EQU 2  ; (Never used on CCOS, used only in CCPROM)
+intSysTick    EQU 3  ; (intHorisontalSync on compass)
+intModem      EQU 4
+intBubble     EQU 5  ; (Never used on CCOS, used only in CCPROM)
+intSerial     EQU 6
+intGlitch     EQU 7
+
+These interrupts are mapped with lookup table in ROM
+Interrupts form Source code and their physical numbers:
+            Logical     Physical
+intSerial       6           0
+intBubble       5           1   ; (Never used on CCOS, used only in CCPROM)
+intModem        4           2
+intSysTick      3           3   ; (intHorisontalSync on compass)
+intKeyboard     2           4   ; (Never used on CCOS, used only in CCPROM)
+intGpib         1           5
+int8087         0           6
+intGlitch       7           7

@@ -12,7 +12,7 @@ INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 #INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 INC_FLAGS := $(addprefix -I,$(INC_DIRS)) -lpthread -lm `sdl2-config --cflags --libs`
 
-CPPFLAGS ?= $(INC_FLAGS) -Wall -MMD -MP
+CPPFLAGS ?= $(INC_FLAGS) -g -Wall -MMD -MP
 
 LDFLAGS := -lpthread -lm `sdl2-config --cflags --libs`
 
@@ -40,6 +40,7 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 
 clean:
 	$(RM) -r $(BUILD_DIR)
+	$(RM) ./gridemu
 
 -include $(DEPS)
 

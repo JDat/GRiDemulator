@@ -47,7 +47,7 @@ char title[64]; //assuming 64 isn't safe if somebody starts messing with STR_TIT
 
 uint64_t ops = 0;
 uint32_t baudrate = 115200, ramsize = 640, instructionsperloop = 100, cpuLimitTimer;
-uint8_t videocard = 0xFF, showMIPS = 0;
+//uint8_t videocard = 0xFF, showMIPS = 0;
 volatile uint8_t goCPU = 1, limitCPU = 0;
 volatile double speed = 0;
 
@@ -55,32 +55,34 @@ volatile uint8_t running = 1;
 
 MACHINE_t machine;
 
-void optimer(void* dummy) {
-	ops /= 10000;
-	if (showMIPS) {
-		debug_log(DEBUG_INFO, "%llu.%llu MIPS          \r", ops / 10, ops % 10);
-	}
-	ops = 0;
-}
+//void optimer(void* dummy) {
+//void optimer() {
+//    ops /= 10000;
+//    if (showMIPS) {
+//        debug_log(DEBUG_INFO, "%llu.%llu MIPS          \r", ops / 10, ops % 10);
+//    }
+//    ops = 0;
+//}
 
-void cputimer(void* dummy) {
-	goCPU = 1;
+//void cputimer(void* dummy) {
+void cputimer() {
+    goCPU = 1;
 }
 
 void setspeed(double mhz) {
-	if (mhz > 0) {
-		speed = mhz;
-		instructionsperloop = (uint32_t)((speed * 1000000.0) / 140000.0);
-		limitCPU = 1;
-		debug_log(DEBUG_INFO, "[MACHINE] Throttling speed to approximately a %.02f MHz 8086 (%lu instructions/sec)\r\n", speed, instructionsperloop * 10000);
-		timing_timerEnable(cpuLimitTimer);
-	}
-	else {
-		speed = 0;
-		instructionsperloop = 100;
-		limitCPU = 0;
-		timing_timerDisable(cpuLimitTimer);
-	}
+    if (mhz > 0) {
+        speed = mhz;
+        instructionsperloop = (uint32_t)((speed * 1000000.0) / 140000.0);
+        limitCPU = 1;
+        debug_log(DEBUG_INFO, "[MACHINE] Throttling speed to approximately a %.02f MHz 8086 (%lu instructions/sec)\r\n", speed, instructionsperloop * 10000);
+        timing_timerEnable(cpuLimitTimer);
+    }
+    else {
+        speed = 0;
+        instructionsperloop = 100;
+        limitCPU = 0;
+        timing_timerDisable(cpuLimitTimer);
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -88,53 +90,53 @@ int main(int argc, char *argv[]) {
         uint32_t keyScanCode;
         uint8_t modKeys;
 
-	sprintf(title, "%s v%s pre alpha", STR_TITLE, STR_VERSION);
+    sprintf(title, "%s v%s pre alpha", STR_TITLE, STR_VERSION);
 
-	//printf("%s (c)2020 Mike Chambers\r\n", title);
         printf("%s\r\n", title);
-	//printf("[A portable, open source 80186 PC emulator]\r\n\r\n");
 
-	ports_init();
-	timing_init();
-	memory_init();
+    memory_init();
+    ports_init();
+    timing_init();
 
-	if (args_parse(&machine, argc, argv)) {
-		return -1;
-	}
+    if (args_parse(&machine, argc, argv)) {
+        return -1;
+    }
 
-	if (sdlconsole_init(title)) {
-		debug_log(DEBUG_ERROR, "[ERROR] SDL initialization failure\r\n");
-		return -1;
-	}
+    if (sdlconsole_init(title)) {
+        debug_log(DEBUG_ERROR, "[ERROR] SDL initialization failure\r\n");
+        return -1;
+    }
 
-	if (machine_init(&machine, usemachine) < 0) {
-		debug_log(DEBUG_ERROR, "[ERROR] Machine initialization failure\r\n");
-		return -1;
-	}
+    if (machine_init(&machine, usemachine) < 0) {
+        debug_log(DEBUG_ERROR, "[ERROR] Machine initialization failure\r\n");
+        return -1;
+    }
 
-	timing_addTimer(optimer, NULL, 10, TIMING_ENABLED);
-	cpuLimitTimer = timing_addTimer(cputimer, NULL, 10000, TIMING_DISABLED);
-	if (speed > 0) {
-		setspeed(speed);
-	}
-	while (running) {
-		static uint32_t curloop = 0;
-                //limitCPU = 0;
-		if (limitCPU == 0) {
-			goCPU = 1;
-		}
-		if (goCPU) {
-			cpu_interruptCheck(&machine.CPU, &machine.i8259);
+    //timing_addTimer(optimer, 10, TIMING_ENABLED);
+    cpuLimitTimer = timing_addTimer(cputimer, 10000, TIMING_DISABLED);
+    if (speed > 0) {
+        setspeed(speed);
+    }
+    while (running) {
+        timing_loop();
+
+        static uint32_t curloop = 0;
+        
+        limitCPU = 0;
+        if (limitCPU == 0) {
+            goCPU = 1;
+        }
+        if (goCPU) {
+            cpu_interruptCheck(&machine.CPU);
                         //doDMA();
-			cpu_exec(&machine.CPU, instructionsperloop);
-			ops += instructionsperloop;
-			goCPU = 0;
-		}
-		timing_loop();
-		if (++curloop == 100) {
-                        gridvideo_update();
+            cpu_exec(&machine.CPU, instructionsperloop);
+            ops += instructionsperloop;
+            goCPU = 0;
+        }
+        if (++curloop == 100) {
+            gridvideo_update();
 
-			switch (sdlconsole_loop()) {
+            switch (sdlconsole_loop()) {
                                 case SDLCONSOLE_EVENT_KEY:
                                         keyScanCode = sdlconsole_getScanCode();
                                         modKeys = sdlconsole_getModKeys();
@@ -144,13 +146,21 @@ int main(int argc, char *argv[]) {
                                         running = 0;
                                         break;
                                 case SDLCONSOLE_EVENT_DEBUG_1:
+                                        ramDump(0,1024);
                                         break;
                                 case SDLCONSOLE_EVENT_DEBUG_2:
+                                        //if (limitCPU == 1) {
+                                                //limitCPU = 0;
+                                                //debug_log(DEBUG_INFO, "[MACHINE] Run\n");
+                                        //} else {
+                                                //limitCPU = 1;
+                                                //debug_log(DEBUG_INFO, "[MACHINE] Stop\n");
+                                        //}
                                         break;
-			}
-			curloop = 0;
-		}
-	}
+            }
+            curloop = 0;
+        }
+    }
 
-	return 0;
+    return 0;
 }

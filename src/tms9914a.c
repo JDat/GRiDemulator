@@ -57,7 +57,6 @@ bool externalStateChange;
 bool reflection;
 
 int8_t busMemberId;
-//I8259_t* i8259;
 
 void do_aux_cmd(unsigned cmd , bool set_bit) {
 
@@ -101,7 +100,8 @@ uint8_t tms9914a_read(void* dummy, uint32_t addr) {
         debug_log(DEBUG_DETAIL, "[GPIB] Read port 0x%02X\n", addr);
 #endif
 
-      return 0xFF;
+      ret = 0xFF;
+      return ret;
       
         switch(addr) {
           case regIntStatus0:
@@ -201,7 +201,7 @@ void tms9914a_init() {
         //if (busMemberId < 0) return -1;
 }
 
-void update_int(I8259_t* i8259) {
+void update_int() {
 	bool new_int_line = false;
 	registers[regIntStatus0] &= 0b11111100;
 	if (registers[regIntStatus0] & registers[regIntMask0]) {
@@ -227,7 +227,8 @@ void update_int(I8259_t* i8259) {
 		irqLine = new_int_line;
     //rise IRQ!
 		//m_int_write_func(m_int_line);
-    i8259_doirq(i8259, 1);
+    //i8259_doirq(irqGPiB);
+    i8259_setirq(irqGPiB, true);
 	}
 
 }
@@ -254,7 +255,7 @@ void update_fsm() {
   reflection = true;
   
   bool changed = true;
-	uint8_t prev_state;
+	//uint8_t prev_state;
   while (changed) {
     changed = externalStateChange;
     externalStateChange = false;

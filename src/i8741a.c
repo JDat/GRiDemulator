@@ -32,14 +32,11 @@
 #include "utility.h"
 #include "timing.h"
 
-
 uint32_t scanCode = 0;
 uint8_t keybReady = true;
 uint8_t gotSDLcode = false;
 #define baseAddress 0xDFFC0
 #define addressLen  0x3
-
-I8259_t* keyIrq8259;
 
 uint8_t busData, busStatus;
 
@@ -52,7 +49,8 @@ bool timer_overflow = false;
 void sendData(uint8_t data, uint8_t flags) {
   busData = data;
   busStatus = flags;
-  i8259_doirq(keyIrq8259, 4);
+  //i8259_doirq(irqKeyboard);
+  i8259_setirq(irqKeyboard, true);
 }
 
 uint8_t translateScancode(uint32_t keyval, uint8_t modKeys) {
@@ -105,7 +103,9 @@ void gridKeyboard8741_getScanCode(uint32_t lScanCode, uint8_t lModKeys) {
     scanCode = 0xff;
   }
   gotSDLcode = true;
+#ifdef DEBUG_KEYBOARD
   debug_log(DEBUG_DETAIL, "[KEY] getScanCode: 0x%02X\tSDL code: 0x%08X\tmodkeys: 0x%02X\n", scanCode, lScanCode, lModKeys);
+#endif
 } 
 
 uint8_t gridKeyboard8741_read(void* dummy, uint32_t addr) {
@@ -138,12 +138,6 @@ void gridKeyboard8741_write(void* dummy, uint32_t addr, uint8_t value) {
   addr = addr >> 1;
 #ifdef DEBUG_KEYBOARD
   debug_log(DEBUG_DETAIL, "[KEY] Write %s port: 0x%02X\n", addr ? "Command" : "Data", value);
-
-  //debug_log(DEBUG_DETAIL, "[cpu] exec: Addr: %04X:%04X, opcode: %02X\r\n", machine.CPU.segregs[regcs], machine.CPU.ip, machine.CPU.opcode);
-  //debug_log(DEBUG_DETAIL, "[cpu] regs: AX: %04X, BX: %04X, CX: %04X, DX: %04X\r\n", machine.CPU.regs.wordregs[regax], machine.CPU.regs.wordregs[regbx], machine.CPU.regs.wordregs[regcx], machine.CPU.regs.wordregs[regdx]);
-  //debug_log(DEBUG_DETAIL, "[cpu] regs: SI: %04X, DI: %04X, BP: %04X, SP: %04X\r\n", machine.CPU.regs.wordregs[regsi], machine.CPU.regs.wordregs[regdi], machine.CPU.regs.wordregs[regbp], machine.CPU.regs.wordregs[regsp]);
-  //debug_log(DEBUG_DETAIL, "[cpu] regs: CS: %04X, DS: %04X, ES: %04X, SS: %04X\r\n", machine.CPU.segregs[regcs], machine.CPU.segregs[regds], machine.CPU.segregs[reges], machine.CPU.segregs[regss]);
-
 #endif
 
   // data mode
@@ -203,17 +197,16 @@ void gridKeyboard8741_tickCallback(void* dummy) {
 
 }
 
-void gridKeyboard8741_init(I8259_t* i8259) {
+void gridKeyboard8741_init() {
 #ifdef DEBUG_KEYBOARD
         debug_log(DEBUG_INFO, "[KEY] Attaching to memory\r\n");
 #endif
         memory_mapCallbackRegister(0xDFFC0, 0x4, (void*)gridKeyboard8741_read, (void*)gridKeyboard8741_write, NULL);
-        keyIrq8259 = i8259;
         
         configRegister[0] = 0x01;
         configRegister[1] = 0x0F;
         configRegister[2] = 0x02;
         configRegister[3] = 0x32;
         
-        timing_addTimer(gridKeyboard8741_tickCallback, (void*) NULL, 1500, TIMING_ENABLED);
+        timing_addTimer(gridKeyboard8741_tickCallback, 1500, TIMING_ENABLED);
 }

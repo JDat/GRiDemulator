@@ -32,11 +32,14 @@
 
 #include <stdint.h>
 #include "cpu.h"
+#include <stdbool.h>
 
 uint8_t bubble_read(void* dummy, uint32_t addr);
 void bubble_write(void* dummy, uint32_t addr, uint8_t value);
 
 //void bubble_init();
-uint8_t bubble_init(I8259_t* i8259);
+//uint8_t bubble_init(I8259_t* i8259);
+uint8_t bubble_init();
 
+extern bool insideInterrupt;
 #endif

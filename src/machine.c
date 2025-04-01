@@ -35,7 +35,7 @@
 #include "debuglog.h"
 #include "cpu.h"
 #include "i8259.h"
-#include "i8253.h"
+//#include "i8253.h"
 #include "input.h"
 #include "i8741a.h"
 #include "gridvideo.h"
@@ -48,12 +48,14 @@
 #include "utility.h"
 #include "timing.h"
 #include "machine.h"
+#include "dma.h"
 
 /*
 	ID string, full description, init function, default video, speed in MHz (-1 = unlimited), default hardware flags
 */
 const MACHINEDEF_t machine_defs[] = {
-	{ "1101", "GRiD Compass 1101", machine_init_grid, VIDEO_CARD_GRID1101, 5, MACHINE_HW_RTC },
+	{ "1101", "GRiD Compass 1101", machine_init_grid, 5},    // 5 - 5MHz clock
+	//{ "1101", "GRiD Compass 1101", machine_init_grid, VIDEO_CARD_GRID1101, 5, MACHINE_HW_RTC },
         //{ "1139", "GRiD Compass 1139", machine_init_grid, VIDEO_CARD_GRID1139, 5, MACHINE_HW_RTC },
         { NULL }
 };
@@ -61,10 +63,11 @@ const MACHINEDEF_t machine_defs[] = {
 const MACHINEMEM_t machine_mem[][11] = {
         // GRid Compass 1101
 	{
-                { MACHINE_MEM_RAM, 0x00000, 0x00400, MACHINE_ROM_ISNOTROM, NULL },      // Interrupt table
-                { MACHINE_MEM_RAM, 0x02980, 0x40000 - 0x02980, MACHINE_ROM_ISNOTROM, NULL },    // RAM after videobuffer 256 kb
+                // no need for RAM abouse it is defines as array in memory.c
+                { MACHINE_MEM_RAM, ramIDTbaseAddress, ramIDTSize, MACHINE_ROM_ISNOTROM, NULL },      // Interrupt table
+                { MACHINE_MEM_RAM, ramMainBaseAddress, ramMainSize, MACHINE_ROM_ISNOTROM, NULL },    // RAM after videobuffer 256 kb
                 //{ MACHINE_MEM_RAM, 0x02980, 0x80000 - 0x02980, MACHINE_ROM_ISNOTROM, NULL },      // RAM after videobuffer 512 kb
-                { MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },      // Factory test ROM absent
+                //{ MACHINE_MEM_RAM, 0xC0000, 0x0FFFF, MACHINE_ROM_ISNOTROM, NULL },      // Factory test ROM absent
                 //{ MACHINE_MEM_ROM, 0xC0000, 194, MACHINE_ROM_REQUIRED, "ROMS/dma_demo.bin" },      // Factory test ROM
                 { MACHINE_MEM_ROM, 0xFC000, 0x04000, MACHINE_ROM_REQUIRED, "ROMS/bootROM1101.bin" },
 		{ MACHINE_MEM_ENDLIST, 0, 0, 0, NULL }
@@ -87,15 +90,18 @@ int machine_init_grid(MACHINE_t* machine) {
 	if (machine == NULL) return -1;
 
 	//debug_log(DEBUG_INFO, "[MACHINE] Init Grid function start\r\n");
-	i8259_init(&machine->i8259);
-        i8253_init(&machine->i8253, &machine->i8259);
+	//i8259_init(&machine->i8259);
+	i8259_init();
+        //i8253_init(&machine->i8253, &machine->i8259);
         
-        gridKeyboard8741_init(&machine->i8259);
+        //gridKeyboard8741_init(&machine->i8259);
+        gridKeyboard8741_init();
         if (dmaInit()) {
                 debug_log(DEBUG_INFO, "[MACHINE] dmaInit FAIL\r\n");
                 return -1;
         }
-        if (bubble_init(&machine->i8259)) {
+        //if (bubble_init(&machine->i8259)) {
+        if (bubble_init()) {
                 return -1;
         }
         uart_init();
@@ -105,6 +111,8 @@ int machine_init_grid(MACHINE_t* machine) {
 	//i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);        
         rtc_init(&machine->CPU);
 	cpu_reset(&machine->CPU);
+	//if (gridvideo_init()) return -1;
+	//if (gridvideo_init(&machine->i8259)) return -1;
 	if (gridvideo_init()) return -1;
 	//debug_log(DEBUG_INFO, "[MACHINE] Init Grid function end\r\n");
 	return 0;
@@ -157,11 +165,11 @@ int machine_init(MACHINE_t* machine, char* id) {
 		i++;
 	}
 
-	machine->hwflags |= machine_defs[num].hwflags;
+	//machine->hwflags |= machine_defs[num].hwflags;
 
-	if (videocard == 0xFF) {
-		videocard = machine_defs[num].video;
-	}
+	//if (videocard == 0xFF) {
+	//	videocard = machine_defs[num].video;
+	//}
 
 	if (speedarg > 0) {
 		speed = speedarg;

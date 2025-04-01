@@ -31,19 +31,21 @@ typedef struct TIMER_s {
 	uint64_t interval;
 	uint64_t previous;
 	uint8_t enabled;
-	void (*callback)(void*);
-	void* data;
+	//void (*callback)(void*);
+	void (*callback)();
+	//void* data;
 } TIMER;
 
 #define TIMING_ENABLED	1
 #define TIMING_DISABLED	0
 #define TIMING_ERROR 0xFFFFFFFF
 
-#define TIMING_RINGSIZE	1024
+//#define TIMING_RINGSIZE	1024
 
 int timing_init();
 void timing_loop();
-uint32_t timing_addTimer(void* callback, void* data, double frequency, uint8_t enabled);
+//uint32_t timing_addTimer(void* callback, void* data, double frequency, uint8_t enabled);
+uint32_t timing_addTimer(void* callback, double frequency, uint8_t enabled);
 void timing_updateIntervalFreq(uint32_t tnum, double frequency);
 void timing_updateInterval(uint32_t tnum, uint64_t interval);
 void timing_timerEnable(uint32_t tnum);
