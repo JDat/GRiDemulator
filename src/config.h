@@ -34,7 +34,7 @@
 
 //#define DEBUG_CPU
 //#define DEBUG_FPU
-#define DEBUG_DISASM
+//#define DEBUG_DISASM
 //#define DEBUG_MEMORY
 //#define DEBUG_PORTS
 

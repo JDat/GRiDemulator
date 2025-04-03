@@ -5,8 +5,10 @@ GRiD Memory map:
 00400 - xxxxxx: Video buffer
 0297F - For screen 320 x 240 - 9600 bytes long
 043FF - For screen 512 x 256 - 16384 bytes long
-02980 - 06980 - CCPROM RAM data area (variables and tables) for 1101
-04400 - 08400 - CCPROM RAM data area (variables and tables) for 1139
+//02980 - 06980 - CCPROM RAM data area (variables and tables) for 1101
+02980 - 02D80 - CCPROM RAM data area (variables and tables) for 1101
+//04400 - 08400 - CCPROM RAM data area (variables and tables) for 1139
+04400 - 04800 - CCPROM RAM data area (variables and tables) for 1139
 
 40000 - RAM end for 256kb option
 80000 - RAM end for 512kb option

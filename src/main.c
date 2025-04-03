@@ -129,7 +129,8 @@ int main(int argc, char *argv[]) {
         if (goCPU) {
             cpu_interruptCheck(&machine.CPU);
                         //doDMA();
-            cpu_exec(&machine.CPU, instructionsperloop);
+            //cpu_exec(&machine.CPU, instructionsperloop);
+            cpu_exec(&machine.CPU);
             ops += instructionsperloop;
             goCPU = 0;
         }
@@ -146,7 +147,7 @@ int main(int argc, char *argv[]) {
                                         running = 0;
                                         break;
                                 case SDLCONSOLE_EVENT_DEBUG_1:
-                                        ramDump(0,1024);
+                                        ramDump(0,0x40000);
                                         break;
                                 case SDLCONSOLE_EVENT_DEBUG_2:
                                         //if (limitCPU == 1) {

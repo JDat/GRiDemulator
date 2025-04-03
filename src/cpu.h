@@ -26,6 +26,8 @@
 #define _CPU_H_
 
 #include <stdint.h>
+#include "config.h"
+#include "utility.h"
 //#include "cpuconf.h"
 #include "i8259.h"
 #include <stdbool.h>
@@ -57,6 +59,7 @@ typedef struct {
 #define regbp 5
 #define regsi 6
 #define regdi 7
+
 #define reges 0
 #define regcs 1
 #define regss 2
@@ -175,7 +178,8 @@ void cpu_writew(CPU_t* cpu, uint32_t addr32, uint16_t value);
 void cpu_intcall(CPU_t* cpu, uint8_t intnum);
 void cpu_reset(CPU_t* cpu);
 void cpu_interruptCheck(CPU_t* cpu);
-void cpu_exec(CPU_t* cpu, uint32_t execloops);
+//void cpu_exec(CPU_t* cpu, uint32_t execloops);
+uint32_t cpu_exec(CPU_t* cpu);
 void port_write(CPU_t* cpu, uint16_t portnum, uint8_t value);
 void port_writew(CPU_t* cpu, uint16_t portnum, uint16_t value);
 uint8_t port_read(CPU_t* cpu, uint16_t portnum);
