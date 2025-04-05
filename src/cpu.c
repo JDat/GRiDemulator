@@ -1466,14 +1466,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
       loopcount +=2;
       break;
     }
-    case 0xD8:
-    case 0xD9:
-    case 0xDA:
-    case 0xDB:
-    case 0xDC:
-    case 0xDE:
-    case 0xDD:
-    case 0xDF: {    // escape to x87 FPU (unsupported)
+    case 0xD8 ... 0xDF: {    // escape to x87 FPU (unsupported)
 #ifdef DEBUG_DISASM
       debug_log(DEBUG_INFO, "[8087] PRE exec: Addr: %04X:%04X, opcode: %02X\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
@@ -2864,14 +2857,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x40:
-    case 0x41:
-    case 0x42:
-    case 0x43:
-    case 0x44:
-    case 0x45:
-    case 0x46:
-    case 0x47: {    // INC 16 bit registers ax cx dx bx sp bp si di
+    case 0x40 ... 0x47: {    // INC 16 bit registers ax cx dx bx sp bp si di
       uint8_t tmpReg;
       tmpReg = cpu->opcode & 0x7;
       cpu->oldcf = cpu->cf;
@@ -2887,14 +2873,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x48:
-    case 0x49:
-    case 0x4A:
-    case 0x4B:
-    case 0x4C:
-    case 0x4D:
-    case 0x4E:
-    case 0x4F: {    // DEC 16 bit registers ax cx dx bx sp bp si di
+    case 0x48 ... 0x4F: {    // DEC 16 bit registers ax cx dx bx sp bp si di
       uint8_t tmpReg;
       tmpReg = cpu->opcode & 0x7;
       cpu->oldcf = cpu->cf;
@@ -2910,7 +2889,6 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-
     case 0x37: {    // 37 AAA ASCII
       if (((cpu->regs.byteregs[regal] & 0xF) > 9) || (cpu->af == 1)) {
         cpu->regs.wordregs[regax] = cpu->regs.wordregs[regax] + 0x106;
@@ -3571,68 +3549,15 @@ uint32_t cpu_exec(CPU_t* cpu) {
       loopcount +=10;
       break;
     }
-    case 0x50: {    // 50 PUSH eAX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpush ax\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      push(cpu, cpu->regs.wordregs[regax]);
+    case 0x50 ... 0x57: {    // PUSH 16 bit registers ax cx dx bx sp bp si di
+      uint8_t tmpReg;
+      tmpReg = cpu->opcode & 0x7;
+      push(cpu, cpu->regs.wordregs[tmpReg]);
       loopcount +=10;
-      break;
-    }
-    case 0x51: {    // 51 PUSH eCX
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpush cx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, opcode: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "push %s\n", cpuRegNamesChar[tmpReg]);
 #endif
-      push(cpu, cpu->regs.wordregs[regcx]);
-      loopcount +=10;
-      break;
-    }
-    case 0x52: {    // 52 PUSH eDX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpush dx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      push(cpu, cpu->regs.wordregs[regdx]);
-      loopcount +=10;
-      break;
-    }
-    case 0x53: {    // 53 PUSH eBX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpush bx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      push(cpu, cpu->regs.wordregs[regbx]);
-      loopcount +=10;
-      break;
-    }
-    case 0x54: {    // 54 PUSH eSP
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpush sp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      push(cpu, cpu->regs.wordregs[regsp] - 2);
-      loopcount +=10;
-      break;
-    }
-    case 0x55: {    // 55 PUSH eBP
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpush bp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      push(cpu, cpu->regs.wordregs[regbp]);
-      loopcount +=10;
-      break;
-    }
-    case 0x56: {    // 56 PUSH eSI
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpush si\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      push(cpu, cpu->regs.wordregs[regsi]);
-      loopcount +=10;
-      break;
-    }
-    case 0x57: {    // 57 PUSH eDI
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpush di\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      push(cpu, cpu->regs.wordregs[regdi]);
-      loopcount +=10;
       break;
     }
     case 0x7:  {    // 07 POP cpu->segregs[reges]
@@ -3667,20 +3592,13 @@ uint32_t cpu_exec(CPU_t* cpu) {
       loopcount +=10;
       break;
     }
-    case 0x58:
-    case 0x59:
-    case 0x5A:
-    case 0x5B:
-    case 0x5C:
-    case 0x5D:
-    case 0x5E:
-    case 0x5F: {    // POP 16 bit registers ax cx dx bx sp bp si di
+    case 0x58 ... 0x5F: {    // POP 16 bit registers ax cx dx bx sp bp si di
       uint8_t tmpReg;
       tmpReg = cpu->opcode & 0x7;
       cpu->regs.wordregs[tmpReg] = pop(cpu);
       loopcount +=8;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, opcode: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
       debug_log(DEBUG_DETAIL, "pop %s\n", cpuRegNamesChar[tmpReg]);
 #endif
       break;
@@ -3716,73 +3634,17 @@ uint32_t cpu_exec(CPU_t* cpu) {
       loopcount +=3;
       break;
     }
-    case 0x91: {    // 91 XCHG eCX eAX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\txchg\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->oper1 = cpu->regs.wordregs[regcx];
-      cpu->regs.wordregs[regcx] = cpu->regs.wordregs[regax];
+    case 0x91 ... 0x97: {    // XCHG 16 bit registers cx dx bx sp bp si di with ax
+      uint8_t tmpReg;
+      tmpReg = cpu->opcode & 0x7;
+      cpu->oper1 = cpu->regs.wordregs[tmpReg];
+      cpu->regs.wordregs[tmpReg] = cpu->regs.wordregs[regax];
       cpu->regs.wordregs[regax] = cpu->oper1;
-      loopcount +=4;
-      break;
-    }
-    case 0x92: {    // 92 XCHG eDX eAX
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\txchg\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] [new] [testing] %04X:%04X, opcode: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "xchg %s, ax\n", cpuRegNamesChar[tmpReg]);
 #endif
-      cpu->oper1 = cpu->regs.wordregs[regdx];
-      cpu->regs.wordregs[regdx] = cpu->regs.wordregs[regax];
-      cpu->regs.wordregs[regax] = cpu->oper1;
-      loopcount +=4;
-      break;
-    }
-    case 0x93: {    // 93 XCHG eBX eAX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\txchg\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->oper1 = cpu->regs.wordregs[regbx];
-      cpu->regs.wordregs[regbx] = cpu->regs.wordregs[regax];
-      cpu->regs.wordregs[regax] = cpu->oper1;
-      loopcount +=4;
-      break;
-    }
-    case 0x94: {    // 94 XCHG eSP eAX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\txchg\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->oper1 = cpu->regs.wordregs[regsp];
-      cpu->regs.wordregs[regsp] = cpu->regs.wordregs[regax];
-      cpu->regs.wordregs[regax] = cpu->oper1;
-      loopcount +=4;
-      break;
-    }
-    case 0x95: {    // 95 XCHG eBP eAX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\txchg\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->oper1 = cpu->regs.wordregs[regbp];
-      cpu->regs.wordregs[regbp] = cpu->regs.wordregs[regax];
-      cpu->regs.wordregs[regax] = cpu->oper1;
-      loopcount +=4;
-      break;
-    }
-    case 0x96: {    // 96 XCHG eSI eAX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\txchg\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->oper1 = cpu->regs.wordregs[regsi];
-      cpu->regs.wordregs[regsi] = cpu->regs.wordregs[regax];
-      cpu->regs.wordregs[regax] = cpu->oper1;
-      loopcount +=4;
-      break;
-    }
-    case 0x97: {    // 97 XCHG eDI eAX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\txchg\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->oper1 = cpu->regs.wordregs[regdi];
-      cpu->regs.wordregs[regdi] = cpu->regs.wordregs[regax];
-      cpu->regs.wordregs[regax] = cpu->oper1;
+
       loopcount +=4;
       break;
     }
@@ -4009,22 +3871,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
     }
 
     // Invalid opcodes on 8086
-    case 0x60:
-    case 0x61:
-    case 0x62:
-    case 0x63:
-    case 0x64:
-    case 0x65:
-    case 0x66:
-    case 0x67:
-    case 0x68:
-    case 0x69:
-    case 0x6A:
-    case 0x6B:
-    case 0x6C:
-    case 0x6D:
-    case 0x6E:
-    case 0x6F:
+    case 0x60 ... 0x6F:
     case 0xC0:
     case 0xC1:
     case 0xC8:

@@ -44,7 +44,7 @@ void* memory_udata[CPU_ADDRESS_RANGE];
 void cpu_write(CPU_t* cpu, uint32_t addr32, uint8_t value) {
   addr32 &= CPU_ADDRESS_MASK;
 #ifdef DEBUG_MEMORY
-  debug_log(DEBUG_INFO, "[MEM] cpu write Addr: 0x%05X, val: 0x%02X\n", addr32, value);
+  debug_log(DEBUG_DETAIL, "[MEM] cpu write Addr: 0x%05X, val: 0x%02X\n", addr32, value);
 #endif
 
   if (memory_mapWrite[addr32] != NULL) {
@@ -61,16 +61,16 @@ uint8_t cpu_read(CPU_t* cpu, uint32_t addr32) {
 
   if (memory_mapRead[addr32] != NULL) {
 #ifdef DEBUG_MEMORY
-    debug_log(DEBUG_INFO, "[MEM] cpu read Addr: 0x%05X\t", addr32);
-    debug_log(DEBUG_INFO, "val: 0x%02X\n", *(memory_mapRead[addr32]));
+    debug_log(DEBUG_DETAIL, "[MEM] cpu read Addr: 0x%05X\t", addr32);
+    debug_log(DEBUG_DETAIL, "val: 0x%02X\n", *(memory_mapRead[addr32]));
 #endif
     return *(memory_mapRead[addr32]);
   }
 
   if (memory_mapReadCallback[addr32] != NULL) {
 #ifdef DEBUG_MEMORY
-    debug_log(DEBUG_INFO, "[MEM] cpu read Addr: 0x%05X\t", addr32);
-    debug_log(DEBUG_INFO, "val: 0x%02X\n", (*memory_mapReadCallback[addr32])(memory_udata[addr32], addr32));
+    debug_log(DEBUG_DETAIL, "[MEM] cpu read Addr: 0x%05X\t", addr32);
+    debug_log(DEBUG_DETAIL, "val: 0x%02X\n", (*memory_mapReadCallback[addr32])(memory_udata[addr32], addr32));
 #endif
     return (*memory_mapReadCallback[addr32])(memory_udata[addr32], addr32);
   }
@@ -82,13 +82,13 @@ uint8_t cpu_read(CPU_t* cpu, uint32_t addr32) {
 
 void memory_mapRegister(uint32_t start, uint32_t len, uint8_t* readb, uint8_t* writeb) {
 #ifdef DEBUG_MEMORY
-  debug_log(DEBUG_INFO, "[MEM] mapRegister start. Addr: 0x%05X, len: 0x%05X\n", start, len);
+  debug_log(DEBUG_DETAIL, "[MEM] mapRegister start. Addr: 0x%05X, len: 0x%05X\n", start, len);
 #endif
   uint32_t i;
   for (i = 0; i < len; i++) {
     if ((start + i) >= CPU_ADDRESS_RANGE) {
 #ifdef DEBUG_MEMORY
-      debug_log(DEBUG_ERROR, "[MEM] Error in mapRegister: wanted: %d, allowed range: %d\n", (start + i), CPU_ADDRESS_RANGE);
+      debug_log(DEBUG_DETAIL, "[MEM] Error in mapRegister: wanted: %d, allowed range: %d\n", (start + i), CPU_ADDRESS_RANGE);
 #endif
       break;
     }
@@ -99,7 +99,7 @@ void memory_mapRegister(uint32_t start, uint32_t len, uint8_t* readb, uint8_t* w
 
 void memory_mapCallbackRegister(uint32_t start, uint32_t count, uint8_t(*readb)(void*, uint32_t), void (*writeb)(void*, uint32_t, uint8_t), void* udata) {
 #ifdef DEBUG_MEMORY
-  debug_log(DEBUG_INFO, "[MEM] mapCallbackRegister. Addr: 0x%05X, len: 0x%05X\n", start, count);
+  debug_log(DEBUG_DETAIL, "[MEM] mapCallbackRegister. Addr: 0x%05X, len: 0x%05X\n", start, count);
 #endif
   uint32_t i;
   for (i = 0; i < count; i++) {
