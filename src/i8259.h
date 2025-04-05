@@ -38,7 +38,7 @@
     } I8259_t;
 
     void i8259_init();
-    void i8259_doirq(uint8_t irqnum);
+    //void i8259_doirq(uint8_t irqnum);
     void i8259_setirq(uint8_t irqnum, uint8_t state);
     uint8_t i8259_nextintr();
     bool i8259_haveInt();

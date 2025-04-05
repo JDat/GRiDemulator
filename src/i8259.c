@@ -182,14 +182,14 @@ bool i8259_haveInt() {
 }
 
 // called by hardware to rise interrupt
-void i8259_doirq(uint8_t irqnum) {
-#ifdef DEBUG_PIC 
+//void i8259_doirq(uint8_t irqnum) {
+//#ifdef DEBUG_PIC 
     //if ( irqnum != 3) {
-        debug_log(DEBUG_DETAIL, "[I8259] doIRQ %u raised\r\n", irqnum);
+//        debug_log(DEBUG_DETAIL, "[I8259] doIRQ %u raised\r\n", irqnum);
     //}
-#endif
-    irr |= (1 << irqnum);
-}
+//#endif
+//    irr |= (1 << irqnum);
+//}
 
 void i8259_setirq(uint8_t irqnum, uint8_t irqstate) {
 
@@ -198,14 +198,17 @@ void i8259_setirq(uint8_t irqnum, uint8_t irqstate) {
         debug_log(DEBUG_DETAIL, "[I8259] setIRQ %u\tstate: %u\t lock: %u\r\n", irqnum, irqstate, lock);
     //}
 #endif
-    if (lock == false) {
+    while (lock != false) {
+        ;
+    }
+    //if (lock == false) {
         irr |= ( (irqstate & 1) << irqnum);
 #ifdef DEBUG_PIC 
         //if ( irqnum != 3) {
             debug_log(DEBUG_DETAIL, "[I8259] setIRQ %u complete\r\n", irqnum);
         //}
 #endif
-    }
+    //}
 }
 
 void i8259_init() {

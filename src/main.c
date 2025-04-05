@@ -46,7 +46,7 @@ char* usemachine = "1101"; //default
 char title[64]; //assuming 64 isn't safe if somebody starts messing with STR_TITLE and STR_VERSION
 
 uint64_t ops = 0;
-uint32_t baudrate = 115200, ramsize = 640, instructionsperloop = 100, cpuLimitTimer;
+//uint32_t baudrate = 115200, ramsize = 640, instructionsperloop = 100, cpuLimitTimer;
 //uint8_t videocard = 0xFF, showMIPS = 0;
 volatile uint8_t goCPU = 1, limitCPU = 0;
 volatile double speed = 0;
@@ -72,16 +72,16 @@ void cputimer() {
 void setspeed(double mhz) {
     if (mhz > 0) {
         speed = mhz;
-        instructionsperloop = (uint32_t)((speed * 1000000.0) / 140000.0);
+        //instructionsperloop = (uint32_t)((speed * 1000000.0) / 140000.0);
         limitCPU = 1;
-        debug_log(DEBUG_INFO, "[MACHINE] Throttling speed to approximately a %.02f MHz 8086 (%lu instructions/sec)\r\n", speed, instructionsperloop * 10000);
-        timing_timerEnable(cpuLimitTimer);
+        //debug_log(DEBUG_INFO, "[MACHINE] Throttling speed to approximately a %.02f MHz 8086 (%lu instructions/sec)\r\n", speed, instructionsperloop * 10000);
+        //timing_timerEnable(cpuLimitTimer);
     }
     else {
         speed = 0;
-        instructionsperloop = 100;
+        //instructionsperloop = 100;
         limitCPU = 0;
-        timing_timerDisable(cpuLimitTimer);
+        //timing_timerDisable(cpuLimitTimer);
     }
 }
 
@@ -113,27 +113,27 @@ int main(int argc, char *argv[]) {
     }
 
     //timing_addTimer(optimer, 10, TIMING_ENABLED);
-    cpuLimitTimer = timing_addTimer(cputimer, 10000, TIMING_DISABLED);
-    if (speed > 0) {
-        setspeed(speed);
-    }
+    //cpuLimitTimer = timing_addTimer(cputimer, 10000, TIMING_DISABLED);
+    //if (speed > 0) {
+        //setspeed(speed);
+    //}
     while (running) {
         timing_loop();
 
         static uint32_t curloop = 0;
         
-        limitCPU = 0;
-        if (limitCPU == 0) {
+        //limitCPU = 0;
+        //if (limitCPU == 0) {
             goCPU = 1;
-        }
-        if (goCPU) {
+        //}
+        //if (goCPU) {
             cpu_interruptCheck(&machine.CPU);
                         //doDMA();
             //cpu_exec(&machine.CPU, instructionsperloop);
             cpu_exec(&machine.CPU);
-            ops += instructionsperloop;
-            goCPU = 0;
-        }
+            //ops += instructionsperloop;
+            //goCPU = 0;
+        //}
         if (++curloop == 100) {
             gridvideo_update();
 

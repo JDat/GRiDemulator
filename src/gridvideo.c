@@ -46,8 +46,8 @@ int gridvideo_init() {
     memory_mapCallbackRegister(VIDEOBASE, (screenWidth * screenHeight) / 8, (void*)gridvideo_readmemory, (void*)gridvideo_writememory, NULL);
 
     //timing_addTimer(gridvideo_scanlineCallback, 16000, TIMING_ENABLED);
-    timing_addTimer(gridvideo_scanlineCallback, 100, TIMING_ENABLED);
-    //timing_addTimer(gridvideo_scanlineCallback, 50, TIMING_ENABLED);
+    //timing_addTimer(gridvideo_scanlineCallback, 100, TIMING_ENABLED);
+    timing_addTimer(gridvideo_scanlineCallback, 200, TIMING_ENABLED);
 
     // do we need this?
     //timing_addTimer(gridvideo_drawCallback, NULL, 60, TIMING_ENABLED);
