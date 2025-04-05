@@ -1905,90 +1905,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x74: {    // 74 JZ Jb (JE)
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (cpu->zf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jz %04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
-#endif
-      break;
-    }
-    case 0x7C: {    // 7C JL Jb (JNGE)
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (cpu->sf != cpu->of) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jl %04X:%04X\tflag S: %01X, O: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf, cpu->of);
-#endif
-      break;
-    }
-    case 0x7E: {    // 7E JLE Jb (JNG)
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if ((cpu->sf != cpu->of) || cpu->zf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jle %04X:%04X\tflag S: %01X, O: %01X, Z: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf, cpu->of, cpu->zf);
-#endif
-      break;
-    }
-    case 0x72: {    // 72 JB Jb (JNAE)
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (cpu->cf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jb %04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
-#endif
-      break;
-    }
-    case 0x76: {    // 76 JBE Jb (JNA)
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (cpu->cf || cpu->zf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jbe %04X:%04X\tflag Z: %01X, C: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->zf, cpu->cf);
-#endif
-      break;
-    }
-    case 0x7A: {    // 7A JPE Jb (JP)
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (cpu->pf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jpe %04X:%04X\tflag P: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->pf);
-#endif
-      break;
-    }
+
     case 0x70: {    // 70 JO Jb
 #ifdef DEBUG_DISASM
       debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
@@ -2002,101 +1919,6 @@ uint32_t cpu_exec(CPU_t* cpu) {
       }
 #ifdef DEBUG_DISASM
       debug_log(DEBUG_DETAIL, "jo %04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
-#endif
-      break;
-    }
-    case 0x78: {    // 78 JS Jb
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (cpu->sf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "js %04X:%04X\tflag S: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf);
-#endif
-      break;
-    }
-    case 0x75: {    // 75 JNZ Jb (JNE)
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-
-      if (!cpu->zf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jnz %04X:%04X\tflag Z: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->zf);
-#endif
-      break;
-    }
-    case 0x7D: {    // 7D JGE Jb (JNL)
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (cpu->sf == cpu->of) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jge %04X:%04X\tflag S: %01X, O: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf, cpu->of);
-#endif
-      break;
-    }
-    case 0x7F: {    // 7F JG Jb (JNLE)
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (!cpu->zf && (cpu->sf == cpu->of)) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jg %04X:%04X\tflag S: %01X, O: %01X, Z: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf, cpu->of, cpu->zf);
-#endif
-      break;
-    }
-    case 0x73: {    // 73 JNB Jb (JAE)
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (!cpu->cf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jnb %04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
-#endif
-      break;
-    }
-    case 0x77: {    // 77 JA Jb (JNBE)
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (!cpu->cf && !cpu->zf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "ja %04X:%04X\tflag Z: %01X, C: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->zf, cpu->cf);
-#endif
-      break;
-    }
-    case 0x7B: {    // 7B JPO Jb (JNP)
-      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
-      StepIP(cpu, 1);
-      loopcount +=4;
-      if (!cpu->pf) {
-        cpu->ip = cpu->ip + cpu->temp16;
-        loopcount +=4;
-      }
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "jpo %04X:%04X\tflag P: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->pf);
 #endif
       break;
     }
@@ -2116,6 +1938,107 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
+    case 0x72: {    // 72 JB Jb (JNAE)
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (cpu->cf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jb %04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+      break;
+    }
+    case 0x73: {    // 73 JNB Jb (JAE)
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (!cpu->cf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jnb %04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+      break;
+    }
+    case 0x74: {    // 74 JZ Jb (JE)
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+#endif
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (cpu->zf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jz %04X:%04X\r\n", cpu->segregs[regcs], cpu->ip);
+#endif
+      break;
+    }
+    case 0x75: {    // 75 JNZ Jb (JNE)
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+
+      if (!cpu->zf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jnz %04X:%04X\tflag Z: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->zf);
+#endif
+      break;
+    }
+    case 0x76: {    // 76 JBE Jb (JNA)
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (cpu->cf || cpu->zf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jbe %04X:%04X\tflag Z: %01X, C: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->zf, cpu->cf);
+#endif
+      break;
+    }
+    case 0x77: {    // 77 JA Jb (JNBE)
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (!cpu->cf && !cpu->zf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "ja %04X:%04X\tflag Z: %01X, C: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->zf, cpu->cf);
+#endif
+      break;
+    }
+    case 0x78: {    // 78 JS Jb
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (cpu->sf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "js %04X:%04X\tflag S: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf);
+#endif
+      break;
+    }
     case 0x79: {    // 79 JNS Jb
       cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
       StepIP(cpu, 1);
@@ -2129,6 +2052,85 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
+    case 0x7A: {    // 7A JPE Jb (JP)
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (cpu->pf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jpe %04X:%04X\tflag P: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->pf);
+#endif
+      break;
+    }
+    case 0x7B: {    // 7B JPO Jb (JNP)
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (!cpu->pf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jpo %04X:%04X\tflag P: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->pf);
+#endif
+      break;
+    }
+    case 0x7C: {    // 7C JL Jb (JNGE)
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (cpu->sf != cpu->of) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jl %04X:%04X\tflag S: %01X, O: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf, cpu->of);
+#endif
+      break;
+    }
+    case 0x7D: {    // 7D JGE Jb (JNL)
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (cpu->sf == cpu->of) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jge %04X:%04X\tflag S: %01X, O: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf, cpu->of);
+#endif
+      break;
+    }
+    case 0x7E: {    // 7E JLE Jb (JNG)
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if ((cpu->sf != cpu->of) || cpu->zf) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jle %04X:%04X\tflag S: %01X, O: %01X, Z: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf, cpu->of, cpu->zf);
+#endif
+      break;
+    }
+    case 0x7F: {    // 7F JG Jb (JNLE)
+      cpu->temp16 = signext(getmem8(cpu, cpu->segregs[regcs], cpu->ip));
+      StepIP(cpu, 1);
+      loopcount +=4;
+      if (!cpu->zf && (cpu->sf == cpu->of)) {
+        cpu->ip = cpu->ip + cpu->temp16;
+        loopcount +=4;
+      }
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "jg %04X:%04X\tflag S: %01X, O: %01X, Z: %01X\n", cpu->segregs[regcs], cpu->ip, cpu->sf, cpu->of, cpu->zf);
+#endif
+      break;
+    }
+
     case 0xE0: {    // E0 LOOPNZ Jb (LOOPNE)
 #ifdef DEBUG_DISASM
       debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X opcode: %02X\tloopnz ", cpu->segregs[regcs], cpu->ip, cpu->opcode);
@@ -3421,80 +3423,16 @@ uint32_t cpu_exec(CPU_t* cpu) {
       loopcount +=4;
       break;
     }
-    case 0xB8: {    // B8 MOV eAX Iv
-      cpu->oper1 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 2);
-      cpu->regs.wordregs[regax] = cpu->oper1;
-      loopcount +=4;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [main] %04X:%04X, op: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
-      debug_log(DEBUG_DETAIL, "mov ax, %04Xh\n", cpu->oper1);
-#endif
-      break;
-    }
-    case 0xB9: {    // B9 MOV eCX Iv
-      cpu->oper1 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 2);
-      cpu->regs.wordregs[regcx] = cpu->oper1;
-      loopcount +=4;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "mov cx, %04Xh\n", cpu->oper1);
-#endif
-      break;
-    }
-    case 0xBA: {    // BA MOV eDX Iv
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "mov dx, %04Xh\n", cpu->oper1);
-#endif
-      cpu->oper1 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 2);
-      cpu->regs.wordregs[regdx] = cpu->oper1;
-      loopcount +=4;
-      break;
-    }
-    case 0xBB: {    // BB MOV eBX Iv
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "mov bx, %04Xh\n", cpu->oper1);
-#endif
-      cpu->oper1 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 2);
-      cpu->regs.wordregs[regbx] = cpu->oper1;
-      loopcount +=4;
-      break;
-    }
-    case 0xBC: {    // BC MOV eSP Iv
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "mov sp, %04Xh\n", cpu->oper1);
-#endif
-      cpu->regs.wordregs[regsp] = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
+    case 0xB8 ... 0xBF: {    // MOV 16 bit registers ax cx dx bx sp bp si di, 16 bit Immediate
+      uint8_t tmpReg;
+      tmpReg = cpu->opcode & 0x7;
+      cpu->regs.wordregs[tmpReg] = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
       loopcount +=4;
-      break;
-    }
-    case 0xBD: {    // BD MOV eBP Iv
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "mov bp, %04Xh\n", cpu->oper1);
+      debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, opcode: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] mov %s, %04Xh\n", cpuRegNamesChar[tmpReg], cpu->regs.wordregs[tmpReg]);
 #endif
-      cpu->regs.wordregs[regbp] = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 2);
-      break;
-    }
-    case 0xBE: {    // BE MOV eSI Iv
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "mov si, %04Xh\n", cpu->oper1);
-#endif
-      cpu->regs.wordregs[regsi] = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 2);
-      loopcount +=4;
-      break;
-    }
-    case 0xBF: {    // BF MOV eDI Iv
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "mov di, %04Xh\n", cpu->oper1);
-#endif
-      cpu->regs.wordregs[regdi] = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 2);
-      loopcount +=4;
       break;
     }
     case 0xC6: {    // C6 MOV Eb Ib

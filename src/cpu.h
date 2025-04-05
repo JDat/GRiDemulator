@@ -121,6 +121,7 @@ typedef struct {
   x->df = (tmp >> 10) & 1; \
   x->of = (tmp >> 11) & 1; \
 }
+
 /*
 #define modregrm(x) { \
   x->addrbyte = getmem8(x, x->segregs[regcs], x->ip); \
@@ -162,6 +163,7 @@ typedef struct {
   } \
 }
 */
+
 /*
 const t_8087command opcodesMatrix8087[64] = {
         { NULL },
