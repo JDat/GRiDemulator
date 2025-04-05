@@ -40,13 +40,15 @@ union _bytewordregs_ {
 typedef struct {
   union _bytewordregs_ regs;
   uint8_t opcode, segoverride, reptype, hltstate;
-  uint16_t segregs[4], savecs, saveip, ip, useseg, oldsp;
+  uint16_t segregs[4], ip, useseg, oldsp;
   uint8_t tempcf, oldcf, cf, pf, af, zf, sf, tf, ifl, df, of, mode, reg, rm;
   uint16_t oper1, oper2, res16, disp16, temp16, dummy, stacksize, frametemp;
   uint8_t oper1b, oper2b, res8, disp8, temp8, nestlev, addrbyte;
   uint32_t temp1, temp2, temp3, temp4, temp5, temp32, tempaddr32, ea;
   int32_t result;
   uint16_t trap_toggle;
+  uint16_t savecs, saveip;
+  uint8_t usedRegister;
   //uint64_t totalexec;
   //void (*int_callback[256])(void*, uint8_t); //Want to pass a CPU object in first param, but it's not defined at this point so use a void*
 } CPU_t;

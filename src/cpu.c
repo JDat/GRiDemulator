@@ -544,10 +544,12 @@ void cpu_reset(CPU_t* cpu) {
 
 uint16_t readrm16(CPU_t* cpu, uint8_t rmval) {
   //debug_log(DEBUG_INFO, "cpu readmem16\r\n");
+  cpu->usedRegister = 0xFF;
   if (cpu->mode < 3) {
     getea(cpu, rmval);
     return cpu_read(cpu, cpu->ea) | ((uint16_t)cpu_read(cpu, cpu->ea + 1) << 8);
   } else {
+    cpu->usedRegister = rmval;
     return getreg16(cpu, rmval);
   }
 }
@@ -564,11 +566,13 @@ uint8_t readrm8(CPU_t* cpu, uint8_t rmval) {
 
 void writerm16(CPU_t* cpu, uint8_t rmval, uint16_t value) {
   //debug_log(DEBUG_INFO, "cpu writemem16\r\n");
+  cpu->usedRegister = 0xFF;
   if (cpu->mode < 3) {
     getea(cpu, rmval);
     cpu_write(cpu, cpu->ea, value & 0xFF);
     cpu_write(cpu, cpu->ea + 1, value >> 8);
   } else {
+    cpu->usedRegister = rmval;
     putreg16(cpu, rmval, value);
   }
 }
@@ -1331,15 +1335,6 @@ uint32_t cpu_exec(CPU_t* cpu) {
     }
 */
 
-/*
-#ifdef DEBUG_DISASM
-    if (cpu->reptype == 0 ) {
-      debug_log(DEBUG_DETAIL, "[DASM] [sux] %04X:%04X, op: %02X\n", cpu->savecs, cpu->saveip, cpu->opcode);
-    } else {
-      debug_log(DEBUG_DETAIL, "\t");
-    }
-#endif
-*/
     StepIP(cpu, 1);
 
     switch (cpu->opcode) {
@@ -1363,8 +1358,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       // repetition prefix check
       case 0xF3:  {   // REP/REPE/REPZ
 #ifdef DEBUG_DISASM
-        debug_log(DEBUG_DETAIL, "[DASM] [main] %04X:%04X, op: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
-        debug_log(DEBUG_DETAIL, "REP/REPE/REPZ\t");
+        debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, op: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
+        debug_log(DEBUG_DETAIL, "REP/REPE/REPZ\n");
 #endif
         cpu->reptype = 1;
         loopcount +=6;
@@ -1372,8 +1367,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       }
       case 0xF2:  {   // REPNE/REPNZ
 #ifdef DEBUG_DISASM
-        debug_log(DEBUG_DETAIL, "[DASM] [main] %04X:%04X, op: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
-        debug_log(DEBUG_DETAIL, "REPNE/REPNZ\t");
+        debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, op: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
+        debug_log(DEBUG_DETAIL, "REPNE/REPNZ\n");
 #endif
         cpu->reptype = 2;
         loopcount +=6;
@@ -1632,7 +1627,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
     }
     case 0xAA: {    // AA STOSB
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "(op: %02X) stosb\tcx: %04Xh\n", cpu->opcode, cpu->regs.wordregs[regcx]);
+      debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, op: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "stosb\tcx: %04Xh\n", cpu->regs.wordregs[regcx]);
 #endif
       if (cpu->reptype && (cpu->regs.wordregs[regcx] == 0)) {
         break;
@@ -2525,7 +2521,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
       putreg16(cpu, cpu->reg, cpu->res16);
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, op: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] [new] [testing] %04X:%04X, op: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
       debug_log(DEBUG_DETAIL, "xor %s, %s\n", cpuRegNamesChar[cpu->reg], cpuRegNamesChar[cpu->rm]);
 #endif
       break;
@@ -2780,7 +2776,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
         case 7: {
           flag_sub16(cpu, cpu->oper1, cpu->oper2);
 #ifdef DEBUG_DISASM
-          debug_log(DEBUG_DETAIL, "[testing] cmp %04Xh, %04Xh\n", cpu->oper1, cpu->oper2);
+          debug_log(DEBUG_DETAIL, "[not implemented] cmp %04Xh, %04Xh\n", cpu->oper1, cpu->oper2);
 #endif
 
           loopcount +=3;
@@ -2868,112 +2864,6 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-/*
-    case 0x40: {    // 40 INC eAX
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regax];
-      cpu->oper2 = 1;
-      op_add16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regax] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tinc ax\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x41: {    // 41 INC eCX
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regcx];
-      cpu->oper2 = 1;
-      op_add16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regcx] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tinc cx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x42: {    // 42 INC eDX
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regdx];
-      cpu->oper2 = 1;
-      op_add16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regdx] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tinc dx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x43: {    // 43 INC eBX
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regbx];
-      cpu->oper2 = 1;
-      op_add16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regbx] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tinc bx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x44: {    // 44 INC eSP
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regsp];
-      cpu->oper2 = 1;
-      op_add16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regsp] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tinc sp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x45: {    // 45 INC eBP
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regbp];
-      cpu->oper2 = 1;
-      op_add16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regbp] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tinc bp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x46: {    // 46 INC eSI
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regsi];
-      cpu->oper2 = 1;
-      op_add16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regsi] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tinc si\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x47: {    // 47 INC eDI
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regdi];
-      cpu->oper2 = 1;
-      op_add16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regdi] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tinc di\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-*/
     case 0x40:
     case 0x41:
     case 0x42:
@@ -2997,113 +2887,6 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-/*
-    case 0x48: {    // 48 DEC eAX
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regax];
-      cpu->oper2 = 1;
-      op_sub16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regax] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tdec ax\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x49: {    // 49 DEC eCX
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regcx];
-      cpu->oper2 = 1;
-      op_sub16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regcx] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tdec cx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x4A: {    // 4A DEC eDX
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regdx];
-      cpu->oper2 = 1;
-      op_sub16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regdx] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tdec dx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x4B: {    // 4B DEC eBX
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regbx];
-      cpu->oper2 = 1;
-      op_sub16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regbx] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tdec bx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x4C: {    // 4C DEC eSP
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regsp];
-      cpu->oper2 = 1;
-      op_sub16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regsp] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tdec sp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x4D: {    // 4D DEC eBP
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regbp];
-      cpu->oper2 = 1;
-      op_sub16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regbp] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tdec bp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x4E: {    // 4E DEC eSI
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regsi];
-      cpu->oper2 = 1;
-      op_sub16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regsi] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tdec si\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-    case 0x4F: {    // 4F DEC eDI
-      cpu->oldcf = cpu->cf;
-      cpu->oper1 = cpu->regs.wordregs[regdi];
-      cpu->oper2 = 1;
-      op_sub16(cpu);
-      cpu->cf = cpu->oldcf;
-      cpu->regs.wordregs[regdi] = cpu->res16;
-      loopcount +=2;
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tdec di\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      break;
-    }
-*/
-
     case 0x48:
     case 0x49:
     case 0x4A:
@@ -3884,68 +3667,22 @@ uint32_t cpu_exec(CPU_t* cpu) {
       loopcount +=10;
       break;
     }
-    case 0x58: {    // 58 POP eAX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpop ax\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.wordregs[regax] = pop(cpu);
+    case 0x58:
+    case 0x59:
+    case 0x5A:
+    case 0x5B:
+    case 0x5C:
+    case 0x5D:
+    case 0x5E:
+    case 0x5F: {    // POP 16 bit registers ax cx dx bx sp bp si di
+      uint8_t tmpReg;
+      tmpReg = cpu->opcode & 0x7;
+      cpu->regs.wordregs[tmpReg] = pop(cpu);
       loopcount +=8;
-      break;
-    }
-    case 0x59: {    // 59 POP eCX
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpop cx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "pop %s\n", cpuRegNamesChar[tmpReg]);
 #endif
-      cpu->regs.wordregs[regcx] = pop(cpu);
-      loopcount +=8;
-      break;
-    }
-    case 0x5A: {    // 5A POP eDX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpop dx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.wordregs[regdx] = pop(cpu);
-      loopcount +=8;
-      break;
-    }
-    case 0x5B: {    // 5B POP eBX
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpop bx\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.wordregs[regbx] = pop(cpu);
-      loopcount +=8;
-      break;
-    }
-    case 0x5C: {    // 5C POP eSP
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpop sp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.wordregs[regsp] = pop(cpu);
-      loopcount +=8;
-      break;
-    }
-    case 0x5D: {    // 5D POP eBP
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpop bp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.wordregs[regbp] = pop(cpu);
-      loopcount +=8;
-      break;
-    }
-    case 0x5E: {    // 5E POP eSI
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpop si\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.wordregs[regsi] = pop(cpu);
-      loopcount +=8;
-      break;
-    }
-    case 0x5F: {    // 5F POP eDI
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\tpop di\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.wordregs[regdi] = pop(cpu);
-      loopcount +=8;
       break;
     }
     case 0x8F: {    // 8F POP Ev
@@ -4298,10 +4035,10 @@ uint32_t cpu_exec(CPU_t* cpu) {
     }
     default:   {
       debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, op: %02X\t\tIllegal instruction [default case]\n", cpu->savecs, cpu->saveip, cpu->opcode);
-//#ifdef CPU_ALLOW_ILLEGAL_OP_EXCEPTION
-      //cpu_intcall(cpu, 6); /* trip invalid opcode exception. this occurs on the 80186+, 8086/8088 CPUs treat them as NOPs. */
-      /* technically they aren't exactly like NOPs in most cases, but for our pursoses, that's accurate enough. */
-//#endif
+      //cpu_intcall(cpu, 6); // trip invalid opcode exception.
+      // this occurs on the 80186+, 8086/8088 CPUs treat them as NOPs.
+      // technically they aren't exactly like NOPs in most cases,
+      // but for our pursoses, that's accurate enough.
       break;
     }
   }
