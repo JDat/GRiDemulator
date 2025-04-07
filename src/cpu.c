@@ -2337,7 +2337,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.byteregs[regal] = cpu->res8;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tand\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] and al, %02Xh\n", cpu->oper2b);
 #endif
       break;
     }
@@ -2349,7 +2350,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.wordregs[regax] = cpu->res16;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tand\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] and ax, %04Xh\n", cpu->oper2);
 #endif
       break;
     }
@@ -2376,25 +2378,28 @@ uint32_t cpu_exec(CPU_t* cpu) {
       break;
     }
     case 0xA8: {    // TEST al, Immediate
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\ttest\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
       cpu->oper1b = cpu->regs.byteregs[regal];
       cpu->oper2b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
       flag_log8(cpu, cpu->oper1b & cpu->oper2b);
       loopcount +=4;
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] test al, %02Xh\n", cpu->oper2b);
+#endif
       break;
     }
     case 0xA9: {    // TEST ax, Immediate
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\ttest\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
+
       cpu->oper1 = cpu->regs.wordregs[regax];
       cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
       flag_log16(cpu, cpu->oper1 & cpu->oper2);
       loopcount +=4;
+#ifdef DEBUG_DISASM
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] test ax, %04Xh\n", cpu->oper2);
+#endif
       break;
     }
     case 0x8:  {    // 08 OR Eb Gb
@@ -2456,7 +2461,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.byteregs[regal] = cpu->res8;
       loopcount +=4;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tor\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] or al, %02Xh\n", cpu->oper2b);
 #endif
       break;
     }
@@ -2468,7 +2474,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.wordregs[regax] = cpu->res16;
       loopcount +=4;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tor\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] or ax, %04Xh\n", cpu->oper2);
 #endif
       break;
     }
@@ -2529,8 +2536,10 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.byteregs[regal] = cpu->res8;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\txor\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] xor al, %02Xh\n", cpu->oper2b);
 #endif
+
       break;
     }
     case 0x35: {    // XOR ax, Immediate
@@ -2541,7 +2550,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.wordregs[regax] = cpu->res16;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\txor\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] xor ax, %04Xh\n", cpu->oper2);
 #endif
       break;
     }
@@ -2603,8 +2613,10 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.byteregs[regal] = cpu->res8;
       loopcount +=4;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tadd\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] add al, %02Xh\n", cpu->oper2b);
 #endif
+
       break;
     }
     case 0x5:  {    // ADD ax, Immediate
@@ -2615,7 +2627,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.wordregs[regax] = cpu->res16;
       loopcount +=4;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tadd\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] add ax, %04Xh\n", cpu->oper2);
 #endif
       break;
     }
@@ -2843,7 +2856,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.byteregs[regal] = cpu->res8;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tadc\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] adc al, %02Xh\n", cpu->oper2b);
 #endif
       break;
     }
@@ -2855,7 +2869,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.wordregs[regax] = cpu->res16;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tadc\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] adc ax, %04Xh\n", cpu->oper2);
 #endif
       break;
     }
@@ -2994,7 +3009,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.byteregs[regal] = cpu->res8;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tsub\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] sub al, %02Xh\n", cpu->oper2b);
 #endif
       break;
     }
@@ -3006,7 +3022,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.wordregs[regax] = cpu->res16;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tsub\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] sub ax, %04Xh\n", cpu->oper2);
 #endif
       break;
     }
@@ -3066,7 +3083,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.byteregs[regal] = cpu->res8;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tsbb\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] sbb al, %02Xh\n", cpu->oper2b);
 #endif
       break;
     }
@@ -3078,7 +3096,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       cpu->regs.wordregs[regax] = cpu->res16;
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tsbb\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] sbb ax, %04Xh\n", cpu->oper2);
 #endif
       break;
     }
@@ -3133,7 +3152,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       flag_sub8(cpu, cpu->oper1b, cpu->oper2b);
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tcmp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] cmp al, %02Xh\n", cpu->oper2b);
 #endif
       break;
     }
@@ -3144,7 +3164,8 @@ uint32_t cpu_exec(CPU_t* cpu) {
       flag_sub16(cpu, cpu->oper1, cpu->oper2);
       loopcount +=3;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tcmp\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[DASM] %04X:%04X, opcode: %02X\t\t", cpu->segregs[regcs], cpu->ip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] cmp ax, %04Xh\n", cpu->oper2);
 #endif
       break;
     }
@@ -3372,7 +3393,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
       loopcount +=4;
 #ifdef DEBUG_DISASM
       debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, opcode: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
-      debug_log(DEBUG_DETAIL, "[testing] mov %s, %04Xh\n", cpuRegNamesChar[tmpReg], cpu->regs.wordregs[tmpReg]);
+      debug_log(DEBUG_DETAIL, "mov %s, %04Xh\n", cpuRegNamesChar[tmpReg], cpu->regs.wordregs[tmpReg]);
 #endif
       break;
     }
