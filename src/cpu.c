@@ -50,18 +50,18 @@ static const char *cpuRegNamesChar[] = {
   "ss",
   "ds"
 };
-/*
+
 static const char *cpuRegNames8Char[] = {
-  "ah",
   "al",
-  "bh",
-  "bl",
-  "ch",
   "cl",
-  "dh",
   "dl",
+  "bl",
+  "ah",
+  "ch",
+  "dh",
+  "bh"
 };
-*/
+
 #endif
 
 const uint8_t byteregtable[8] = { regal, regcl, regdl, regbl, regah, regch, regdh, regbh };
@@ -2329,7 +2329,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x24: {    // 24 AND cpu->regs.byteregs[regal] Ib
+    case 0x24: {    // AND al, Immediate
       cpu->oper1b = cpu->regs.byteregs[regal];
       cpu->oper2b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
@@ -2341,7 +2341,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x25: {    // 25 AND eAX Iv
+    case 0x25: {    // AND ax, Immediate
       cpu->oper1 = cpu->regs.wordregs[regax];
       cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
@@ -2375,7 +2375,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0xA8: {    // A8 TEST cpu->regs.byteregs[regal] Ib
+    case 0xA8: {    // TEST al, Immediate
 #ifdef DEBUG_DISASM
       debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\ttest\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
@@ -2386,7 +2386,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
       loopcount +=4;
       break;
     }
-    case 0xA9: {    // A9 TEST eAX Iv
+    case 0xA9: {    // TEST ax, Immediate
 #ifdef DEBUG_DISASM
       debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\ttest\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
 #endif
@@ -2448,7 +2448,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0xC:  {    // 0C OR cpu->regs.byteregs[regal] Ib
+    case 0xC:  {    // OR al, Immediate
       cpu->oper1b = cpu->regs.byteregs[regal];
       cpu->oper2b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
@@ -2460,7 +2460,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0xD:  {    // 0D OR eAX Iv
+    case 0xD:  {    // OR ax, Immediate
       cpu->oper1 = cpu->regs.wordregs[regax];
       cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
@@ -2521,7 +2521,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x34: {    // 34 XOR cpu->regs.byteregs[regal] Ib
+    case 0x34: {    // XOR al, Immediate
       cpu->oper1b = cpu->regs.byteregs[regal];
       cpu->oper2b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
@@ -2533,7 +2533,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x35: {    // 35 XOR eAX Iv
+    case 0x35: {    // XOR ax, Immediate
       cpu->oper1 = cpu->regs.wordregs[regax];
       cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
@@ -2595,7 +2595,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x4:  {    // 04 ADD cpu->regs.byteregs[regal] Ib
+    case 0x4:  {    // ADD al, Immediate
       cpu->oper1b = cpu->regs.byteregs[regal];
       cpu->oper2b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
@@ -2607,7 +2607,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x5:  {    // 05 ADD eAX Iv
+    case 0x5:  {    // ADD ax, Immediate
       cpu->oper1 = cpu->regs.wordregs[regax];
       cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
@@ -2835,7 +2835,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x14: {    // 14 ADC cpu->regs.byteregs[regal] Ib
+    case 0x14: {    // ADC al, Immediate
       cpu->oper1b = cpu->regs.byteregs[regal];
       cpu->oper2b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
@@ -2847,7 +2847,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x15: {    // 15 ADC eAX Iv
+    case 0x15: {    // ADC ax, Immediate
       cpu->oper1 = cpu->regs.wordregs[regax];
       cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
@@ -2986,7 +2986,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x2C: {    // 2C SUB cpu->regs.byteregs[regal] Ib
+    case 0x2C: {    // SUB al, Immediate
       cpu->oper1b = cpu->regs.byteregs[regal];
       cpu->oper2b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
@@ -2998,7 +2998,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x2D: {    // 2D SUB eAX Iv
+    case 0x2D: {    // SUB ax, Immediate
       cpu->oper1 = cpu->regs.wordregs[regax];
       cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
@@ -3058,7 +3058,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x1C: {    // 1C SBB cpu->regs.byteregs[regal] Ib
+    case 0x1C: {    // SBB al, Immediate
       cpu->oper1b = cpu->regs.byteregs[regal];
       cpu->oper2b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
@@ -3070,7 +3070,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x1D: {    // 1D SBB eAX Iv
+    case 0x1D: {    // SBB ax, Immediate
       cpu->oper1 = cpu->regs.wordregs[regax];
       cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
@@ -3126,7 +3126,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x3C: {    // 3C CMP cpu->regs.byteregs[regal] Ib
+    case 0x3C: {    // CMP al, Immediate
       cpu->oper1b = cpu->regs.byteregs[regal];
       cpu->oper2b = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
@@ -3137,7 +3137,7 @@ uint32_t cpu_exec(CPU_t* cpu) {
 #endif
       break;
     }
-    case 0x3D: {    // 3D CMP eAX Iv
+    case 0x3D: {    // CMP ax, Immediate
       cpu->oper1 = cpu->regs.wordregs[regax];
       cpu->oper2 = getmem16(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 2);
@@ -3351,76 +3351,17 @@ uint32_t cpu_exec(CPU_t* cpu) {
       loopcount +=8;
       break;
     }
-    case 0xB0: {    // B0 MOV al, Immediate byte
-      cpu->regs.byteregs[regal] = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
+    case 0xB0 ... 0xB7: {    // MOV 8 bit registers al cl dl bl ah ch dh bh, 8 bit Immediate
+      uint8_t tmpReg;
+      tmpReg = cpu->opcode & 0x7;
+      uint8_t regXlatArray[] = {regal,regcl,regdl,regbl,regah,regch,regdh,regbh};
+      cpu->regs.byteregs[regXlatArray[tmpReg]] = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
       StepIP(cpu, 1);
       loopcount +=4;
 #ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "mov al, %02Xh\n", cpu->regs.byteregs[regal]);
+      debug_log(DEBUG_DETAIL, "[DASM] [new] %04X:%04X, opcode: %02X\t\t", cpu->savecs, cpu->saveip, cpu->opcode);
+      debug_log(DEBUG_DETAIL, "[testing] mov %s, %02Xh\n", cpuRegNames8Char[tmpReg], cpu->regs.byteregs[regXlatArray[tmpReg]]);
 #endif
-      break;
-    }
-    case 0xB1: {    // B1 MOV cpu->regs.byteregs[regcl] Ib
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tmov\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.byteregs[regcl] = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 1);
-      loopcount +=4;
-      break;
-    }
-    case 0xB2: {    // B2 MOV cpu->regs.byteregs[regdl] Ib
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tmov\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.byteregs[regdl] = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 1);
-      loopcount +=4;
-      break;
-    }
-    case 0xB3: {    // B3 MOV cpu->regs.byteregs[regbl] Ib
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tmov\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.byteregs[regbl] = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 1);
-      loopcount +=4;
-      break;
-    }
-    case 0xB4: {    // B4 MOV cpu->regs.byteregs[regah] Ib
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tmov\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.byteregs[regah] = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 1);
-      loopcount +=4;
-      break;
-    }
-    case 0xB5: {    // B5 MOV cpu->regs.byteregs[regch] Ib
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tmov\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.byteregs[regch] = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 1);
-      loopcount +=4;
-      break;
-    }
-    case 0xB6: {    // B6 MOV cpu->regs.byteregs[regdh] Ib
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tmov\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.byteregs[regdh] = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 1);
-      loopcount +=4;
-      break;
-    }
-    case 0xB7: {    // B7 MOV cpu->regs.byteregs[regbh] Ib
-#ifdef DEBUG_DISASM
-      debug_log(DEBUG_DETAIL, "[DASM] [not implemented] %04X:%04X, opcode: %02X\tmov\r\n", cpu->segregs[regcs], cpu->ip, cpu->opcode);
-#endif
-      cpu->regs.byteregs[regbh] = getmem8(cpu, cpu->segregs[regcs], cpu->ip);
-      StepIP(cpu, 1);
-      loopcount +=4;
       break;
     }
     case 0xB8 ... 0xBF: {    // MOV 16 bit registers ax cx dx bx sp bp si di, 16 bit Immediate

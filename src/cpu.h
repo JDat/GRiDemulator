@@ -26,11 +26,10 @@
 #define _CPU_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "config.h"
 #include "utility.h"
-//#include "cpuconf.h"
 #include "i8259.h"
-#include <stdbool.h>
 
 union _bytewordregs_ {
   uint16_t wordregs[8];
@@ -87,20 +86,22 @@ typedef struct {
 #define regbh 7
 #endif
 
-//#define StepIP(mycpu, x)  mycpu->ip += x
+#define segbase(x)  ((uint32_t) x << 4)
+#define signext(value)  (int16_t)(int8_t)(value)
+#define signext32(value)  (int32_t)(int16_t)(value)
+
 #define getmem8(mycpu, x, y)  cpu_read(mycpu, segbase(x) + y)
 #define getmem16(mycpu, x, y) cpu_readw(mycpu, segbase(x) + y)
 #define putmem8(mycpu, x, y, z) cpu_write(mycpu, segbase(x) + y, z)
 #define putmem16(mycpu, x, y, z)  cpu_writew(mycpu, segbase(x) + y, z)
-#define signext(value)  (int16_t)(int8_t)(value)
-#define signext32(value)  (int32_t)(int16_t)(value)
+
 #define getreg16(mycpu, regid)  mycpu->regs.wordregs[regid]
 #define getreg8(mycpu, regid) mycpu->regs.byteregs[byteregtable[regid]]
 #define putreg16(mycpu, regid, writeval)  mycpu->regs.wordregs[regid] = writeval
 #define putreg8(mycpu, regid, writeval) mycpu->regs.byteregs[byteregtable[regid]] = writeval
+
 #define getsegreg(mycpu, regid) mycpu->segregs[regid]
 #define putsegreg(mycpu, regid, writeval) mycpu->segregs[regid] = writeval
-#define segbase(x)  ((uint32_t) x << 4)
 
 #define makeflagsword(x) \
   ( \
@@ -123,48 +124,6 @@ typedef struct {
 }
 
 /*
-#define modregrm(x) { \
-  x->addrbyte = getmem8(x, x->segregs[regcs], x->ip); \
-  StepIP(x, 1); \
-  x->mode = x->addrbyte >> 6; \
-  x->reg = (x->addrbyte >> 3) & 7; \
-  x->rm = x->addrbyte & 7; \
-  switch(x->mode) \
-  { \
-  case 0: \
-  if(x->rm == 6) { \
-  x->disp16 = getmem16(x, x->segregs[regcs], x->ip); \
-  StepIP(x, 2); \
-  } \
-  if(((x->rm == 2) || (x->rm == 3)) && !x->segoverride) { \
-  x->useseg = x->segregs[regss]; \
-  } \
-  break; \
- \
-  case 1: \
-  x->disp16 = signext(getmem8(x, x->segregs[regcs], x->ip)); \
-  StepIP(x, 1); \
-  if(((x->rm == 2) || (x->rm == 3) || (x->rm == 6)) && !x->segoverride) { \
-  x->useseg = x->segregs[regss]; \
-  } \
-  break; \
- \
-  case 2: \
-  x->disp16 = getmem16(x, x->segregs[regcs], x->ip); \
-  StepIP(x, 2); \
-  if(((x->rm == 2) || (x->rm == 3) || (x->rm == 6)) && !x->segoverride) { \
-  x->useseg = x->segregs[regss]; \
-  } \
-  break; \
- \
-  default: \
-  x->disp8 = 0; \
-  x->disp16 = 0; \
-  } \
-}
-*/
-
-/*
 const t_8087command opcodesMatrix8087[64] = {
         { NULL },
         { NULL }
@@ -179,15 +138,20 @@ uint8_t cpu_read(CPU_t* cpu, uint32_t addr);
 uint16_t cpu_readw(CPU_t* cpu, uint32_t addr);
 void cpu_write(CPU_t* cpu, uint32_t addr32, uint8_t value);
 void cpu_writew(CPU_t* cpu, uint32_t addr32, uint16_t value);
+
 void cpu_intcall(CPU_t* cpu, uint8_t intnum);
 void cpu_reset(CPU_t* cpu);
 void cpu_interruptCheck(CPU_t* cpu);
-//void cpu_exec(CPU_t* cpu, uint32_t execloops);
+
+// Check interrupt etc stuff and execute one instruction
+// Return how many cycles used to execure instruction
 uint32_t cpu_exec(CPU_t* cpu);
+
 void port_write(CPU_t* cpu, uint16_t portnum, uint8_t value);
 void port_writew(CPU_t* cpu, uint16_t portnum, uint16_t value);
 uint8_t port_read(CPU_t* cpu, uint16_t portnum);
 uint16_t port_readw(CPU_t* cpu, uint16_t portnum);
+
 //void cpu_registerIntCallback(CPU_t* cpu, uint8_t interrupt, void (*cb)(CPU_t*, uint8_t));
 
 #endif
